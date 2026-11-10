@@ -1,0 +1,66 @@
+A few assumptions I'm making from the brief — flag if wrong and I'll adjust: "you" (46M) hold Singapore citizenship; your wife (46F) has retained Chinese citizenship (since China doesn't recognize dual nationality, if she'd naturalized as Singaporean too she'd have lost PRC status — the brief lists it separately, so I'm reading it as her being the one who kept her Chinese passport); combined AUD 16k/month after tax is your Australia household income; the parents in question are based in China; "14 years" takes you both to 60.
+
+1–2. Odds either of you needs >90 days/year in China, and when
+
+Your wife doesn't have this problem at all — as a PRC citizen she has unrestricted stay rights in the mainland regardless of where she lives or works. The exposure is entirely yours, as a Singapore passport holder (30-day visa-free entry per stay under the current China–Singapore arrangement).
+
+The driver is parental health, not your own preference, so probability tracks age:
+
+- Years 1–5 (parents ~70–75): Low-moderate. "OK health" at 70 usually means occasional scares, not sustained caregiving. Likely a handful of 2–4 week visits, not 90+ days.
+- Years 6–10 (parents ~75–85): Moderate-high. This is where chronic conditions, a hip fracture, a stroke, or a cancer diagnosis start becoming statistically likely for at least one parent. A single hospitalization-plus-recovery episode alone can push a visit past 90 days.
+- Years 11–14 (parents ~80–90): High. If either parent is still alive, the chance of needing extended or end-of-life caregiving in a given year is substantial.
+
+Cumulative probability that at least one year in the 14-year window requires you personally to exceed 90 days in China: I'd put this at roughly 50–65% — driven less by "will it happen" and more by "when," since parental decline over a 14-year horizon starting at 70+ is closer to a when-not-if question.
+
+3–5. Is HK PR (and the Home Return Permit) worth pursuing
+
+What HK PR actually costs you: Basic Law Article 24 requires 7 years of continuous ordinary residence in Hong Kong — actually living and working there, not just holding a visa. That means relocating your household, walking away from (or heavily discounting) the AUD 16k/month Australia income for the better part of a decade, re-establishing careers, schooling, etc. This is a life relocation, not a visa application.
+
+What it buys you: the Home Return Permit (回乡证), which lets HK PR-holding Chinese nationals cross into the mainland without a visa and without the tourist-style day caps foreign passports face — genuinely the most frictionless way to be in China long-term.
+
+The catch: you likely don't need it. Because your wife is a PRC citizen, you as her spouse already qualify for the Q1 family-reunification visa/residence permit route — apply through the local PSB once in China, get a residence permit typically valid 1–5 years and renewable, multiple entry, no cap on continuous days present during its validity. That's the same practical outcome (open-ended ability to stay and care for parents) for periodic renewal, versus a 7-year relocation andcareer sacrifice.
+                                                                                                                                      If it's worth it: only if HK residency delivers valueentry question — e.g., you're already considering aHK-based career move, want HK banking/asset structuring, want a HKSAR passport's travel profile, or want the option for children's HK education. In that case the Home Return Permit is a nong, not the reason to do it.
+
+If it's not worth it (my read): the Q1 spousal route — your ability to be present for parental caregiving —at a fraction of the cost, without requiring you to give up the Australia income or relocate the household for 7 years. Spending 7
+years and a six-figure-plus opportunity cost in foreg solve a problem that a renewable visa already solvesisn't a good trade, unless HK residency is something you want for its own sake.
+
+Caveat: exact Q1 permit validity lengths and China's visa-free terms for Singapore passports do shift with policy — worth a direct
+check with a PRC visa consultant or the local Chinese the Q1 route as settled, especially since you'replanning against a 14-year horizon.
+
+✻ Churned for 1m 31s · done 9:33 pm
+
+❯ reanalysis based on the updates
+
+Re-reading with the five new reference points — one of them overturns a load-bearing assumption in my last answer, so let me flag that
+first before rebuilding the rest.
+
+Critical correction: the Home Return Permit probably
+
+The 回乡证 (Home Return Permit) is issued to HK/Macaure Chinese nationals. Since you naturalized as aSingapore citizen, PRC nationality law (Art. 9) treats you as having automatically lost Chinese nationality the moment you did —
+you're a foreign national in China's eyes, full stop.esidency to non-Chinese nationals after 7 years ofordinary residence, but that status comes with an HKSAR "Right of Abode" ID card and travel on your Singapore passport — not the Home
+Return Permit, and not the unlimited-entry treatment  an ordinary Chinese visa for mainland entry, same asany other Singaporean, HK PR or not.
+
+So the premise in the original question 3 — "HK PR → Home Return Permit → unlimited China stay" — doesn't hold for you specifically.
+This changes the shape of the whole analysis, so I'm  HK PR actually gets you, plus your reference points.
+
+1–2. Probability of needing >90 days/year, and the tr
+
+Unchanged in mechanism, but now with an important twi no longer just "can either of you legally stay," it's"can either of you stay without a large financial penalty."
+
+- You: the constraint is visa/immigration (30-day visa-free cap as Singaporean).
+- Your wife: no PRC entry constraint at all (Chinese alian PR, spending >165 days/year away from Australiarisks reclassification as an absentee/foreign owner for land tax purposes, adding a 5–8% surcharge on your ~800K AUD property
+  (roughly AUD 40K–64K/year). That's a bigger number in this analysis.
+
+Net effect: the probability that someone needs to be en year over the next 14 years is still 50–65%cumulative, rising sharply once parents are past ~80. But now there's a real cost attached to who that someone is — your wife going is
+expensive in a way that's independent of Chinese immi
+
+3–5. Is HK PR worth it (revised)
+
+What it would actually deliver, given you can't get t
+- Access to HK's public healthcare system at resident rates (ref #1) — genuine, standing benefit, useful for your own or your pa  future care, unrelated to China entry.
+- Geographic convenience as a base closer to Shanghai than Australia is — modest, not decisive.                                 - "Potential long-term China residency" (ref #2) is lg more direct than HK PR: as the spouse of a PRCcitizen with 5 continuous years of China residence (≥9 months/year physically present) and a stable income/residence, you can   for actual PRC permanent residency (China Green Car's the genuinely powerful status you were reaching for— no HK detour needed, and it doesn't require renouncing Singapore citizenship. It requires roughly the same order of commitme  HK PR's 7-year rule (years of real physical presenc it directly solves the problem instead of solving aproblem you don't actually have.                                                                                              
+What it costs: 7 years of actually living in HK to qualify, which given your combined AUD 16K/month Australia income is a large opportunity cost — and it buys you medical access plu, not the unlimited-China-entry outcome you wereoriginally after.                                                                                                                   
+The other options on the table, weighed against it:                                                                                 - Q1 family-reunification visa (available to you now,tizen): residence permit valid 1–5 years, renewable, no cap on continuous days present. This is the actual low-cost answer to "how do I stay 90+ days." It doesn't require HK PR, doesn't   require 7 years, doesn't require relocating.
+- APEC Business Travel Card (ref #3): ~2 months per entry, 5-year multiple-entry card — but eligibility is business-travel-based,     sponsored through your employer's genuine trade/inv economies. Worth checking whether your actual jobqualifies before counting on it; if it does, it's a nice lower-friction supplement for moderate-length trips, but it caps at 60     days/visit, so it doesn't clear 90 days on its own migration authorities do sometimes scrutinizeback-to-back "visa run" patterns).                                                                                                - Reclaiming Chinese nationality (the only route that Return Permit) means renouncing Singapore citizenship— giving up your passport, PR rights, CPF, mobility — to save roughly SGD 600/year (ref #4) in MediShield premiums and gain a trav  document whose functional benefit the Q1 visa alreaworth it.
+                                                                                                                                    Bottom line: HK PR is probably not worth pursuing as regiving problem — the thing it was supposed to unlock(unrestricted entry) isn't actually available to you through that path. The Q1 visa already solves the real problem for a fraction othe cost. If you still want HK PR, it should be justierits (HK healthcare access, general optionality), notas a China-entry workaround.                                                                                                        
+The bigger action item this update surfaces: given the property/land-tax exposure is tied to your wife specifically, the household ifinancially better off structuring extended China carQ1 visa, or the APEC card if eligible) take on more ofthe long-stay duty, and your wife stays under the 165-day absence threshold — since a single year of her going over that could cost more than several years of your visa renewals combinen Australian tax advisor exactly how the 165-day testand any joint-ownership apportionment work for your specific state and title structure, since that number is large enough to be the dominant factor in this whole decision.
