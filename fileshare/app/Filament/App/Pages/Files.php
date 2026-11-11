@@ -44,6 +44,19 @@ class Files extends Page
         return app(\App\Services\PdfSettingsService::class)->get(\App\Services\PdfSettingsService::USER);
     }
 
+    public function canSeePasswordHistory(): bool
+    {
+        return (bool) auth()->user()?->canUpload();
+    }
+
+    /** Admin / operator only: PDF user password changes of the past 3 days. */
+    public function getPasswordHistory(): array
+    {
+        abort_unless($this->canSeePasswordHistory(), 403);
+
+        return app(\App\Services\PdfSettingsService::class)->userPasswordHistory(3);
+    }
+
     public function openFolder(string $name): void
     {
         $this->path = trim($this->path . '/' . $name, '/');

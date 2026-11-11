@@ -39,4 +39,12 @@ class UploadFiles extends Page implements HasSchemas
             ])
             ->statePath('data');
     }
+
+    // Admin and operator can see the PDF user password of the past 3 days (read-only).
+    public function getPasswordHistory(): array
+    {
+        abort_unless(auth()->user()?->canUpload(), 403);
+
+        return app(\App\Services\PdfSettingsService::class)->userPasswordHistory(3);
+    }
 }

@@ -74,6 +74,21 @@ class PdfSettingsService
         return PdfSettingHistory::with('user')->latest('created_at')->latest('id')->limit($limit)->get();
     }
 
+    /** User-password changes within the last $days days, newest first, decrypted. */
+    public function userPasswordHistory(int $days = 3): array
+    {
+        return PdfSettingHistory::with('user')
+            ->where('key', self::USER)
+            ->where('created_at', '>=', now()->subDays($days))
+            ->latest('created_at')->latest('id')
+            ->get()
+            ->map(fn ($h) => [
+                'when' => $h->created_at->timezone(config('app.timezone'))->format('Y-m-d H:i:s'),
+                'password' => $this->plain(self::USER, $h->new_value),
+                'by' => $h->source === 'auto' ? 'auto' : ($h->user?->name ?? 'admin'),
+            ])->all();
+    }
+
     /** Value as shown in the history list (decrypts passwords). */
     public function plain(string $key, ?string $stored): ?string
     {

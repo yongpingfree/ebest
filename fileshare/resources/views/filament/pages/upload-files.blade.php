@@ -1,6 +1,27 @@
 <x-filament-panels::page>
     {{ $this->form }}
 
+    <x-filament::section heading="PDF user password history (past 3 days)" collapsible collapsed>
+        <table style="width:100%; font-size:.875rem; border-collapse:collapse;">
+            <thead>
+                <tr style="text-align:left; border-bottom:1px solid #8884;">
+                    <th style="padding:.4rem">When</th><th>PDF user password</th><th>Changed by</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse ($this->getPasswordHistory() as $row)
+                    <tr style="border-bottom:1px solid #8882;">
+                        <td style="padding:.4rem">{{ $row['when'] }}</td>
+                        <td style="font-family:monospace">{{ $row['password'] }}</td>
+                        <td>{{ $row['by'] }}</td>
+                    </tr>
+                @empty
+                    <tr><td colspan="3" style="padding:.4rem">No changes in the past 3 days.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    </x-filament::section>
+
     <div
         x-data="folderUploader({ url: @js(route('admin.upload')), token: @js(csrf_token()) })"
         style="margin-top:1.5rem;"

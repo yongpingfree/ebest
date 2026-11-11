@@ -1,6 +1,10 @@
+XPATH=~/Downloads/Tang/Stocks/eBest/security
 files=(
-database/migrations/2026_11_10_120000_add_permissions_to_users_table.php app/Support/Permissions.php settings/permissions.json
-config/fileshare.php app/Models/User.php app/Filament/Resources/Users/Schemas/UserForm.php app/Filament/Resources/Users/Pages/ListUsers.php
+app/Services/PdfSettingsService.php
+app/Filament/Pages/UploadFiles.php
+resources/views/filament/pages/upload-files.blade.php
+app/Filament/App/Pages/Files.php
+resources/views/filament/app/pages/files.blade.php
 )
 files_old=(
 app/Providers/Filament/AdminPanelProvider.php
@@ -39,5 +43,5 @@ database/migrations/2026_11_10_110000_add_last_login_at_to_users_table.php
 for file in "${files[@]}"
 do
 echo "filename: $file"
-scp -i SecurityInformServer.pem fileshare/$file ubuntu@52.62.119.114:/var/www/fileshare/$file
+scp -i $XPATH/SecurityInformServer.pem fileshare/$file ubuntu@52.62.119.114:/var/www/fileshare/$file
 done

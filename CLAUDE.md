@@ -70,6 +70,8 @@ plan for next 5-7 days:
 
 # issues/improvement
 
+## after fixing any issue, update the files array in fileupload.sh script
+
 1, the backend python should be called like below:
 
 python3 transform.py <input pdf file> "user password" -o <output pdf file> --hours <validity hours> --owner-password "owner password"
@@ -262,3 +264,4 @@ ubuntu@ip-172-31-200-201:/var/www/fileshare$ php artisan optimize:clear
  - the visibility on Export button is controlled by permission
  - a list of user permission can be seen as settings/permissions.json
  - the permission for Export button should be configurable
+ 19, for admin and operator user, list history of user password in the past 3 days, in both upload files and downloaded files
