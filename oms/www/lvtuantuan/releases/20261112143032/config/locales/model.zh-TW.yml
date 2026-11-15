@@ -1,0 +1,240 @@
+zh-TW:
+  attributes:
+    discount: 折扣
+    order:
+      agree_refund: 同意直接退款
+      refuse_refund: 拒絕直接退款
+      direct_refund: 直接退款
+      confirm: 確認訂單
+      finish: 完成訂單
+      virtual_deliver: 虛擬訂單發貨
+      deliver_order_refund: 待收貨訂單退款
+    item/listing_types:
+      pending: 暫不販售
+      online: 立即上架販售
+      advance_on: 自定義上架時間
+    after_sale:
+      agree: 同意售後
+      refuse: 拒絕售後
+      confirm: 確定售後收貨
+      reject: 拒絕退款
+      agree_and_refund: 同意退貨退款售後並退款
+    gift_card_template/statuses:
+      pending: 可使用
+      used: 已使用
+      expired: 已過期
+    name: 名字
+    link: 連結
+    email: 郵箱
+    price_in_cent: 價格
+    start_at: 開始時間
+    end_at: 結束時間
+    payment_types:
+      wechat: 微信
+      alipay: 支付寶
+      credit_card: 信用卡
+      union_pay: 銀聯
+      apple_pay: ApplePay（銀聯）
+      cba_apple_pay: ApplePay（VISA/MASTERCARD）
+      cba_google_pay: GooglePay（VISA/MASTERCARD）
+      stripe_google_pay: GooglePay（Stripe）
+      stripe_apple_pay: ApplePay（Stripe）
+    coupon_template:
+      assign_coupon_notification_title: 優惠券發放通知
+      assign_coupon_notification: 優惠券 %{title} 已發放，請查收
+      coupon_expire_notification_title: 您的eBest優惠券即將過期
+      coupon_expire_notification: 您的 %{titles} 3天後過期，請記得使用
+  activerecord:
+    models:
+      address: 地址
+      user: 用户
+      member: 會員
+      shopping_cart_item: 購物車商品
+      auction/activity: 拍賣
+      auction_order: 拍賣訂單
+      au_suburb: Au Suburb
+    attributes:
+      default: &default
+        id: 編號
+        created_at: 創建時間
+        updated_at: 更新時間
+      magic_bean/coupon_template:
+        category_instruction: "僅限於%{content}使用"
+        item_instruction: "僅限於購買%{content}使用"
+        brand_instruction: "僅限於%{content}使用"
+        at_least_amount_instruction: "全店通用，訂單滿%{content}元可用"
+        general_instruction: "全店通用"
+        max_random_reduction_count: 隨機滿減券數上限
+      magic_bean/item:
+        serving_per_package: 本包裝所含份数
+        serving_size:  每一份的份量
+        production_place: 產地
+        allergen: 過敏原
+        storage_method: 存儲方式
+        storage_methods:
+          room_temp_storage: 常溫
+          refrigerated_storage: 冷藏
+          frozen_storage: 冷凍
+          other_storage: 其他
+          blank_storage: /
+        web_category: 網站主產品分類
+        web_category_id: 網站主產品分類
+      magic_bean/category:
+        children: 子分類
+        items: 商品
+        position: 位置
+        external_url: 外站URL
+      magic_bean/stock_keeping_unit: &stock_keeping_unit
+        "no": SKU編號
+        price_in_cent: 售價
+        properties: 屬性
+        item: 產品
+        length_in_cm: 長度
+        height_in_cm: 高度
+        width_in_cm: 寬度
+        weight_in_gram: 重量
+        barcode: 条形碼
+        quantity: 數量
+      magic_bean/item/stock_keeping_units:
+        <<: *stock_keeping_unit
+        errors:
+          must_greater_than_price_in_cent: 進貨價必須大於售價
+          barcode_can_only_contains: 条形碼只能包含大小寫英文或數字或().-或空格
+      magic_bean/address:
+        province: 州
+        city_name: 區名
+        county: 郡名
+        detail_info: 地址
+        postal_code: 郵編
+        tel_number: 電話
+        first_name: 名字
+        last_name: 姓氏
+        email: 邮箱
+        street: 街道地址
+        street_number: 街道地址
+        company_name: 公司名稱
+        alias_name: 地址名稱
+        unit_number: 單元號
+        remark: 備註
+        errors:
+          format:
+            contains_only_ascii_chars: 只能包含英文或數字
+            contains_only_english_or_dash_or_middot: 只能包含英文或-·
+      magic_bean/site_config:
+        sku_cost_minimum_factor: 售價至少為進貨價的倍數
+        sku_minimum_profit_in_cent: 售價最小利潤金額
+      magic_bean/brand:
+        position: 權重
+      magic_bean/user:
+        locale: 語言環境
+        password: 密碼
+        password_confirmation: 密碼
+      magic_bean/user/member:
+        birthday: 會員生日
+      magic_bean/member:
+        <<: *default
+        mobile: 手機號碼
+        birthday: 生日
+        available_integral: 可用積分
+        blocked_integral: 凍結積分
+        cumulative_integral: 累計獲取積分
+        user: 用户
+      magic_bean/integral_record:
+        <<: *default
+        available_integral: 可用積分
+        blocked_integral: 凍結積分
+        integral: 積分
+        kind: 類型
+        targetable: 目標
+        created_at: 創建時間
+        errors:
+          not_enough: 不足            
+      magic_bean/invoice:
+        title: 公司名
+        abn: ABN
+        first_name: 名字
+        last_name: 姓氏
+        tel_number: 電話
+        email: 郵箱
+        alias_name: 信息標籤
+        address: 地址
+        is_default: 是否默認
+        errors:
+          format:
+            contains_only_english_or_dash_or_middot: 只能包含英文或-·
+      magic_bean/app_text_message:
+        title: 標題
+        kind: 消息類型
+        content: 内容
+        titles:
+          order_paid_notification: 訂單支付通知
+          order_stockout_notification: 訂單整單缺貨通知
+          order_partly_stockout_notification: 訂單部分缺貨通知
+          order_delivery_notification: 訂單發貨通知
+          order_delivery_time_update_notification: 訂單派送時間更新通知
+          letter_for_new_user: 給新用戶的介紹信
+          order_after_sale_refund_notification: 訂單售後退款通知
+          order_confirm_norication: 訂單待確認通知
+      magic_bean/after_sale:
+        <<: *default
+        amount_in_cent: 實退金額
+        original_payment_in_cent: 應退金額
+        refund_titles:
+          refund_application: 退款申請
+          refund_result: 退款結果
+        refund_messages:
+          refund_approved: 您好，您的退款申請已經通過審核，請查收
+          refund_rejected: 您好，您的退款申請因不符合退款條件已被拒絕，拒絕理由：%{seller_reply}。請前往 App 查看詳情
+          sale_return_approved: 您好，您的退款申請已經通過審核，請在3天內將商品寄往%{return_receiver_properties}
+          sale_return_rejected: 您好，您的退回的貨物因不符合退款條件已被拒絕退款，請前往 App 聯繫客服協商解決
+        errors:
+          some_products_are_in_process: "%{item_title} 超過可退數量，部分數量可能已經申請售後服務"
+          can_not_be_created: 該訂單無法發起售後
+      magic_bean/shopping_cart_item:
+        stock_keeping_unit_id: 商品
+      magic_bean/auction/activity:
+        start_at: 開始時間
+        default_end_at: 結束時間
+        starting_price_in_cent: 起標價
+        bidding_increments_in_cent: 出價最小增額
+        reserve_price_in_cent: 底價
+        directly_purchase_price_in_cent: 直接購買價
+        notification:
+          end_title: 拍賣結束通知
+          end_content: 您參加的拍賣%{title}已結束，並且活動已%{word}
+          end_success_word: 達標
+          end_failure_word: 流標
+        errors:
+          must_be_multiple_of_bidding_increment: 必須為出價最小增額的倍數
+          must_greater_than_current_bid: 必須大於目前出價
+          not_greater_than_purchase_price: 不能大於直接購買價
+          taken: 已經被其他用戶使用，請提高您的出價金額
+      magic_bean/auction/bid:
+        amount_in_cent: 出價金額
+        notification_title: 拍賣出價通知
+        notification_content: 您參加的拍賣%{title}有新的更高出價者
+      magic_bean/auction/automatic_bid:
+        amount_limit_in_cent: 出價上限
+      magic_bean/sku_in_stock_notice:
+        notification_text: 到貨啦 - %{sku_title}
+      magic_bean/order:
+        remark: 備註
+        buyer_message: 留言
+        order_items: 商品
+        status: 狀態
+        status/wait_buyer_pay: 待支付
+        status/wait_seller_send_goods: 待發貨
+        status/wait_buyer_confirm_goods: 待確認收貨
+        status/refunding: 正在退款
+        status/trade_finished: 交易成功
+        status/trade_closed: 交易關閉
+        status/buyer_confirm_goods: 買家確認收貨
+        status/apply_refund: 申請退款
+        receiver_properties: 收貨地址
+        payment_in_cent: 支付金額
+        delivery_type: 發貨方式
+        delivery_types:
+          express: 郵寄
+          self_pick: 自提
+          merchant_delivery: 送貨上門
+          virtual_delivery: 虛擬訂單

@@ -1,0 +1,30 @@
+<%
+  @collection = MagicBean::Order.yesterday.paid.ransack
+  @after_sale_collection = MagicBean::AfterSale.includes(:order).yesterday.ransack(status_in: [:finished])
+  wechat_direct_refund_in_cent_sum = @collection.result.where(payment_type: "wechat", status: :trade_closed).sum(MagicBean::Order::DIRECT_REFUND_WECHAT_KEY)
+  credit_card_direct_refund_in_cent_sum = @collection.result.where(payment_type: ["credit_card", "union_pay"], status: :trade_closed).sum(MagicBean::Order::DIRECT_REFUND_CREDIT_CARD_KEY)
+  omipay_direct_refund_in_cent_sum = @collection.result.where(payment_type: "omipay", status: :trade_closed).sum(MagicBean::Order::DIRECT_REFUND_OMIPAY_KEY)
+  wechat_after_sale_refund_in_cent_sum = @after_sale_collection.result.where(payment_type: "wechat").sum(MagicBean::AfterSale::REFUND_KEY)
+  credit_card_after_sale_refund_in_cent_sum = @after_sale_collection.result.where(payment_type: ["credit_card", "union_pay"]).sum(MagicBean::AfterSale::REFUND_KEY)
+  omipay_after_sale_refund_in_cent_sum = @after_sale_collection.result.where(payment_type: "omipay").sum(MagicBean::AfterSale::REFUND_KEY)
+  @actual_refund_amount_in_yuan_sum = ((wechat_direct_refund_in_cent_sum + credit_card_direct_refund_in_cent_sum + omipay_direct_refund_in_cent_sum + wechat_after_sale_refund_in_cent_sum + credit_card_after_sale_refund_in_cent_sum + omipay_after_sale_refund_in_cent_sum)/100.0).round(2)
+%>
+<p>
+  新增订单数：<%= @collection.result.count %>
+</p>
+
+<p>
+  订单金额：<%= "$#{@collection.result.payment_in_yuan_sum}" %>
+</p>
+
+<p>
+  订单实付金额：<%= "$#{@collection.result.final_amount_in_yuan_sum}" %>
+</p>
+
+<p>
+  订单实退金额：<%= "$#{@actual_refund_amount_in_yuan_sum}" %>
+</p>
+
+<p>
+  新增用户数：<%= MagicBean::User.yesterday.count %>
+</p>

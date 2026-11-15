@@ -1,0 +1,10 @@
+<div class="pages">
+  <div class="markdown-body rich-text-page">
+    <% if @article %>
+      <%= content_for :title, @article.name %>
+      <%= rich_text_render(@article.content) %>
+    <% else %>
+      页面不存在
+    <% end %>
+  </div>
+</div>

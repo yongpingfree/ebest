@@ -1,0 +1,10 @@
+AllCops:
+  TargetRubyVersion: 2.5
+  Exclude:
+    - 'db/schema.rb'
+Style/AsciiComments:
+  Enabled: false
+inherit_gem:
+  rubocop-github:
+    - config/default.yml
+    - config/rails.yml

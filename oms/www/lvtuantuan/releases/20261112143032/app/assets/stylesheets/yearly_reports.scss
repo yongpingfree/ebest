@@ -1,0 +1,109 @@
+@function px2vw($px) {
+  @return 100vw * ($px / 1242);
+}
+
+#yearly-reports {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100vw;
+  min-height: 100vh;
+  background: #975bff;
+  color: #fff;
+
+  .header {
+    width: px2vw(1011);
+    height: px2vw(351);
+    margin-top: px2vw(110);
+    margin-left: px2vw(112);
+    background: image_url('icon_yearly_reports_header.png') no-repeat center center / contain;
+  }
+
+  .statistical-data {
+    margin-left: px2vw(112);
+
+    .total-amount {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: px2vw(10) 0;
+      margin-right: px2vw(112);
+      font-size: px2vw(80);
+      font-weight: bold;
+      overflow-wrap: break-word;
+
+      & > div:nth-child(2) {
+        padding: px2vw(10);
+      }
+    }
+
+    .advance-percentage {
+      margin-top: px2vw(20);
+      font-size: px2vw(54);
+    }
+
+    .category-name {
+      margin-top: px2vw(20);
+      font-size: px2vw(54);
+    }
+  }
+
+  .align-center {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: px2vw(50);
+    padding-bottom: px2vw(110);
+
+    .trojan-horse {
+      width: px2vw(1189);
+      height: px2vw(840);
+      background: image_url('icon_yearly_reports_trojan_horse.png') no-repeat center center / contain;
+    }
+
+    .sign-days {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: px2vw(30);
+      font-size: px2vw(48);
+
+      & > div {
+        margin-bottom: px2vw(10);
+      }
+
+      .num-line-box {
+        display: flex;
+        align-items: flex-end;
+
+        .num {
+          margin-right: px2vw(10);
+          font-size: px2vw(120);
+          font-weight: bold;
+          line-height: 1;
+        }
+      }
+    }
+
+    .new-year {
+      font-size: px2vw(48);
+    }
+
+    .qr-code {
+      margin: px2vw(30) auto;
+      width: px2vw(300);
+      height: px2vw(300);
+      background: image_url('icon_yearly_reports_app_shares.png') no-repeat center center / contain;
+    }
+
+    .years {
+      margin-bottom: px2vw(20);
+      font-size: px2vw(40);
+    }
+
+    .open-app {
+      font-size: px2vw(40);
+    }
+  }
+}

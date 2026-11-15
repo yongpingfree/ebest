@@ -1,0 +1,18 @@
+<% content_for :title, "Welcome" %>
+
+<div id="register_success">
+  <div class="discount-img">
+    <div class="logo"></div>
+    <div class="desc">
+      New user coupons</br>has been sent to your account
+    </div>
+  </div>
+
+  <%= render partial: "newbie_coupon_template_en", collection: @newbie_coupon_templates, as: :newbie_coupon_template %>
+
+  <div class="phone-number">Has sent to <%= params[:phone] %></div>
+
+  <a class="download-btn" href="/app_shares">Get the App</a>
+
+  <div class="app-store-search">Download eBest in Google Play or App Store</div>
+</div>

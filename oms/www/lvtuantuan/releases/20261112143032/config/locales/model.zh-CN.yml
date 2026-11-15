@@ -1,0 +1,707 @@
+zh-CN:
+  attributes:
+    discount: 折扣
+    order:
+      agree_refund: 同意直接退款
+      refuse_refund: 拒绝直接退款
+      direct_refund: 直接退款
+      confirm: 确认订单
+      finish: 完成订单
+      virtual_deliver: 虚拟订单发货
+      deliver_order_refund: 待收货订单退款
+    item/listing_types:
+      pending: 暂不售卖
+      online: 立即上架售卖
+      advance_on: 自定义上架时间
+    after_sale:
+      agree: 同意售后
+      refuse: 拒绝售后
+      confirm: 确定售后收货
+      reject: 拒绝退款
+      agree_and_refund: 同意退货退款售后并退款
+    gift_card_template/statuses:
+      pending: 可使用
+      used: 已使用
+      expired: 已过期
+    name: 名字
+    link: 链接
+    email: 邮箱
+    price_in_cent: 价格
+    start_at: 开始时间
+    end_at: 结束时间
+    payment_types:
+      wechat: 微信
+      alipay: 支付宝
+      credit_card: 信用卡
+      union_pay: 银联
+      apple_pay: ApplePay（银联）
+      cba_apple_pay: ApplePay（VISA/MASTERCARD）
+      cba_google_pay: GooglePay（VISA/MASTERCARD）
+      stripe_google_pay: GooglePay（Stripe）
+      stripe_apple_pay: ApplePay（Stripe）
+    coupon_template:
+      assign_coupon_notification_title: 优惠券发放通知
+      assign_coupon_notification: 优惠券 %{title} 已发放，请查收
+      coupon_expire_notification_title: 您的eBest优惠券即将过期
+      coupon_expire_notification: 您的 %{titles} 3天后过期，请记得使用
+      
+  activerecord:
+    models:
+      push_message: 消息中心
+      marketing_message: 营销短信
+      sku_in_stock_notice: 到货通知统计
+      category: 商品分类
+      web_category: 网站分类
+      address: 地址
+      default_freight_template: 默认运费模版
+      exceptional_freight_template: 特殊省份运费模版
+      groupon_activity: 拼团活动
+      custom_page: 自定义页面
+      custom_list: 自定义产品列表
+      page: 独立页面
+      report_page: 配置報表页面
+      report_pages_preview: 报表页面
+      member: 会员
+      integral_record: 积分记录
+      page_popup: 弹窗管理
+      user_suggestion: 用户反馈
+      user_recommended_product: 好物推荐
+      coupon_template: 优惠券模板
+      random_reduction_coupon_template_rule: 随机满减分配比例
+      preferential_pool: 优惠池
+      coupon_package: 优惠券礼包
+      coupon: 优惠券
+      gift_card_coupon: 礼品券
+      after_sale: 售后
+      gift_activity: 赠品活动
+      stock_keeping_unit: 商品
+      self_pick_up: 自提点
+      logistic: 物流
+      delivery_area: 送货上门区域
+      site_config: 全站配置
+      payment_setting: 支付配置
+      data_analysis: 数据分析
+      merchant_delivery_addresses_analysis: 商家自派地址数分析
+      delivery_time: 配送时间
+      same_day_delivery_time: 当日达配送时间
+      freight_template: 运费模板
+      brand: 品牌
+      store: 分店
+      product: Product
+      item: 产品
+      form_item: 表格产品
+      form_item_application: 表格产品申请
+      sku_sale: 商品销量统计
+      qa_and_guarantee: 答疑保障
+      comment: 评论
+      history: 浏览记录
+      order_analysis: 订单数据分析
+      user: 用户
+      groupon: 拼团
+      home: 首页
+      normal_order: 普通订单
+      groupon_order: 拼团订单
+      virtual_order: 虚拟商品订单
+      web_channel_order: 网站订单
+      app_channel_order: App订单
+      mini_program_channel_order: 小程序订单
+      ae_order: 跨境购订单
+      warehouse_order: 仓储订单
+      operation_record: 操作记录
+      admin_assign_integral_record: 管理员发放积分记录
+      admin_user: 管理员
+      order_sale: 销量统计-订单
+      order: 订单
+      app_download_channel: APP 下载渠道
+      event_page: 活动页面
+      event_form_record: 活动记录
+      cutoff_time: 截止时间
+      gift_card_template: 礼品券模板
+      external_link: 外部链接
+      external_mini_program: 外部小程序链接
+      supplier: 供应商
+      sku_sales_plan: 计划销量
+      sku_return: 商品退货统计
+      shopping_cart: 购物车
+      time_limited_promotion: 限时优惠活动
+      extra_orders_limit: 額外配送上限
+      sku_supplier: 供应商商品
+      gift_orders_analysis: 赠品统计
+      pool_gift_orders_analysis: 优惠池赠品统计
+      gift_coupons_analysis: 订单赠品优惠券统计
+      role_template: 权限模板
+      promo_code_template: Promo Code
+      hot_search: 搜索热词
+      hot_sell_config: 热卖榜
+      banner_click: 图片点击数
+      live_room: 直播间管理
+      live_room_viewed_user: 直播观看用户
+      live_room_viewed_user_stat: 直播在线观看人数
+      live_room_stock_keeping_unit: 直播间SKU
+      live_room_order: 直播订单
+      mobile_blacklist: 电话黑名单
+      coupon_auto_assignment: 定时发放优惠券
+      sign_in_activity: 签到活动
+      multi_lang_config: 多语系内容配置
+      overseas_student_application: 留学生认证申请
+      shopping_cart_item: 购物车商品
+      auction/activity: 拍卖
+      auction_order: 拍卖订单
+      item_banner: 产品Banner
+      web_banner: 英文网站Banner
+      web_banner_item: 英文网站Banner素材
+      web_custom_list: 英文网站商品列表
+      au_suburb: Au Suburb
+      freight_search: 运费查询
+      homepage_paging_setting: 首页分页配置
+      third_party_order: 第三方订单
+      mine_page_activity_setting: 我的页面活动配置
+      ae_item: AE产品
+      ae_drop_shipper_category: AE跨境购分类
+      item_tag_type: 标签类型
+      item_tag_group: 标签组
+      item_tag: 标签项
+      top_left_item_tag: 左上角营销标签
+      sku_sales_mailer_setting: sku销售邮件设置
+    attributes:
+      default: &default
+        id: 编号
+        created_at: 创建时间
+        updated_at: 更新时间
+      magic_bean/invoice:
+        title: 公司名
+        abn: ABN
+        first_name: 名字
+        last_name: 姓氏
+        tel_number: 电话
+        email: 邮箱
+        alias_name: 信息标签
+        errors:
+          format:
+            contains_only_english_or_dash_or_middot: 只能包含英文或-·
+      magic_bean/push_message:
+        push_at: 发布时间
+        path_customized: 是否自定义跳转
+        path_customized_id: 跳转页面
+        path_customized_type: 跳转页面类型
+      magic_bean/marketing_message:
+        state: 状态
+        content: 短信内容
+        user_ids: 指定用户
+        sms_platform: 发送平台
+      magic_bean/category:
+        children: 子分类
+        items: 商品
+        position: 位置
+        external_url: 外站URL
+      magic_bean/address:
+        province: 州
+        city_name: 区名
+        county: 郡名
+        detail_info: 地址
+        postal_code: 邮编
+        tel_number: 电话
+        first_name: 名字
+        last_name: 姓氏
+        email: 邮箱
+        street: 街道地址
+        street_number: 街道地址
+        company_name: 公司名称
+        alias_name: 地址名称
+        unit_number: 单元号
+        remark: 备注
+        errors:
+          format:
+            contains_only_ascii_chars: 只能包含英文或数字
+            contains_only_english_or_dash_or_middot: 只能包含英文或-·
+      magic_bean/freight_template: &freight_template
+        name: 模版名称
+        delivery_type: 发货方式
+        first_kg_charge_in_cent: 1KG以内运费
+        second_kg_charge_in_cent: 2KG以内运费
+        continued_weight_charge_in_cent: 超过2KG后每KG运费
+        extra_charge_in_cent: 超过2KG后一次性的额外费用
+        au_suburb_freight_templates: 特殊地区
+        au_suburbs: 特殊地区
+      magic_bean/default_freight_template:
+        <<: *freight_template
+      magic_bean/exceptional_freight_template:
+        <<: *freight_template
+      magic_bean/default_freight_template/exceptional_freight_templates:
+        <<: *freight_template
+      magic_bean/sku_property:
+        text: 规格名
+      magic_bean/sku_value:
+        text: 规格值
+      magic_bean/item:
+        stock_keeping_units: 商品
+        item_type: 产品类型
+        channels: 平台限制
+        delivery_type: 发货方式
+        fixed_freight: 固定运费
+        merchant_delivery_freight_template_id: 送货上门运费模版
+        express_freight_template_id: 邮寄运费模版
+        self_pick_freight_template_id: 自提运费模版
+        buy_quota_days: 限购周期
+        qa_and_guarantee: 答疑保障
+        presell_dispatch_on: 预售可派送最早日期
+        latest_presell_dispatch_on: 预售可派送最晚日期
+        presell_end_at: 预售结束时间
+        description: 描述
+        detail_images: 产品详情图
+        main_images: 产品主图
+        serving_per_package: 本包裝所含份数
+        serving_size: 每一份的份量
+        production_place: 产地
+        allergen: 过敏源
+        storage_method: 存储方式
+        storage_methods:
+          room_temp_storage: 常温
+          refrigerated_storage: 冷藏
+          frozen_storage: 冷冻
+          other_storage: 其他
+          blank_storage: /
+        listing_type: 上架类型
+        web_category: 网站主产品分类
+        web_category_id: 网站主产品分类
+        leader: 负责人
+        expiration_reminder_before_n_days: 提前n天提示过期日期弹窗
+      magic_bean/stock_keeping_unit: &stock_keeping_unit
+        "no": 商品货号
+        price_in_cent: 商品价格
+        properties: 商品规格
+        item: 产品
+        length_in_cm: 长度
+        height_in_cm: 高度
+        width_in_cm: 宽度
+        weight_in_gram: 重量
+        barcode: 条形码
+        quantity: 数量
+        gst_percent: GST%
+        shoppingunit: 入驻商
+        price_in_yuan: 价格
+        discount_price_in_yuan: 折扣价格
+        discount_quantity: 折扣数量
+        is_special: 是否特品
+        is_private_kitchen: 是否私厨
+        marketing_mode: 营销模式
+        strikethrough_price_in_cent: 划线价
+      magic_bean/item/stock_keeping_units:
+        <<: *stock_keeping_unit
+        errors:
+          must_greater_than_price_in_cent: 必须大于售价
+          barcode_can_only_contains: 条形码只能包含大小写英文或数字或().-或空格
+      magic_bean/logistic:
+        <<: *default
+        "no": 物流单号
+        company: 物流公司
+        traces: 物流轨迹
+      magic_bean/seller_recommendation:
+        item: 商品
+      magic_bean/order:
+        order_items: 商品
+        status: 状态
+        remark: 备注
+        buyer_message: 留言
+        status/wait_buyer_pay: 待支付
+        status/wait_seller_send_goods: 待发货
+        status/wait_buyer_confirm_goods: 待确认收货
+        status/refunding: 正在退款
+        status/trade_finished: 交易成功
+        status/trade_closed: 交易关闭
+        status/buyer_confirm_goods: 买家确认收货
+        status/apply_refund: 申请退款
+        status/risk_pay: 风控支付
+        status/live_top_confirm: 直播待审核
+        receiver_properties: 收货地址
+        payment_in_cent: 支付金额
+        delivery_type: 发货方式
+        delivery_types:
+          express: 邮寄
+          self_pick: 自提
+          merchant_delivery: 送货上门
+          virtual_delivery: 虚拟订单
+      magic_bean/order_items:
+        base: 商品
+      magic_bean/activity_items:
+        activity: 活动
+        item: 商品
+      magic_bean/qa_and_guarantee:
+        items: 商品
+        web_image: 桌面端图片
+      magic_bean/brand:
+        name: 品牌名称
+        items: 商品
+        position: 权重
+      magic_bean/admin_user:
+        password: 密码
+        password_confirmation: 密码确认
+        mobile: 手机号
+        email: 邮箱
+        stores: 分店
+      magic_bean/store:
+        short_name: 店名缩写
+      magic_bean/groupon_activity:
+        user_count: 拼团人数
+      magic_bean/groupon_activity/sku_groupons:
+        price_in_cent: SKU拼团价格
+      magic_bean/custom_page:
+        en_name: 英文名
+        name: 中文名
+        qrcode_url: 二维码
+        front_end_url: 小程序页面路径
+      magic_bean/custom_list:
+        item_ids: 商品列表
+        title: 标题
+        remark: 备注
+        position: 位置
+        kind: 类型
+      magic_bean/page:
+        name: 页面名
+        kind: 类型
+        content: 内容
+      magic_bean/member:
+        <<: *default
+        mobile: 手机号码
+        birthday: 生日
+        available_integral: 可用积分
+        blocked_integral: 冻结积分
+        cumulative_integral: 累积获取积分
+        user: 用户
+      magic_bean/integral_record:
+        <<: *default
+        available_integral: 可用积分
+        blocked_integral: 冻结积分
+        integral: 积分
+        kind: 类型
+        targetable: 目标
+        created_at: 创建时间
+        errors:
+          not_enough: 不足
+      magic_bean/page_popup:
+        <<: *default
+        title: 标题
+        image: 图片
+        path: 小程序路径
+        for_new_user: 新用户可用
+        start_at: 开始时间
+        end_at: 结束时间
+      magic_bean/user_suggestion:
+        <<: *default
+        status: 状态
+        content: 内容
+      magic_bean/user_recommended_product:
+        <<: *default
+        recommended_products: 内容
+      magic_bean/coupon_template: &coupon_template
+        <<: *default
+        title: 名称
+        desc: 使用说明
+        kind: 类型
+        denominations_in_cent: 面额
+        min_denominations_in_cent: 最小面额
+        max_denominations_in_cent: 最大面额
+        discount: 折扣
+        at_least_amount_in_cent: 门槛金额
+        need_at_least_amount: 是否有使用门槛
+        time_kind: 用券时间类型
+        time_limit_in_day: 领取后限时使用时间
+        start_at: 优惠券开始使用时间
+        end_at: 优惠券结束使用时间
+        details_image: 详情图片
+        expired_image: 过期图片
+        enabled: 是否启用
+        remarks: 备注
+        code: 优惠券码
+        item_ids: 产品
+        user_kind: 用户类型
+        category_instruction: "仅限于%{content}使用"
+        item_instruction: "仅限于购买%{content}使用"
+        brand_instruction: "仅限于%{content}使用"
+        at_least_amount_instruction: "全店通用，订单满%{content}元可用"
+        general_instruction: "全店通用"
+        max_random_reduction_count: 随机满减券数上限
+      magic_bean/coupon:
+        <<: *coupon_template
+        expired_at: 过期时间
+      magic_bean/coupon_package:
+        <<: *default
+        name: 名称
+        status: 状态
+        user_kind: 用户类型
+        coupon_template_ids: 优惠券
+        cover: 封面
+        start_at: 开始时间
+        end_at: 结束时间
+      magic_bean/after_sale:
+        <<: *default
+        amount_in_cent: 实退金额
+        original_payment_in_cent: 应退金额
+        refund_titles:
+          refund_application: 退款申请
+          refund_result: 退款结果
+        applicant_types:
+          user: 用户
+          wms: 系统
+          admin: 管理后台
+        internal_reasons:
+          product_spoilage: '产品变质'
+          quality_issue: '产品质量'
+          product_expired: '过期'
+          near_expiration: '临期'
+          packaging_damage: '产品破损'
+          warehouse_shipment_omission: '仓库漏发/错发'
+          driver_missed_delivery: '司机漏送/错送'
+          driver_took_wong: '司机漏拿/错拿'
+          supplier_non_delivery: '未到货'
+          inventory_discrepancy: '库存差异'
+          thawing_or_defrosting: '融化解冻'
+          shortweight_or_short_measure: '缺斤少两'
+          eating_foreign_objects: '吃到异物'
+          supplier_attached_wrong_labels: '供货商贴错标签'
+          out_of_stock: '产品缺货'
+          incorrect_response: '回复错误'
+          customer_dissatisfaction: '客户不满意'
+          not_match_the_description: '实物与介绍不符'
+          frostbite: '冻伤'
+          customer_mistaken_purchase: '客人错买'
+          customer_changed_their_mind: '客人改变主意'
+          specifications_not_suitable: '规格不合适'
+        departments:
+          supplier: '供应商'
+          warehouse: '仓库'
+          procurement: '采购'
+          fleet: '车队'
+          customer: '客人'
+          operations: '运营'
+          customer_service: '客服'
+        refund_messages:
+          refund_approved: 您好，您的退款申请已经通过审核，请查收
+          refund_rejected: 您好，您的退款申请因不符合退款条件已被拒绝，拒绝理由：%{seller_reply}。请前往 App 查看详情
+          sale_return_approved: 您好，您的退款申请已经通过审核，请在3天内将商品寄往%{return_receiver_properties}
+          sale_return_rejected: 您好，您的退回的货物因不符合退款条件已被拒绝退款，请前往 App 联系客服协商解决
+        errors:
+          some_products_are_in_process: "%{item_title} 超过可退数量，部分数量可能已在申请售后"
+          can_not_be_created: 该订单无法发起售后
+      magic_bean/gift_activity:
+        <<: *default
+        start_at: 开始时间
+        end_at: 结束时间
+        status: 状态
+        rules: 规则
+      magic_bean/self_pick_up:
+        name: 自提点名称
+        mobile: 联系手机号
+        address: 地址
+        province_name: 省份
+        city_name: 城市
+        opening_hours: 营业时间
+
+      magic_bean/delivery_area:
+        <<: *default
+        name: 名称
+        postal_code: 邮编
+        latitude: 纬度
+        longitude: 经度
+
+      magic_bean/delivery_time:
+        <<: *default
+        name: 名称
+        weekdays: 星期数
+      magic_bean/delivery_time_period:
+        title_zh_cn: 标题
+        title_zh_tw: 标题
+        title_en: 标题
+        delivery_time_period_settings: 时间段设置
+      magic_bean/delivery_time_period_setting:
+        prefer_time: 时间段
+        order_address_limit_every_day: 订单地址数上限
+        freight_in_yuan: 运费
+        freight_in_cent: 运费
+
+      magic_bean/item/cutoff_times:
+        weekdays: 星期数
+        time_at: 时间点
+        deliver_after_n_days: 截单后n天发货
+
+      magic_bean/gift_card_template:
+        quantity: 数量
+        denominations_in_cent: 面额
+        expired_at: 过期时间
+        purchaser: 用券单位
+
+      magic_bean/supplier:
+        <<: *default
+        name: 供应商名称
+        cost_in_cent: 供应商价格
+
+      magic_bean/promo_code_template:
+        promo_stock_keeping_units: SKU
+        title: 标题
+        enable: 是否启用
+        start_on: 开始日期
+        end_on: 结束日期
+
+      magic_bean/promo_code:
+        total_avaliable_count: 总可使用次数
+        used_count: 已使用次数
+
+      magic_bean/promo_stock_keeping_unit: &promo_stock_keeping_unit
+        stock_keeping_unit: SKU
+        price_in_cent: 单价
+        quantity: 数量
+      promo_stock_keeping_units:
+        <<: *promo_stock_keeping_unit
+
+      magic_bean/order_invoice/states:
+        pending: 发送中
+        success: 发送成功
+        failure: 发送失败
+      magic_bean/stock_keeping_unit/marketing_modes:
+        self_support: 自营
+        consign_for_sale: 寄售
+        platform: 平台
+      magic_bean/extra_orders_limit:
+        order_amount_in_cent: 订单金额
+        delivery_date: 派送日期
+        begin_at: 生效时间
+        extra_merchant_delivery_orders_limit: 额外配送单量
+      magic_bean/app_text_message:
+        title: 标题
+        kind: 消息类型
+        content: 内容
+        titles:
+          order_paid_notification: 订单支付通知
+          order_stockout_notification: 订单整单缺货通知
+          order_partly_stockout_notification: 订单部分缺货通知
+          order_delivery_notification: 订单发货通知
+          order_delivery_time_update_notification: 订单派送时间更新通知
+          letter_for_new_user: 给新用户的介绍信
+          order_after_sale_refund_notification: 订单售后退款通知
+          order_confirm_notification: 订单待确认通知
+          ae_order_failed_and_refund_notice: 跨境购缺货退款通知
+      magic_bean/live_room:
+        title: 标题
+        viewed_count_offset: 基础观看次数
+        viewed_count_multiplier: 实际观看次数乘数
+        liked_count_offset: 基础点赞次数
+        liked_count_multiplier: 实际点赞次数乘数
+      magic_bean/live_room/live_room_skus:
+        stock_keeping_unit: 直播间SKU
+      magic_bean/admin_assign_integral_record:
+        integral: 积分
+      magic_bean/site_config:
+        sku_cost_minimum_factor: 售价至少为进货价的倍数
+        sku_minimum_profit_in_cent: 售价最小利润金额
+      magic_bean/payment_setting:
+        wechat_service_percentage: 小程序微信手续费百分比
+        vm_credit_card_service_percentage: VISA/MASTER信用卡手续费百分比
+        unionpay_credit_card_service_percentage: 银联信用卡手续费百分比
+        exchange_rate_rise_percentage: 汇率上浮百分比
+        omipay_wechat_service_percentage: Omipay微信手续费百分比
+        omipay_alipay_service_percentage: Omipay支付宝手续费百分比
+        supay_wechat_service_percentage: Supay微信手续费百分比
+        supay_alipay_service_percentage: Supay支付宝手续费百分比
+        enable_commweb_3ds_auth: 是否开启CommWeb 3DS身份验证
+        apple_pay_service_percentage: 银联ApplePay手续费百分比
+        cba_apple_pay_service_percentage: CBA ApplePay手续费百分比
+        cba_google_pay_service_percentage: CBA GooglePay手续费百分比
+        no_transaction_fee_over_amount_in_cent: 实付满金额免手续费
+        no_transaction_fee_over_amount_in_yuan: 实付满金额免手续费
+      magic_bean/sign_in_activity:
+        <<: *default
+        start_at: 开始时间
+        end_at: 结束时间
+        title_zh_cn: 标题
+        detail_image: 活动图片
+        enabled: 是否启用
+        reward_integral_each_time: 单次签到金币
+        extra_reward_type: 额外奖励计算方式
+        sign_in_times: 签到次数
+        extra_reward_integral: 额外金币
+      magic_bean/user:
+        locale: 语言环境
+        password: 密码
+        password_confirmation: 密码
+      magic_bean/user/member:
+        birthday: 会员生日
+      magic_bean/overseas_student_application:
+        nickname: 昵称
+        gender: 性别
+        birthday: 生日
+        school: 学校
+        email: 邮箱
+        student_number: 学生证
+        student_image_obverse_side: 学生证正面
+        student_image_reverse_side: 学生证反面
+      magic_bean/shopping_cart_item:
+        stock_keeping_unit_id: 商品
+      magic_bean/auction/activity:
+        start_at: 开始时间
+        default_end_at: 结束时间
+        starting_price_in_cent: 起标价
+        bidding_increments_in_cent: 出价最小增额
+        reserve_price_in_cent: 底价
+        directly_purchase_price_in_cent: 直接购买价
+        notification:
+          end_title: 拍卖结束通知
+          end_content: 您参加的拍卖%{title}已结束，并且活动已%{word}
+          end_success_word: 达标
+          end_failure_word: 流标
+        errors:
+          must_be_multiple_of_bidding_increment: 必须为出价最小增额的倍数
+          must_greater_than_current_bid: 必须大于目前出价
+          not_greater_than_purchase_price: 不能大于直接购买价
+          taken: 已经被其他用户使用，请提高你的出价金额
+      magic_bean/auction/bid:
+        amount_in_cent: 出价金额
+        notification_title: 拍卖出价通知
+        notification_content: 您参加的拍卖%{title}有新的更高出价者
+      magic_bean/auction/automatic_bid:
+        amount_limit_in_cent: 出价上限
+      magic_bean/same_day_delivery_time:
+        same_day_delivery_time_periods: 配送时间段
+      magic_bean/same_day_delivery_time/same_day_delivery_time_periods:
+        time_period: 时间段
+        time_window: 时间窗口
+        kind: 时间段类型
+        enabled: 是否启用
+        address_count_limit: 配送地址数
+        free_shipping_amount_in_cent: 免额外运费订单金额
+        app_free_shipping_amount_in_cent: App免额外运费订单金额
+        mini_program_free_shipping_amount_in_cent: 小程序免额外运费订单金额
+        web_free_shipping_amount_in_cent: Web免额外运费订单金额
+        extra_shipping_amount_in_cent: 额外运费
+      magic_bean/web_banner:
+        web_banner_items: 网页Banner素材
+        store_id: 门店
+        page_location: 页面位置
+      web_banner_items: &web_banner_items
+        web_banner: 网页Banner
+        desktop_image_url: 桌面端图片
+        mobile_image_url: 移动端图片
+        position: 排序
+        start_at: 开始时间
+        end_at: 结束时间
+        nav_path_type: 跳转页面类型
+        nav_path_id: 跳转页面编号
+      magic_bean/web_banner_item:
+        <<: *web_banner_items
+      magic_bean/sku_in_stock_notice:
+        notification_text: 到货啦 - %{sku_title}
+      magic_bean/homepage_paging_setting:
+        name: 名称
+        position: 权重
+        image: 图片
+      magic_bean/mine_page_activity_setting:
+        name: 名称
+        position: 权重
+        icon: 图标
+        enabled: 是否启用
+      magic_bean/hot_sell_config:
+        last_x_days: 过去X天销量
+        show_item_nums: 最多展示几个商品
+        contains_order_gift: 销量包含全场满赠数量
+        contains_order_pool_gift: 销量包含优惠池满赠数量
+        is_show_storage_on_sale: 仅展示有库存开卖商品
+        enabled: 是否展示热卖榜

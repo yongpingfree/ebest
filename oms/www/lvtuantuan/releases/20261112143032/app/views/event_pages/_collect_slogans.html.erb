@@ -1,0 +1,153 @@
+<% content_for :title, "活动" %>
+<div class="slogan-top-image">
+  <%= image_tag "https://cdn.minimall.donkibuy.com/images/events/slogen-page-top.jpg"%>
+  <button class="js-share-btn share-btn" type="button">分享</button>
+</div>
+<div class="total-wrap">
+  <div class="js-input-wrap input-wrap">
+    <input
+      type="text"
+      class="js-input-content"
+      placeholder="留下一句世间传颂的广告语吧！"
+      maxlength="60"
+    />
+    <button class="js-button" type="button">提交你的创意</button>
+  </div>
+  <p>我的提交（一人三次机会）</p>
+  <div class="submit-content">
+    <div>
+      <div class="js-left left">提交时间</div>
+      <div class="js-right right">提交内容</div>
+    </div>
+    <div>
+      <div class="js-left left"></div>
+      <div class="js-right right"></div>
+    </div>
+    <div>
+      <div class="js-left left"></div>
+      <div class="js-right right"></div>
+    </div>
+    <div>
+      <div class="js-left left"></div>
+      <div class="js-right right"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    const isLogin = <%= current_user.present? %>;
+    const isMember = <%= current_user&.member.present? %>;
+    let disabledCount = 0;
+    let leftContent = $('.js-left');
+    let rightContent = $('.js-right');
+    let spaceReg = /^[ ]+$/;
+
+    if (!window.ReactNativeWebView) {
+      window.location.href = `/app_shares?type=webviewPage&path=${encodeURIComponent(window.location.href)}`
+      return
+    }
+
+    if (isLogin && isMember) {
+      getData();
+    }
+
+    function getData() {
+      $.ajax({
+        url: '/event_form_records',
+        type: 'get',
+        dataType: 'json',
+        data: {
+          event_slug: 'collect_slogans',
+        },
+        success(res) {
+          res = res || []
+          res.map((item, index) => {
+            ++disabledCount
+            rightContent[index + 1].innerHTML = item.data.content;
+            leftContent[index + 1].innerHTML = formatTime(item.created_at);
+          });
+        },
+        error(err) {
+          if (err.status === 403) {
+            layerPop('请注册会员进入该页面')
+          } else if (err.status === 401) {
+            layerPop('您还未授权')
+          }
+        }
+      });
+    }
+
+    $('.js-button').click(function() {
+      if (!isLogin) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'login' }));
+        return
+      } else if (!isMember) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'bind' }));
+        return
+      }
+
+      let inputValue = $('.js-input-wrap input').val();
+      if (!inputValue || spaceReg.test(inputValue)) {
+        layerPop('请输入正确的广告语')
+        return
+      } else if (disabledCount >= 3){
+        layerPop('您已超过提交次数')
+        return
+      }
+
+      $(this).attr('disabled','disabled')
+      let self = this
+
+      $.ajax({
+        url: '/event_form_records',
+        type: 'post',
+        dataType: 'json',
+        data: {
+          event_slug: 'collect_slogans',
+          data: {
+            content: inputValue,
+          }
+        },
+        success(res) {
+          ++disabledCount;
+          rightContent[disabledCount].innerHTML = res.data.content;
+          leftContent[disabledCount].innerHTML = formatTime(res.created_at);
+          layerPop('提交成功！')
+          $('.js-input-wrap input').val('');
+          $(self).removeAttr('disabled')
+        },
+        error(err) {
+          $(self).removeAttr('disabled')
+          if (err.status === 403) {
+            layerPop('请注册会员进入该页面！')
+          } else if (err.status === 401) {
+            layerPop('您还未授权')
+          }
+        }
+      });
+    });
+
+    $('.js-share-btn').click(function () {
+      const params = {
+        url: `${window.location.origin}/app_shares?type=webviewPage&path=${encodeURIComponent(window.location.href)}`,
+        title: 'eBest邀请你成为我们的品牌创意合伙人',
+        description: '广告语通过评选后，最高可以获得 $5000 澳币的代金券，活动时间 10月1日-10月18日'
+      }
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'share', params }));
+    })
+
+    function toString(params) {
+      let num = parseInt(params)
+      return num < 10 ? '0' + num : num
+    }
+
+    function formatTime(timeStr) {
+      let time = new Date(timeStr);
+      let month = toString(time.getMonth() + 1);
+      const arr = ['getDate', 'getHours', 'getMinutes', 'getSeconds']
+      const [day, hour, minute, seconds] = arr.map( item => Date.prototype[item].call(time) )
+      return `${month}-${day} ${hour}:${minute}:${seconds}`;
+    }
+  });
+</script>

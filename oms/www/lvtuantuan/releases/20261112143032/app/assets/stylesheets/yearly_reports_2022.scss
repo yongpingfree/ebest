@@ -1,0 +1,111 @@
+@function px2vw($px) {
+  @return 100vw * ($px / 375);
+}
+
+#yearly-reports-2022 {
+  width: 100vw;
+
+  .view-list {
+    width: 100%;
+
+    .item {
+      position: relative;
+
+      .bg-img {
+        vertical-align: middle;
+        width: 100%;
+      }
+
+      .fill-text {
+        position: absolute;
+        z-index: 1;
+        font-weight: bold;
+        font-size: px2vw(28);
+        text-align: center;
+        
+        &.light {
+          color: #000;
+        }
+
+        &.dark {
+          color: #fff;
+        }
+      }
+
+      &.first {
+        .total-amount-in-yuan {
+          top: px2vw(298);
+          left: px2vw(129);
+          width: px2vw(137);
+          font-size: px2vw(26);
+        }
+
+        .user-store-name {
+          top: px2vw(333);
+          left: px2vw(83);
+          width: px2vw(97);
+          font-size: px2vw(20);
+        }
+
+        .total-amount-advance-percentage {
+          top: px2vw(361);
+          left: px2vw(65);
+          width: px2vw(98);
+        }
+      }
+
+      &.third {
+        .sign-days {
+          top: px2vw(126);
+          left: px2vw(162);
+          width: px2vw(85);
+        }
+
+        .orders-count {
+          top: px2vw(357);
+          left: px2vw(34);
+          width: px2vw(51);
+        }
+
+        .total-quantity {
+          top: px2vw(393);
+          left: px2vw(32);
+          width: px2vw(55);
+          font-size: px2vw(23);
+        }
+
+        .quantity-advance-percentage {
+          top: px2vw(423);
+          left: px2vw(95);
+          width: px2vw(65);
+          font-size: px2vw(24);
+        }
+
+        .use-coupon-orders-count {
+          top: px2vw(452);
+          left: px2vw(95);
+          width: px2vw(65);
+        }
+      }
+
+      &.fourth {
+        .latest-order-time-format {
+          top: px2vw(124);
+          left: px2vw(72);
+          width: px2vw(44);
+        }
+
+        .item-name {
+          top: px2vw(378);
+          left: px2vw(40);
+          width: px2vw(295);
+          line-height: 1.4;
+        }
+      }
+    }
+  }
+
+  .inactive-img {
+    width: 100%;
+  }
+}

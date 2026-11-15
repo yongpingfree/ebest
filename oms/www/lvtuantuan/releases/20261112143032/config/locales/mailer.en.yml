@@ -1,0 +1,10 @@
+---
+en:
+  order_invoice_mailer:
+    send_to_user:
+      title: Invoice (Order NO %{number})
+      greeting: Dear customer, %{name},
+      thanks_for_shopping: Thank you very much for your purchase!
+      order_attachment: Please find attached the invoice for order %{number}
+      welcome_back: We look forward to your next visit!
+      ending_thank: Thanks

@@ -1,0 +1,28 @@
+<% database = Rails.application.credentials.dig(Rails.env.to_sym, :database) %>
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: <%= database.dig(:name) %>
+  username: <%= database.dig(:username) %>
+  password: <%= database.dig(:password) %>
+
+development:
+  <<: *default
+  host: '127.0.0.1'
+  username: 'postgres'
+
+test:
+  <<: *default
+  host: '127.0.0.1'
+  username: 'postgres'
+
+
+staging:
+  <<: *default
+
+production:
+  <<: *default
+  host: <%= database.dig(:host) %>
+  port: <%= database.dig(:port) %>

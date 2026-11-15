@@ -1,0 +1,16 @@
+
+  <%= content_for :title, @page.name %>
+  <div class="page-memnber-info">
+    <%= @page.content.html_safe %>
+    <%# <div class="btn-container">
+      <div class="btn-add" id="js-nav">立即加入</div>
+    </div> %>
+  </div>
+  <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+  <script>
+    window.onload = function() {
+      document.querySelector('#js-nav').addEventListener('click', function() {
+        wx.miniProgram.redirectTo({ url: '/pages/vip/sign-up/sign-up' });
+      });
+    }
+  </script>

@@ -1,0 +1,7 @@
+---
+zh-TW:
+  orders:
+    commweb_failure:
+      failure_title: 付款失敗
+      change_payment_method: 請重試或換個支付方式。
+      close_btn: 關閉

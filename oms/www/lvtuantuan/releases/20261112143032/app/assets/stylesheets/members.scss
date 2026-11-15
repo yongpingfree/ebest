@@ -1,0 +1,17 @@
+.members {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  height: auto;
+
+  img {
+    width: 100%;
+    max-width: 750px;
+    display: block;
+    height: auto !important;
+  }
+
+  .error-message {
+    margin: 0 16px;
+  }
+}

@@ -1,0 +1,107 @@
+<% store_name = @order.peti_store? ? "Peti" : "eBest" %>
+<% logo = @order.peti_store? ? "https://cdn.minimall.donkibuy.com/images/290ef3a9-827e-4c7a-9feb-8b530aa048c2-j36vqe1td.png" : "https://cdn.minimall.donkibuy.com/images/ee249701-1430-4e01-bcc9-4dbe24e6375a-jans6lxgo.png" %>
+<% contact_email = @order.peti_store? ? "info@peti.com.au" : "csen@ebest.com.au" %>
+
+<div class="container">
+  <div class="logo">
+    <%= image_tag logo, style: "width:300px" %>
+  </div>
+</div>
+
+<p>
+  Hi <%= @order.receiver_name %>,
+</p>
+<br/>
+
+<% if @order.merchant_delivery? %>
+  <p>
+    We are excited to let you know that your order <strong><%= @order.third_party_id %></strong> has been dispatched and is on its way to you!
+  </p>
+  <br/>
+
+  <p>
+    You can track your delivery and see the estimated arrival time by clicking the link below:
+  </p>
+  <p>
+    <a href="<%= @order.delivery_track %>"><%= @order.delivery_track %></a>
+  </p>
+  <p>
+    If you have any questions or need further assistance, please don't hesitate to contact us via <%= contact_email %>.
+  </p>
+  <br/>
+
+  <p>
+    Important Delivery Information:
+  </p>
+  <br/>
+
+  <p>
+    If you are not at home when the delivery arrives, we will leave your order in a safe place at your doorstep.
+  </p>
+  <p>
+    We will also take a photo of the delivered items and send it to you for your peace of mind.
+  </p>
+<% elsif @order.self_pick? %>
+  <p>
+    We are excited to let you know that your order <strong><%= @order.third_party_id %></strong> is ready for pickup!
+  </p>
+  <br/>
+
+  <p>Pickup Details:</p>
+  <p>Your self-pickup code is <strong><%= @order.tracking_no %></strong></p>
+  <p>Pickup Date: <strong><%= @order.delivery_date %>, 2-6pm</strong></p> 
+  <p>Pickup Location: <%= "#{@order.receiver_properties["address"]}, #{@order.receiver_properties["province"]} #{@order.receiver_properties["zip"]}" %></p>
+  <p>Additional Information:</p>
+  <p>Upon arrival, please call <strong>0426 607 777</strong> and our staff will assist you.</p>
+  <br/>
+
+  <p>
+    If you have any questions or need further assistance, please don't hesitate to contact us via <%= contact_email %>.
+  </p>
+<% else %>
+  <p>
+    We are excited to let you know that your order <strong><%= @order.third_party_id %></strong> has been dispatched and is on its way to you! Your order will be delivered via Australia Post.
+  </p>
+  <br/>
+
+  <p>
+    You can track your delivery and see the estimated arrival time by clicking the link below:
+  </p>
+  <p>
+    <% tracking_link = "https://auspost.com.au/mypost/track/details/#{@order.tracking_no}" %>
+    <a href="<%= tracking_link %>"><%= tracking_link %></a>
+  </p>
+  <br/>
+
+  <p>
+    If you have any questions or need further assistance, please don't hesitate to contact us via <%= contact_email %>.
+  </p>
+<% end %>
+<br/>
+
+<p>
+  Thank you for choosing <%= store_name %>!
+</p>
+<br/>
+
+<p>
+  Best regards,
+</p>
+<p>
+  <%= store_name %>
+</p>
+
+<style type="text/css" media="all">
+  .container {
+    text-align: center;
+    margin: 30px auto;
+
+    .logo {
+      display: block;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 0 auto;
+    }
+  }
+</style>

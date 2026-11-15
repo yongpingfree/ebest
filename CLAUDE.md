@@ -34,6 +34,32 @@ apps developer
 - enforce authentication if User-Agent does not start with okhttp or X-Requested-With is not 'com.donkibuy.ebest'
 - sample response message in api folder
 
+6, generate requirement documentation on onboardingSystem.md
+- output is Word document
+- information required for PO
+  供货商名称           
+    purchase date           
+    purchaser           
+    marketing mode            
+    预计到货时间            
+    是否同步库存            
+            
+    PRODUCT NAME  SKU BARCODE QTY unit price (inc.GST)  GST rate  subtotal
+    refer to PO template file
+- if it's a new vendor, vendor needs to fill in registration info in the portal, and information to be sent to eBest backend for new vendor form submission:
+    refer to new vendor form
+- keep description in Chinese, don't include English
+- avoid wording like:
+  - • 全文为纯中文描述
+- issues on first version:
+  - the new system needs to align with the existing PO process (refer to PO录入流程&审核 document)
+  - 库存问题，我们现在有三套库存，oms，wms，runbow，三个地方都有库存，数据一致性是不是要有一个统一的标准
+    - this is only for the inventory under the vendor onboarding system
+  - 然后原有的送货来了之后，要在wms录入po单，库存数量才能增加，这也是个问题，比如是否有自动创建po的功能？
+    - 对于vendor delivery, vendor confirmed ready for sell, vendor create self PO by himself
+    - for normal eBest delivery, once stock confirmed by eBest upon receival, vendor create PO for eBest to signoff
+    - for JIT delivery, everyday upon delivery to eBest warehouse, vendor create PO for eBest to signoff
+
 # status
 
 1, 2026-11-2 to 2026-11-9
@@ -265,3 +291,14 @@ ubuntu@ip-172-31-200-201:/var/www/fileshare$ php artisan optimize:clear
  - a list of user permission can be seen as settings/permissions.json
  - the permission for Export button should be configurable
  19, for admin and operator user, list history of user password in the past 3 days, in both upload files and downloaded files
+20, in Upload Files sheet, the Drag & drop files area is too small, also background is same as other space, which is not clear to user.
+- change background color
+- add an icon for easy understanding
+- add some border
+21, in the admin dashboard, show a line chart with total number of files uploaded, and downloaded, and total number of times of download every day in the past 30 days.
+22, in download file, the folder is in grey color, change it to yellow
+23, the file icon is also grey, please change icon as Excel file for xls and xlsx, icon as Pdf for pdf file
+24, for any Excel file uploaded
+- protect it by a password, and a similar expiry date by VBA script; using the same configuration (password and expiry hours)
+- change PDF setting to PDF/Excel setting
+- change PDF password to PDF/Excel password

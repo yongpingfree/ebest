@@ -1,0 +1,33 @@
+:concurrency: 5
+:pidfile: tmp/pids/sidekiq.pid
+
+:queues:
+  - ["orders", 5]
+  - ["shopping_cart_items", 5]
+  - ["payment", 4]
+  - ["deliver_sms", 3]
+  - ["push_notification", 3]
+  - ["default", 2]
+  - ["wechat", 2]
+  - ["member", 2]
+  - ["coupons", 2]
+  - ["auto_assign_coupon", 2]
+  - ["searchkick", 2]
+  - ["mailers", 1]
+  - ["groupon", 1]
+  - ["logistic", 1]
+  - ["low_priority", 1]
+  - ["sendgrid", 1]
+  - ["shopline", 1]
+  - ["aliexpress", 1]
+
+# ES服务器如果CPU占用过高，会导致sidekiq所有进场被占用，导致无法处理新的任务，所以这里现在每个进程最多同时执行15个searchkick job
+# :process_limits:
+#   searchkick: 15
+
+development:
+  :concurrency: 5
+staging:
+  :concurrency: 5
+production:
+  :concurrency: 10

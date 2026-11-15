@@ -1,0 +1,17 @@
+<div id="commweb_failure">
+  <h1><%= t(".failure_title") %></h1>
+  <p><%= t(".change_payment_method") %></p>
+  <div class="btn submit-btn green" id="return_btn"><%= t(".close_btn") %></div>
+</div>
+
+<script charset="utf-8">
+  $(function() {
+    $('#return_btn').click(function() {
+      if(window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'close' }));
+      } else {
+        window.close();
+      }
+    });
+  });
+</script>

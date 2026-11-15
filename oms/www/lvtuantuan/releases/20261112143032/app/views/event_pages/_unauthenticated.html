@@ -1,0 +1,11 @@
+<p class="text-center">
+  用户未授权
+</p>
+
+<script>
+  window.addEventListener("load", function() {
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'login' }))
+    }
+  });
+</script>

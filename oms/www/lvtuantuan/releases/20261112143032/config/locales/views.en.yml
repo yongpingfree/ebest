@@ -1,0 +1,7 @@
+---
+en:
+  orders:
+    commweb_failure:
+      failure_title: Payment failed
+      change_payment_method: Please try again or use a different payment method.
+      close_btn: Close

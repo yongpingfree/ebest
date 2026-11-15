@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DownloadLog;
 use App\Models\SharedFile;
 
 class FileDownloadController extends Controller
@@ -14,6 +15,8 @@ class FileDownloadController extends Controller
 
         $abs = rtrim(config('fileshare.published'), '/') . '/' . $file->path;
         abort_unless(is_file($abs), 404);
+
+        DownloadLog::record($user->id, [$file->id]);
 
         return response()->download($abs, basename($file->path));
     }

@@ -1,0 +1,10 @@
+Description:
+    generate admin_api
+
+Example:
+    rails generate admin_api things
+
+    This will do:
+      create  app/services/beans_admin/api/v1/things.rb
+      create  app/services/beans_admin/api/entities/thing.rb
+      insert  app/services/beans_admin/api/v1.rb

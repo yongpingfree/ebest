@@ -1,0 +1,530 @@
+en:
+  attributes:
+    discount: Discount
+    order:
+      agree_refund: Agree to Refund
+      refuse_refund: Refuse to Refund
+      direct_refund: Refund Directly
+      confirm: Confirm
+      finish: Complete Order
+      virtual_deliver: Virtual Order Delivery
+      deliver_order_refund: Deliver Order Refund
+    item/listing_types:
+      pending: Pending
+      online: Online
+      advance_on: Advance On
+    after_sale:
+      agree: Agree
+      refuse: Refuse
+      confirm: Confirm
+      reject: Reject
+      agree_and_refund: Agree to Return and Refund
+    gift_card_template/statuses:
+      pending: Available
+      used: Used
+      expired: Expired
+    name: Name
+    link: Link
+    email: Email
+    price_in_cent: Price
+    start_at: Start Time
+    end_at: End Time
+    payment_types:
+      wechat: Wechat
+      alipay: Alipay
+      credit_card: CreditCard
+      union_pay: UnionPay
+      apple_pay: UnionPay ApplePay
+      cba_apple_pay: ApplePay（VISA/MASTERCARD）
+      cba_google_pay: GooglePay（VISA/MASTERCARD）
+      stripe_google_pay: GooglePay（Stripe）
+      stripe_apple_pay: ApplePay（Stripe）
+    coupon_template:
+      assign_coupon_notification_title: Coupon Distribution Notification
+      assign_coupon_notification: Coupon %{title} has been issued, please check.
+      coupon_expire_notification_title: Your eBest coupon is about to expire
+      coupon_expire_notification: Your %{titles} will expire in 3 days, please remember to use.
+  activerecord:
+    models:
+      category: Category
+      address: Address
+      default_freight_template: Default Freight Template
+      exceptional_freight_template: Exceptional Freight Template
+      logistic: Logistic
+      groupon_activity: Groupon Activity
+      custom_page: Custom Page
+      custom_list: Custom List
+      page: Page
+      report_page: Report Page
+      member: Member
+      integral_record: Integral Record
+      page_popup: Page Popup
+      user_suggestion: User Suggestion
+      user_recommended_product: User Recommended Products
+      coupon_template: Coupon Template
+      random_reduction_coupon_template_rule: Random Reduction Assignment Ratio
+      preferential_pool: Preferential Pool
+      coupon_package: Coupon Package
+      coupon: Coupon
+      gift_card_coupon: Gift Card Coupon
+      after_sale: After Sale
+      gift_activity: Gift Activity
+      stock_keeping_unit: SKU
+      self_pick_up: Self Pick Up
+      delivery_area: Delivery Area
+      site_config: Site Config
+      payment_setting: Payment Setting
+      data_analysis: Data Analysis
+      merchant_delivery_addresses_analysis: Merchant Delivery Addresses Analysis
+      delivery_time: Delivery Time
+      same_day_delivery_time: Same Day Delivery Time
+      freight_template: Freight Template
+      brand: Brand
+      store: Store
+      product: Product
+      item: Item
+      form_item: Form Item
+      form_item_application: Form Item Application
+      sku_sale: SKU Sale
+      qa_and_guarantee: QA and Guarantee
+      comment: Comment
+      history: History
+      order_analysis: Order Analysis
+      user: User
+      groupon: Groupon
+      home: Home
+      normal_order: Normal Order
+      groupon_order: Groupon Order
+      virtual_order: Virtual Product Order
+      web_channel_order: Web Channel Order
+      app_channel_order: App Channel Order
+      mini_program_channel_order: MiniProgram Channel Order
+      ae_order: AE Order
+      warehouse_order: Warehouse Order
+      operation_record: Operation Record
+      admin_assign_integral_record: Admin Assign Integral Record
+      admin_user: Admin User
+      order_sale: Order Sale
+      order: Order
+      app_download_channel: APP Download Channel
+      event_page: Event Page
+      event_form_record: Event Form Record
+      cutoff_time: Cutoff Time
+      gift_card_template: Gift Card Template
+      external_link: External Link
+      external_mini_program: External Mini Program
+      supplier: Supplier
+      sku_sales_plan: SKU Sales Plan
+      sku_return: SKU Return
+      shopping_cart: Shopping Cart
+      time_limited_promotion: Time Limited Promotion
+      extra_orders_limit: Extra Orders Limit
+      sku_supplier: SKU Supplier
+      gift_orders_analysis: Gift Orders Analysis
+      pool_gift_orders_analysis: Pool Gift Orders Analysis
+      gift_coupons_analysis: Gift Coupons Analysis
+      role_template: Role Template
+      promo_code_template: Promo Code
+      hot_search: Hot Search
+      banner_click: Banner Click
+      live_room: Live Room
+      live_room_viewed_user: Live Room Viewed User
+      live_room_viewed_user_stat: Live Room Online Viewers
+      live_room_stock_keeping_unit: Live Room SKU
+      live_room_order: Live Room Order
+      mobile_blacklist: Mobile Blacklist
+      coupon_auto_assignment: Coupon Auto Assignment
+      sign_in_activity: Sign In Activity
+      multi_lang_config: Multi Language Configuration
+      overseas_student_application: Overseas Student Application
+      shopping_cart_item: Cart item
+      auction/activity: Auction
+      auction_order: Auction Order
+      item_banner: Item Banner
+      web_banner: English Web Banner
+      web_banner_item: English Web Banner Item
+      web_custom_list: English Web Custom List
+      push_message: Message Center
+      marketing_message: Marketing Message Center
+      sku_in_stock_notice: SKU In-stock Notice
+      au_suburb: Au Suburb
+      freight_search: Shipping Fee Inquiry
+      homepage_paging_setting: Homepage Paging Setting
+      mine_page_activity_setting: Mine Page Activity Setting
+      ae_item: AE Item
+      ae_drop_shipper_category: AE Drop Shipper Category
+      item_tag_type: Item Tag Type
+      item_tag_group: Item Tag Group
+      item_tag: Item Tag
+      top_left_item_tag: Top Left Item Tag
+      sku_sales_mailer_setting: Sku Sales Mailer Setting
+    attributes:
+      default: &default
+        id: id
+        created_at: Created At
+        updated_at: Updated At
+      magic_bean/category:
+        children: Children Category
+        items: Item
+        position: Position
+        external_url: External URL
+      magic_bean/address:
+        province: State
+        city_name: Suburb
+        county: County
+        detail_info: Address
+        postal_code: Post Code
+        tel_number: Mobile
+        first_name: First Name
+        last_name: Last Name
+        email: Email
+        street: Street
+        street_number: Street No.
+        company_name: Company
+        alias_name: Alias Name
+        unit_number: Unit No.
+        errors:
+          format:
+            contains_only_ascii_chars: can contain only English and numbers
+            contains_only_english_or_dash_or_middot: can contain only English, - or ·
+      magic_bean/freight_template: &freight_template
+        name: Name
+        delivery_type: Delivery Type
+        first_kg_charge_in_cent: First Kg Charge in Cent
+        second_kg_charge_in_cent: Second Kg Charge in Cent
+        continued_weight_charge_in_cent: Continued Weight Charge in Cent
+        extra_charge_in_cent: Extra Charge in Cent
+        au_suburb_freight_templates: AU Suburb Freight Templates
+        au_suburbs: AU Suburbs
+      magic_bean/default_freight_template:
+        <<: *freight_template
+      magic_bean/exceptional_freight_template:
+        <<: *freight_template
+      magic_bean/default_freight_template/exceptional_freight_templates:
+        <<: *freight_template
+      magic_bean/sku_property:
+        text: Name
+      magic_bean/sku_value:
+        text: Value
+      magic_bean/item:
+        stock_keeping_units: SKU
+        item_type: Product Type
+        channels: Platform
+        delivery_type: Delivery Method
+        fixed_freight: Fixed Freight
+        merchant_delivery_freight_template_id: Merchant Delivery Template
+        express_freight_template_id: Express Delivery Template
+        self_pick_freight_template_id: Self Pickup Template
+        buy_quota_days: Purchase Quota Days
+        qa_and_guarantee: QA and Guarantee
+        presell_dispatch_on: Earliest Presale Dispatch Date
+        latest_presell_dispatch_on: Latest Presale Dispatch Date
+        presell_end_at: Presale End Time
+        description: Description
+        detail_images: Product Detail Images
+        main_images: Product Main Images
+        serving_per_package: Servings per Package
+        serving_size: Serving Size
+        production_place: Place of Production
+        allergen: Allergen
+        storage_method: Storage Method
+        storage_methods:
+          room_temp_storage: Room Temperature
+          refrigerated_storage: Refrigerated
+          frozen_storage: Frozen
+          other_storage: Other
+          blank_storage: /
+        listing_type: Listing Type
+        web_category: Web Category
+        web_category_id: Web Category
+        leader: Leader
+        expiration_reminder_before_n_days: Expiration Reminder Days
+      magic_bean/stock_keeping_unit: &stock_keeping_unit
+        "no": SKU Number
+        price_in_cent: Price
+        properties: Properties
+        item: Product
+        length_in_cm: Length
+        height_in_cm: Height
+        width_in_cm: Width
+        weight_in_gram: Weight
+        barcode: Barcode
+        quantity: Quantity
+        gst_percent: GST%
+        shoppingunit: Merchant
+        price_in_yuan: Price
+        discount_price_in_yuan: Discount Price
+        discount_quantity: Discount Quantity
+        is_special: Special Item
+        is_private_kitchen: Private Kitchen
+        marketing_mode: Marketing Mode
+        strikethrough_price_in_cent: Strikethrough Price
+      magic_bean/item/stock_keeping_units:
+        <<: *stock_keeping_unit
+        errors:
+          must_greater_than_price_in_cent: must be greater than price
+          barcode_can_only_contains: can only contain English, numbers, () or . or - or space.
+      magic_bean/logistic:
+        <<: *default
+        "no": Number
+        company: Company
+        traces: Traces
+      magic_bean/seller_recommendation:
+        item: Item
+      magic_bean/order:
+        order_items: Order Items
+        status: Status
+        remark: Remark
+        buyer_message: Message
+        status/wait_buyer_pay: Wait for Payment
+        status/wait_seller_send_goods: Wait for Delivery
+        status/wait_buyer_confirm_goods: Wait for Confirmation
+        status/refunding: Refunding
+        status/trade_finished: Trade Completed
+        status/trade_closed: Trade Closed
+        status/buyer_confirm_goods: Buyer Confirmed
+        status/apply_refund: Apply for Refund
+        status/risk_pay: Risk Control Payment
+        status/live_top_confirm: Live Pending Review
+        receiver_properties: Shipping Address
+        payment_in_cent: Payment Amount
+        delivery_type: Delivery Method
+        delivery_types:
+          express: Express Delivery
+          self_pick: Self Pickup
+          merchant_delivery: Merchant Delivery
+          virtual_delivery: Virtual Delivery
+      magic_bean/order_items:
+        base: Item
+      magic_bean/invoice:
+        title: Title
+        abn: ABN
+        first_name: First name
+        last_name: Last name
+        email: Email
+        alias_name: Label
+        is_default: Is default
+        address: Address
+        errors:
+          format:
+            contains_only_english_or_dash_or_middot: can contain only English, - or ·
+      magic_bean/activity_items:
+        activity: Acticity
+        item: Item
+      magic_bean/qa_and_guarantee:
+        items: Item
+      magic_bean/brand:
+        name: Name
+        items: Item
+        position: Position
+      magic_bean/admin_user:
+        password: Password
+        password_confirmation: Password Confirmation
+        mobile: Mobile
+        email: Email
+        stores: Store
+      magic_bean/groupon_activity:
+        user_count: User Count
+      magic_bean/groupon_activity/sku_groupons:
+        price_in_cent: Price
+      magic_bean/custom_page:
+        en_name: En Name
+        name: Name
+        qrcode_url: Qrcode Url
+        front_end_url: Front End Url
+      magic_bean/custom_list:
+        item_ids: Items
+        title: Title
+        remarks: Remark
+        position: Position
+        kind: Kind
+      magic_bean/page:
+        name: Name
+        kind: Kind
+        content: Content
+      magic_bean/member:
+        <<: *default
+        mobile: Mobile
+        birthday: Birthday
+        available_integral: Available Integral
+        blocked_integral: Blocked Integral
+        cumulative_integral: Cumulative Integral
+        user: User
+      magic_bean/integral_record:
+        <<: *default
+        available_integral: Available Integral
+        blocked_integral: Blocked Integral
+        integral: Integral
+        kind: Kind
+        targetable: Target
+        created_at: Created At
+        errors:
+          not_enough: not enough
+      magic_bean/page_popup:
+        <<: *default
+        title: Title
+        image: Image
+        path: Path
+        for_new_user: For New user
+        start_at: Start At
+        end_at: End At
+      magic_bean/user_suggestion:
+        <<: *default
+        status: Status
+        content: Content
+      magic_bean/user_recommended_product:
+        <<: *default
+        recommended_products: Content
+      magic_bean/coupon_template: &coupon_template
+        <<: *default
+        title: Title
+        desc: Description
+        kind: Type
+        denominations_in_cent: Denomination
+        min_denominations_in_cent: Minimum Denomination
+        max_denominations_in_cent: Maximum Denomination
+        discount: Discount
+        at_least_amount_in_cent: Minimum Amount
+        need_at_least_amount: Has Minimum Amount Requirement
+        time_kind: Coupon Time Type
+        time_limit_in_day: Time Limit After Receiving
+        start_at: Start Time
+        end_at: End Time
+        details_image: Details Image
+        expired_image: Expired Image
+        enabled: Enabled
+        remarks: Remarks
+        code: Coupon Code
+        item_ids: Products
+        user_kind: User Type
+        category_instruction: "Only available for %%{content}"
+        item_instruction: "Only available for purchasing %%{content}"
+        brand_instruction: "Only available for %%{content}"
+        at_least_amount_instruction: "Store-wide, available for orders over %%{content}"
+        general_instruction: "Store-wide available"
+        max_random_reduction_count: Maximum Random Reduction Count
+      magic_bean/coupon:
+        <<: *coupon_template
+        expired_at: Expired At
+      magic_bean/coupon_package:
+        <<: *default
+        name: Name
+        status: Status
+        user_kind: User Kind
+        coupon_template_ids: Coupon Template
+        cover: Cover
+        start_at: Start At
+        end_at: End At
+      magic_bean/after_sale:
+        <<: *default
+        amount_in_cent: Actual Refund Amount
+        original_payment_in_cent: Original Payment Amount
+        refund_titles:
+          refund_application: Refund Application
+          refund_result: Refund Result
+        applicant_types:
+          user: User
+          wms: WMS
+          admin: Admin
+        refund_messages:
+          refund_approved: Hello, your refund application has been approved, please check
+          refund_rejected: "Hello, your refund application has been rejected because it does not meet the refund conditions. Reason: %{seller_reply}. Please check the details in the App"
+          sale_return_approved: Hello, your refund application has been approved, please send the product to %{return_receiver_properties} within 3 days
+          sale_return_rejected: Hello, your returned goods have been rejected because they do not meet the refund conditions, please contact customer service in the App for consultation
+        errors:
+          some_products_are_in_process: "%{item_title} exceeds the returnable quantity, some quantity may already be in after-sales process"
+          can_not_be_created: This order cannot initiate after-sales service
+      magic_bean/gift_activity:
+        <<: *default
+        start_at: Start At
+        end_at: End At
+        status: Status
+        rules: Rules
+      magic_bean/self_pick_up:
+        name: Name
+        mobile: Mobile
+        address: Address
+        province_name: Province
+        city_name: City
+        opening_hours: Opening Hours
+
+      magic_bean/delivery_area:
+        <<: *default
+        name: Name
+        postal_code: Postal Code
+        latitude: Latitude
+        longitude: Longitude
+
+      magic_bean/delivery_time:
+        <<: *default
+        name: Name
+        weekdays: Weekdays
+        time_period: Time Period
+
+      magic_bean/item/cutoff_times:
+        weekdays: Weekdays
+        time_at: Time_at
+
+      magic_bean/gift_card_template:
+        quantity: Quantity
+        denominations_in_cent: Denominations
+        expired_at: Expired At
+        purchaser: Purchaser
+      magic_bean/site_config:
+        sku_cost_minimum_factor: SKU cost minumum factor
+        sku_minimum_profit_in_cent: SKU minumum profit
+      magic_bean/user:
+        locale: Locale
+        password: Password
+        password_confirmation: confirmation
+      magic_bean/user/member:
+        birthday: Birthday
+      magic_bean/app_text_message:
+        title: Title
+        kind: Kind
+        content: Content
+        titles:
+          order_paid_notification: Order paid notification
+          order_stockout_notification: Order stockout notification
+          order_partly_stockout_notification: Order partly stockout notification
+          order_delivery_notification: Order delivery notification
+          order_delivery_time_update_notification: Order delivery time update notification
+          letter_for_new_user: Introduction to new user
+          order_after_sale_refund_notification: Refund notification
+          order_confirm_notification: Order confirm notification
+      magic_bean/shopping_cart_item:
+        stock_keeping_unit_id: Item
+      magic_bean/auction/activity:
+        start_at: Start at
+        default_end_at: End at
+        starting_price_in_cent: Starting price
+        bidding_increments_in_cent: Bidding increment
+        reserve_price_in_cent: Reserve price
+        directly_purchase_price_in_cent: Directly purchase price
+        notification:
+          end_title: Auction End Notification
+          end_content: The auction you participated in %{title} has ended %{word} winning bidder
+          end_success_word: with
+          end_failure_word: without
+        errors:
+          must_be_multiple_of_bidding_increment: must be multiple of bidding increment
+          must_greater_than_current_bid: must greater than current bid
+          not_greater_than_purchase_price: can not greater than purchase price
+          taken: has been used by another user, please increase your bid amount
+      magic_bean/auction/bid:
+        amount_in_cent: Bid amount
+        notification_title: Bid Notice
+        notification_content: Your auction %{title} has a new higher bidder
+      magic_bean/auction/automatic_bid:
+        amount_limit_in_cent: Bid limit
+      magic_bean/sku_in_stock_notice:
+        notification_text: The product %{sku_title} has arrived
+      magic_bean/marketing_message:
+        state: State
+        message: Content
+        user_ids: User
+        sms_platform: SMS Platform
+      magic_bean/homepage_page_setting:
+        name: Name
+        position: Position
+        image: Image

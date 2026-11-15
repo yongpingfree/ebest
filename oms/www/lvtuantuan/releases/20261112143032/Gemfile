@@ -1,0 +1,412 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby "2.5.7"
+
+# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+gem "rails", "~> 5.2.6.2"
+# Use postgresql as the database for Active Record
+gem "pg", "~> 1.1.3"
+# A performance dashboard for Postgres
+# https://github.com/ankane/pghero
+gem "pghero", "~> 2.7.1"
+# Suggested Indexes
+gem "pg_query", ">= 0.9.0"
+# Use Puma as the app server
+gem "puma", "~> 4.3.11"
+# Use SCSS for stylesheets
+gem "sass-rails", "~> 5.0"
+# Use Uglifier as compressor for JavaScript assets
+gem "uglifier", ">= 1.3.0"
+# See https://github.com/rails/execjs#readme for more supported runtimes
+# gem 'mini_racer', platforms: :ruby
+
+# Use CoffeeScript for .coffee assets and views
+gem "coffee-rails", "~> 4.2"
+# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
+gem "turbolinks", "~> 5"
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem "jbuilder", "~> 2.5"
+# Use Redis adapter to run Action Cable in production
+gem "redis", "~> 4.5.0"
+gem "rucaptcha", "~> 2.6.1"
+# Use ActiveModel has_secure_password
+gem "bcrypt", "~> 3.1.7"
+
+# Use ActiveStorage variant
+# gem 'mini_magick', '~> 4.8'
+
+# Use Capistrano for deployment
+# gem 'capistrano-rails', group: :development
+
+# Reduces boot times through caching; required in config/boot.rb
+gem "bootsnap", ">= 1.1.0", require: false
+
+# A Ruby gem to load environment variables from `.env`
+# https://github.com/bkeepers/dotenv
+gem "dotenv-rails", "~> 2.7", ">= 2.7.1"
+
+# Advanced seed data handling for Rails, combining the best practices of several methods together
+# https://github.com/mbleigh/seed-fu
+gem "seed-fu", "~> 2.3", ">= 2.3.9"
+
+# An opinionated framework for creating REST-like APIs in Ruby. http://www.ruby-grape.org
+# https://github.com/ruby-grape/grape
+gem "grape", "~> 1.3.0"
+
+# An API focused facade that sits on top of an object model.
+# https://github.com/ruby-grape/grape-entity
+gem "grape-entity", "~> 0.7.1"
+
+# Add OAPI/swagger v2.0 compliant documentation to your grape API
+# https://github.com/ruby-grape/grape-swagger
+gem "grape-swagger", "~> 1.0.0"
+
+# A fast, safe and extensible Markdown to (X)HTML parser
+# We use it to support markdown in notes of grape-swagger
+# http://github.com/vmg/redcarpet
+gem "redcarpet", "~> 3.5.1"
+
+# Rouge aims to a be a simple, easy-to-extend drop-in replacement for pygments
+# We use it to support highlight codes in notes of grape-swagger
+# http://github.com/jneen/rouge
+gem "rouge", "~> 3.3.0"
+
+# Swagger UI as Rails Engine for grape-swagger gem.
+# https://github.com/ruby-grape/grape-swagger-rails
+gem "grape-swagger-rails", "~> 0.3.0"
+
+# An API focused facade that sits on top of an object model.
+# https://github.com/ruby-grape/grape-entity
+gem "grape-swagger-entity", "~> 0.3.0"
+
+# Rack::Cors provides support for Cross-Origin Resource Sharing (CORS) for Rack compatible web applications.
+# https://github.com/cyu/rack-cors
+gem "rack-cors", require: "rack/cors"
+
+# A pure ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT) standard.
+# https://github.com/jwt/ruby-jwt
+gem "jwt", "~> 2.1.0"
+
+# A Scope & Engine based, clean, powerful, customizable and sophisticated paginator for Ruby webapps
+# https://github.com/kaminari/kaminari
+gem "kaminari", "~> 1.2.1"
+
+# kaminari paginator integration for grape API framework
+# https://github.com/monterail/grape-kaminari
+gem "grape-kaminari", github: "joshmn/grape-kaminari"
+
+# Simple, efficient background processing for Ruby.
+# https://github.com/mperham/sidekiq
+gem "sidekiq", "= 5.2.10"
+
+# make http request
+# https://github.com/jnunemaker/httparty
+gem "httparty", "~> 0.16.2"
+
+# Ransack is the successor to the MetaSearch gem
+# https://github.com/activerecord-hackery/ransack
+gem "ransack", "~> 2.1.0"
+
+# Map Redis types directly to Ruby objects. Works with any class or ORM.
+# https://github.com/nateware/redis-objects
+gem "redis-objects", "~> 1.4.3"
+
+# Store different kind of actions (Like, Follow, Star, Block ...) in one table via ActiveRecord Polymorphic Association.
+# https://github.com/rails-engine/action-store
+gem "action-store", "~> 0.3.3"
+
+# Enables to set jobs to be run in specified time (using CRON notation)
+# https://github.com/ondrejbartas/sidekiq-cron
+gem "sidekiq-cron", "~> 1.0.4"
+
+# ActiveRecord plugin allowing you to hide and restore records without actually deleting them.
+# https://github.com/rubysherpas/paranoia
+gem "paranoia", "~> 2.4.1"
+
+# A simple Wechat pay ruby gem
+# https://github.com/jasl/wx_pay/blob/master/lib/wx_pay/service.rb
+gem "wx_pay", "~> 0.18.0"
+
+# AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
+# https://github.com/aasm/aasm
+gem "aasm", "~> 5.0.1"
+
+# Qiniu Resource (Cloud) Storage SDK for Ruby.
+# https://github.com/qiniu/ruby-sdk
+gem "qiniu", "~> 6.9"
+
+# 中国各个短信平台 Ruby 接口，现支持云片网、推立方、亿美软通、短信宝、畅友网络
+# https://github.com/saberma/china_sms
+gem "china_sms", github: "saberma/china_sms"
+
+# The (admittedly crazy) goal of this Gem is to be able to normalize/format/split all phone numbers in the world.
+# https://github.com/floere/phony
+gem "phony", "~> 2.16.8"
+
+# A gem that provides a client interface for the Sentry error logger
+# https://github.com/getsentry/sentry-ruby
+gem "sentry-ruby", "~> 5.8"
+gem "sentry-rails", "~> 5.8"
+
+# Roo can access the contents of various spreadsheet files. It can handle * OpenOffice * Excelx * LibreOffice * CSV
+# https://github.com/roo-rb/roo
+gem "roo", "~> 2.7.0"
+
+# xlsx spreadsheet generation
+# https://github.com/beansmile/axlsx/commit/fb2c71f2ada9c86b1b3352409f951fae7162cbe1
+gem "axlsx", github: "beansmile/axlsx", branch: "memory-refactor-final"
+
+# CanCanCan is an authorization library for Ruby
+# https://github.com/CanCanCommunity/cancancan
+gem "cancancan", "~> 3.0.1"
+
+# A tagging plugin for Rails applications that allows for custom tagging along dynamic contexts
+# https://github.com/mbleigh/acts-as-taggable-on
+gem "acts-as-taggable-on", "~> 6.0.0"
+
+# 微信 Ruby 高级API weixin_authorize
+# https://github.com/lanrion/weixin_authorize
+gem "weixin_authorize", "~> 1.6.4"
+
+# Use webpack to manage app-like JavaScript modules in Rails
+# https://github.com/rails/webpacker
+# gem "webpacker", "~> 4.x"
+
+# Simple health check of Rails app
+# https://github.com/ianheggie/health_check
+gem "health_check", "~> 3.0.0"
+
+# https://github.com/rest-client/rest-client
+gem "rest-client", "~> 2.0.2"
+
+# Alibaba Cloud Core SDK for Ruby
+# https://github.com/aliyun/openapi-core-ruby-sdk
+gem "aliyunsdkcore", "~> 0.0.10"
+
+# A Ruby program to facilitate accessing Aliyun Object Storage Service
+# https://github.com/aliyun/aliyun-oss-ruby-sdk
+gem "aliyun-sdk", "~> 0.7.1"
+
+# This gem provides a Ruby wrapper around the Google Places API, using HTTParty.
+# https://github.com/qpowell/google_places
+gem "google_places", "~> 2.0.0"
+
+# Complete Ruby geocoding solution. http://www.rubygeocoder.com
+# https://github.com/alexreisner/geocoder#distance-and-bearing
+gem "geocoder", github: "alexreisner/geocoder"
+
+# Ruby library for the Stripe API. https://stripe.com
+# https://github.com/stripe/stripe-ruby
+gem "stripe", "~> 8.5"
+
+# Check credit card type
+# https://github.com/Fivell/credit_card_validations
+gem "credit_card_validations", "~> 3.5.1"
+
+# JPush's officially supported Ruby client library for accessing JPush APIs.
+# https://github.com/jpush/jpush-api-ruby-client
+gem "jpush", git: "https://github.com/jpush/jpush-api-ruby-client.git"
+
+# Adds a Redis::Namespace class which can be used to namespace Redis keys
+# https://github.com/resque/redis-namespace
+gem "redis-namespace", "~> 1.6.0"
+
+# Wicked PDF uses the shell utility wkhtmltopdf to serve a PDF file to a user from HTML.
+# https://github.com/mileszs/wicked_pdf
+gem "wicked_pdf", "~> 2.1.0"
+
+# The simplest way to install all of the binaries on most Linux or OSX systems.
+# https://github.com/zakird/wkhtmltopdf_binary_gem
+gem "wkhtmltopdf-binary", "~> 0.12.6"
+
+# ropencc is a project for conversion between Traditional and Simplified Chinese
+# https://github.com/psli/ropencc
+gem "ropencc", "~> 0.0.4"
+
+# Gala is a Ruby library for decrypting Apple Pay payment tokens
+# https://github.com/spreedly/gala.git
+gem "gala", "~> 0.4.0"
+
+# https://github.com/AgoraIO/Tools/tree/master/DynamicKey/AgoraDynamicKey/ruby
+gem "agora_dynamic_key", "~> 0.1.0"
+
+# Ruby SDK for Klaviyo API
+# https://github.com/klaviyo/klaviyo-api-ruby
+gem "klaviyo-api-sdk", "~> 12.0.0"
+
+# This gem adds methods to the Enumerable module to allow easy calculation of basic descriptive statistics of Numeric sample data in collections that have included Enumerable such as Array, Hash, Set, and Range.
+# https://github.com/thirtysixthspan/descriptive_statistics
+gem "descriptive_statistics", require: false
+
+# Searchkick learns what your users are looking for. As more people search, it gets smarter and the results get better.
+# https://github.com/ankane/searchkick
+gem "searchkick", "~> 4.5.2"
+gem "elasticsearch", "~> 7.5.0"
+gem "elasticsearch-transport", "~> 7.5.0"
+# gem "opensearch-ruby", "~> 3.3.0"
+# gem "opensearch-aws-sigv4"
+
+# This library represents the beginning of a new path for Twilio SendGrid.
+# https://github.com/sendgrid/sendgrid-ruby
+gem "sendgrid-ruby"
+
+# https://github.com/deanpcmad/sidekiq-limit_fetch
+# Sidekiq strategy to support a granular queue control – limiting, pausing, blocking, querying.
+gem "sidekiq-limit_fetch", "~> 3.4.0"
+
+# https://github.com/linyunjiang/iop_api_client
+# A simple rest API client For International Open Platform for ruby
+gem "iop_api_client", github: "linyunjiang/iop_api_client"
+
+gem "aws-sdk-s3"
+gem "aws-sdk-sns", "< 1.100"
+# Ruby 2.5.7 caps: newer aws gems require Ruby >= 2.7 (RubyGems 3.0.9 won't enforce this)
+gem "aws-sdk-core", "< 3.225"
+gem "aws-partitions", "< 1.1110"
+gem "aws-sigv4", "< 1.12"
+
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "pry-rails"
+
+  # Combine 'pry' with 'byebug'. Adds 'step', 'next', 'finish', 'continue' and 'break' commands to control execution.
+  # https://github.com/deivid-rodriguez/pry-byebug
+  gem "pry-byebug", "~> 3.6"
+  gem "ed25519", "~> 1.2"
+  gem "bcrypt_pbkdf", "~> 1.0"
+end
+
+group :development do
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem "listen", ">= 3.0.5", "< 3.2"
+  gem "web-console", ">= 3.3.0"
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem "spring"
+  gem "spring-watcher-listen", "~> 2.0.0"
+
+  # run code quality and security audit report with one command
+  # https://github.com/rainchen/code_quality
+  gem "code_quality", "~> 0.4.0", require: false
+
+  # http://capistranorb.com/
+  # Capistrano is a utility and framework for executing commands in parallel on multiple remote machines, via SSH.
+  # https://github.com/capistrano/capistrano
+  gem "capistrano", "~> 3.11.0", require: false
+
+  # RVM integration for Capistrano
+  # https://github.com/capistrano/rvm
+  gem "capistrano-rvm", "~> 0.1.2", require: false
+
+  # Bundler support for Capistrano 3.x
+  # https://github.com/capistrano/bundler
+  gem "capistrano-bundler", "~> 1.4.0", require: false
+
+  # Rails specific Capistrano tasks
+  # https://github.com/capistrano/rails
+  gem "capistrano-rails", "~> 1.4.0", require: false
+
+  # Capistrano plugin which adds a remote rails console
+  # https://github.com/ydkn/capistrano-rails-console
+  gem "capistrano-rails-console", "~> 2.3.0", require: false
+
+  # Run any rake task on a remote server using Capistrano
+  # https://github.com/sheharyarn/capistrano-rake
+  gem "capistrano-rake", "~> 0.2.0", require: false
+
+  # A collection of capistrano tasks for syncing assets and databases
+  # https://github.com/sgruhier/capistrano-db-tasks
+  gem "capistrano-db-tasks", "~> 0.6", require: false
+
+  # Sidekiq integration for Capistrano
+  # https://github.com/seuros/capistrano-sidekiq
+  gem "capistrano-sidekiq", "~> 1.0.2", require: false
+
+  # Puma integration for Capistrano 3
+  # https://github.com/seuros/capistrano-puma
+  gem "capistrano3-puma", "~> 4.0.0", require: false
+
+  # Rename your Rails application using a single command.
+  # https://github.com/morshedalam/rename
+  gem "rename", "~> 1.0", ">= 1.0.6"
+
+  # Extends ActiveRecord#explain with support for EXPLAIN ANALYZE and output formats of JSON, XML, and YAML
+  # https://github.com/6/activerecord-explain-analyze
+  gem "activerecord-explain-analyze", "~> 0.1.0"
+end
+
+group :test do
+  # Adds support for Capybara system testing and selenium driver
+  gem "capybara", ">= 2.15"
+  gem "selenium-webdriver"
+  # Easy installation and use of chromedriver to run system tests with Chrome
+  gem "chromedriver-helper"
+
+  # Code coverage for Ruby with a powerful configuration library and automatic merging of coverage across test suites
+  # https://github.com/simplecov-ruby/simplecov
+  gem "simplecov", "~> 0.21.2", require: false
+end
+
+group :development, :test do
+  # Brings the RSpec testing framework to Ruby on Rails
+  # https://github.com/rspec/rspec-rails
+  gem "rspec-rails", "~> 3.8"
+
+  # Provides Rails integration for factory_bot
+  # https://github.com/thoughtbot/factory_bot_rails
+  gem "factory_bot_rails", "~> 5.1.1"
+end
+
+group :development, :staging do
+  # help to kill N+1 queries and unused eager loading
+  # https://github.com/flyerhzm/bullet
+  gem "bullet", "~> 5.9.0"
+end
+
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+# A rack middleware for throttling and blocking abusive requests
+# https://github.com/kickstarter/rack-attack
+gem "rack-attack", "~> 5.4", ">= 5.4.2"
+
+# Prawn/QRCode simplifies the generation and rendering of QRCodes in Prawn PDF documents.
+# https://github.com/jabbrwcky/prawn-qrcode
+gem "prawn-qrcode", "~> 0.5.2"
+
+# Automatically restart Puma cluster workers based on max RAM available
+# https://github.com/schneems/puma_worker_killer
+gem "puma_worker_killer", "~> 0.3.0"
+
+# Expose a suite of instrumentation metric primitives for prometheus
+# https://github.com/prometheus/client_ruby
+gem "prometheus-client", '~> 2.1.0'
+
+# Complete validation of dates, times and datetimes for Rails 5.x and ActiveModel.
+# https://github.com/adzap/validates_timeliness
+gem "validates_timeliness", '~> 4.1.1'
+
+# A library for bulk inserting data using ActiveRecord.
+# https://github.com/zdennis/activerecord-import
+gem "activerecord-import", "~> 1.0"
+
+# Rails I18n de-facto standard library for ActiveRecord model/data translation
+# https://github.com/globalize/globalize
+gem 'globalize', "~> 5.3", ">= 5.3.1"
+
+# Easily access (read and write) globalize translated fields without fiddling with locale
+# https://github.com/globalize/globalize-accessors
+gem "globalize-accessors", "~> 0.3.0"
+
+# https://github.com/seejohnrun/easy_translate
+# Google Translate (with Bulk translate) in Ruby
+gem "easy_translate", "~> 0.5.1"
+
+group :development, :staging, :production do
+  # The New Relic Ruby agent monitors your applications to help you identify and solve performance issues.
+  # https://github.com/newrelic/newrelic-ruby-agent
+  gem "newrelic_rpm"
+end

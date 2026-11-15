@@ -1,0 +1,45 @@
+.pages-index {
+  .article-item {
+    height: (490/1440) * 100vw;
+    position: relative;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 210px;
+
+    .title {
+      font-size: 50px;
+      font-weight: bold;
+    }
+
+    .desc {
+      white-space: pre;
+      padding: 0 10px;
+      margin: 0 auto;
+      font-size: 37px;
+    }
+
+    img {
+      position: absolute;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+  }
+
+  @include media-xs {
+    .article-item {
+      margin-bottom: 30px;
+
+      .title {
+        font-size: 20px;
+      }
+
+      .desc {
+        white-space: normal;
+        margin-top: 5px;
+        font-size: 16px;
+      }
+    }
+  }
+}

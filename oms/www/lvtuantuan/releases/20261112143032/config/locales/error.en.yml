@@ -1,0 +1,123 @@
+---
+en:
+  error:
+    common:
+      missing_params: Missing parameters
+      missing_verification_code: Missing verification code
+      invalid_captcha: Invalid or expired captcha
+      data_sync_exception: Data error, please try again.
+      not_found: Resource error!
+    mobile:
+      invalid_format: Invalid phone number format
+      invalid_code: Invalid or expired verification code
+      invalid_original_number: Invalid original phone number
+      code_aleady_sent: Verification code has been sent
+    student_email:
+      invalid_format: Invalid format of email
+    student_application:
+      application_exists: You have already submitted an application, please wait for review
+    order:
+      fraud_account: Your account is abnormal, please contact customer service
+      gift_card_disabled: Order contains items that can not use gift card
+      not_supported_merchant_delivery_address: The address you choose is not support delivery for the time being, please select other delivery methods or replace the income address. Thank you.
+      delivery_time_presence: The delivery date and time period must be filled in
+      time_not_support_merchant_delivery: The delivery time you choose does not support delivery for the time being, please select other delivery time, thank you
+      time_not_support_self_pickup: The delivery time you choose does not support self-pickup for the time being, please select other delivery time, thank you
+      receiver_values_presence: Please fill in the first name / last name / phone
+      address_pure_detail_start_with_number: The street address needs to start with the street number
+      out_of_stock_and_refund: Warehouse is out of stock, automatic refund
+      too_many_pending_orders: The number of unpaid orders has exceeded the limit
+      different_delivery_types: Items with different delivery methods cannot be ordered together.
+      order_status_can_not_open_after_sale: The after-sales service cannot be reopened in non-transaction success status.
+      conflicted_items: "The goods %{item_titles} in your current order are in conflict, please return to the shopping cart to reselect."
+      same_day_conflicted_items: "The goods %{item_titles} in your current order cannot be delivered on the same day, please return to the shopping cart to reselect."
+      same_day_time_period_not_exist: Time period is missing.
+      same_day_time_period_not_match: Time period cannot be matched.
+      gift_out_of_stock: "Gift %{sku_title} is out of stock!"
+      purchase_limit: "%{sku_title} has exceeded the cumulative purchase limit."
+      delivery_type_not_correct: The delivery method for the order is incorrect.
+      cannot_join_your_group: Cannot join a group buy created by yourself.
+      already_join_group: You have already joined this group buy, please do not join again.
+      sku_offline: "%{sku_title} is no longer available."
+      sale_channel: "%{sku_title} is only available for sale on the %{channel}."
+      invalid_free_shipping_code: Invalid free shipping code.
+      free_shipping_code_only_for_web_new_user: Oops! Our free shipping code is only for new website users.
+      wrong_status_to_create_warehouse_order: The order status does not meet the conditions for creating a storage order
+      child_order_cannot_use_coupon: Child orders cannot use coupons.
+      child_order_cannot_use_integral: Child orders cannot use gold coins.
+      order_closed_notice: The order has been closed, please reorder.
+      order_already_paid: The order has been paid, please do not pay again.
+      overweight: The weight of the express delivery order exceeds 20kg.
+      please_select_not_virtual_item: Please select non-virtual products to place an order.
+      please_select_not_gift_only_item: Please select non-gift items to place an order.
+      coupon_already_used: The coupon has been used.
+      ae_out_of_stock_and_refund: The inventory of cross-border purchase goods is insufficient, automatic refund.
+      deliver_order_cannot_be_refunded: Refunds are only available for orders with 'buyer_confirm_goods' status and no active after-sales requests
+      ae_order_cannot_be_refunded: Cross-border purchase orders cannot be refunded after delivery
+      cannot_refund_child_order_after_delivery: Child orders cannot be refunded separately after delivery
+      refund_amount_exceeds_can_refund_amount: The refund amount exceeds the refundable amount. The maximum refundable amount is $%{can_refund_amount}.
+      refund_amount_should_be_larger_than_zero: The refund amount cannot be 0.
+    user:
+      not_found: User not found
+      login_first: Please login
+      bind_mobile: Please bind a phone number first
+      incorrect_password: Incorrect password
+      login_more_than_times: Login more than 5 times in 10 minutes, please login later.
+      old_password_not_correct: The original password is incorrect.
+      password_should_contain: must include at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character(-=?+._!@#$%^&*)
+    coupon_package:
+      expired: The coupon gift pack has expired. Please come earlier next time.
+      already_in_your_account: You have already claimed this coupon gift pack. Hurry up and go use it.
+      not_eligible: You are not eligible to claim this offer.
+      can_not_contain_memerb_coupon: The non-member gift pack cannot include coupons for members.
+      random_discount_can_not_be_associated: Random discount coupons cannot be associated.
+    coupon_template:
+      not_a_member: Only members can claim this coupon. Please register as a member before claiming it.
+      not_new_user: Only new users are eligible to claim this coupon.
+      timeout: The claim period has ended. Please come earlier next time.
+      expired: The coupon has expired. Please come earlier next time.
+      already_claimed_today: You have already claimed a coupon today. Please come back tomorrow.
+      reach_max_count: This coupon can only be claimed %{quantity} times. Invite your friends to try it out.
+      getting_coupons: Hold on, we are getting coupons.
+      no_more_coupons: The coupons have been claimed, come earlier next time~
+      already_assigned: The coupon has already been claimed.
+    order_invoice:
+      already_created: An invoice has already been generated for this order
+      not_invoicable_for_this_status: An invoice cannot be generated for this order in its current status.
+      not_invoicable_for_auction_item: Invoices cannot be issued for auctioned items
+      not_invoicable_for_consigned_item: This order contains special items. Please contact customer service to obtain an invoice.
+    sku_in_stock_notice:
+      become_member: Please become a member first
+      already_subscribed: You have already set up a notification for this product
+      can_not_subscribe: This product specification is still in stock and cannot be added to the notification list
+    gift_activity:
+      not_meet_the_conditions: The free gift promotion does not meet the conditions
+      at_most_one_can_be_chosen: Either the free gift coupon or the free gift can be chosen
+      select_one_gift_only: Please select one bonus gift only
+      choose_again: Incorrect free gift selection, please choose a free gift again
+      promotion_ended: The free gift promotion has ended
+      unavaliable: The free gift "%{title}" is out of stock or has been discontinued
+      unsupported_delivery_type: The free gift "%{title}" does not support %{delivery_type}
+    address:
+      invalid_suburb_or_postal_code: Invalid suburb or postal code
+    item:
+      virtual_item_can_not_add_to_cart: Virtual items cannot be added to the shopping cart
+      gift_only_item_can_not_add_to_cart: Gift only items cannot be added to the shopping cart
+      not_same_day_item_cant_not_add_to_cart: Non same day delivery items cannot be added to the shopping cart
+      not_found_in_current_store: Not found in current store
+    after_sale:
+      should_not_be_larger_than_total_amount: cannot be larger than the total amount
+      should_not_be_larger_than_original_amount: cannot be larger than the original amount
+      cannot_be_modified: cannot be modified, because the after-sale has been approved or rejected
+    comment:
+      already_commented: You have already commented
+      please_confirm_goods: Please confirm the goods first
+      no_permission_to_comment: You do not have permission to comment on this product
+    event_form_record:
+      max_seven_dragon_balls: You can only submit up to 7 dragon balls
+      max_records: You can only submit up to %{max_records} records
+      answers_cannot_be_empty: Answers cannot be empty
+      answers_cannot_be_repeated: Answers cannot be repeated
+      wrong_line: The answer on line %{lines} is incorrect
+    overseas_student_application:
+      invalid_format: Please enter a valid email address

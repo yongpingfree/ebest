@@ -1,0 +1,103 @@
+body {
+  font-family: PFGrandGothikWide;
+  font-size: 14px;
+}
+
+a {
+  color: inherit;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  .website-body {
+    flex: 1;
+  }
+}
+
+@font-face {
+  font-family: SF-Pro-Display-Regular;
+  src: url('../fonts/sf-pro-display-regular.otf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SF-Pro-Display-Bold;
+  src: url('../fonts/sf-pro-display-bold.otf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: SF-Pro-Display-Light;
+  src: url('../fonts/sf-pro-display-light.otf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: PFGrandGothikWide-Bold;
+  src: url('../fonts/pf-grand-gothik-wide-bold.otf');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: PFGrandGothikExtended-Bold;
+  src: url('../fonts/pf-grand-gothik-extended-bold.otf');
+  font-display: swap;
+}
+
+.font-sfp-r {
+  font-family: SF-Pro-Display-Regular;
+}
+
+.font-sfp-b {
+  font-family: SF-Pro-Display-Bold;
+}
+
+.font-sfp-l {
+  font-family: SF-Pro-Display-Light;
+}
+
+.font-pfw-b {
+  font-family: PFGrandGothikWide-Bold;
+}
+
+.font-pfe-b {
+  font-family: PFGrandGothikExtended-Bold;
+}
+
+.pre-text {
+  font-family: PFGrandGothikWide;
+  white-space: pre;
+  margin-bottom: 0;
+  font-size: inherit;
+}
+
+img.fit-cover {
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  width: 100%;
+}
+
+.square-img-view {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+
+  img {
+    position: absolute;
+    height: 100%;
+  }
+}
+
+.el-row--flex {
+  flex-wrap: wrap;
+}

@@ -1,0 +1,191 @@
+<% content_for :title, "活动" %>
+<%= image_tag "https://cdn.minimall.donkibuy.com/images/events/dragon-ball-bg-top.jpg", class: "bg-top" %>
+<button class="js-share-btn share-btn" type="button">分享</button>
+<div class="activity-form">
+  <form id="formCollect" class="form-contain">
+    <div class="form-group">
+      <div class="item top">神龙榜</div>
+      <div class="item brand">品牌名</div>
+    </div>
+    <div class="form-group">
+      <div class="item label">01 </div>
+      <input name="1" class="item input-item" value="" />
+    </div>
+    <div class="form-group">
+      <div class="item label">02 </div>
+      <input name="2" class="item input-item" value="" />
+    </div>
+    <div class="form-group">
+      <div class="item label">03 </div>
+      <input name="3" class="item input-item" value="" />
+    </div>
+    <div class="form-group">
+      <div class="item label">04 </div>
+      <input name="4" class="item input-item" value="" />
+    </div>
+    <div class="form-group">
+      <div class="item label">05 </div>
+      <input name="5" class="item input-item" value="" />
+    </div>
+    <div class="form-group">
+      <div class="item label">06 </div>
+      <input name="6" class="item input-item" value="" />
+    </div>
+    <div class="form-group">
+      <div class="item label">07 </div>
+      <input name="7" class="item input-item" value="" />
+    </div>
+  </form>
+  <div class="submit-contain">
+    <div class="tip">
+      tip:品牌名请一行填写一个
+    </div>
+    <button class="js-submit-btn submit-btn" type="button">提交答案</button>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    let update = true;
+    let id;
+    const isLogin = <%= current_user.present? %>;
+    const isMember = <%= current_user&.member.present? %>;
+    const eventStartAt = '<%= @dragon_balls_start_at %>'
+
+    if (!window.ReactNativeWebView) {
+      window.location.href = `/app_shares?type=webviewPage&path=${encodeURIComponent(window.location.href)}`
+      return
+    }
+
+    if (isLogin && isMember) {
+      getData();
+    }
+
+    if (new Date().getTime() < new Date(eventStartAt).getTime()) {
+      layerPop('10月1日零时起，活动开始，敬请期待')
+    }
+
+    function getData() {
+      $.ajax({
+        type: 'GET',
+        url: '/event_form_records?event_slug=collect_dragon_balls',
+        success: function(result) {
+          if (result.length !== 0) {
+            id = result[result.length - 1].id;
+            let data = result[result.length - 1].data;
+            for (const item in data) {
+              if (data.hasOwnProperty(item)) {
+                $(`[name=${item}]`).val(data[item]);
+              }
+            }
+            update = true;
+          } else {
+            update = false;
+          }
+        },
+        error: function(err) {
+          if (err.status === 403) {
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'bind' }));
+          } else if (err.status === 401) {
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'login' }));
+          } else {
+            layerPop(err.responseJSON.error_message)
+          }
+        }
+      });
+    }
+
+    $('.js-submit-btn').click(function () {
+      if (new Date().getTime() < new Date(eventStartAt).getTime()) {
+        layerPop('10月1日零时起，活动开始，敬请期待');
+        return
+      }
+
+      if (!isLogin) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'login' }));
+        return
+      } else if (!isMember) {
+        window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'bind' }));
+        return
+      }
+
+      let type;
+      let url;
+      let data = getFormJson();
+      let inputValueString = '';
+
+      for (item in data) {
+        if (data.hasOwnProperty(item)) {
+          inputValueString += data[item];
+        }
+      }
+
+      if (inputValueString === '') {
+        layerPop('请填写品牌名再提交！')
+        return
+      }
+
+      let params = {
+        event_slug: 'collect_dragon_balls',
+        data: getFormJson()
+      };
+
+      if (update) {
+        type = 'put';
+        url = '/event_form_records/' + id;
+      } else {
+        type = 'post';
+        url = '/event_form_records';
+      }
+
+      $(this).attr('disabled','disabled')
+      let self = this
+
+      $.ajax({
+        type: type,
+        url: url,
+        dataType: 'json',
+        data: params,
+        success: function(result) {
+          if (result.message){
+            layerPop(result.message);
+          } else {
+            layerPop('提交成功');
+          }
+          $(self).removeAttr('disabled')
+
+          if (type == 'post') { getData(); }
+        },
+        error: function(err) {
+          $(self).removeAttr('disabled')
+          if (err.status === 403) {
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'bind' }));
+          } else if (err.status === 401) {
+            window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'login' }));
+          } else {
+            layerPop(err.responseJSON.error_message)
+          }
+        }
+      });
+    })
+
+    $('.js-share-btn').click(function () {
+      const params = {
+        url: `${window.location.origin}/app_shares?type=webviewPage&path=${encodeURIComponent(window.location.href)}`,
+        title: '庆双节 集齐”七龙珠“ 召唤神龙',
+        description: '天女散花，天降好运，10月1日-10月7日活动期间，十万好礼送不停',
+        image: '',
+      }
+    	window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'share', params }));
+    })
+
+    function getFormJson() {
+      var obj = {};
+      var arr = $("#formCollect").serializeArray();
+      arr.forEach(function(item) {
+        obj[item.name] = item.value.trim()
+      })
+      return obj;
+    }
+  })
+</script>

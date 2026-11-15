@@ -1,0 +1,31 @@
+<% if @result[:error] %>
+  <p>导入失败，失败原因：</p>
+  <p><%= @result[:error] %></p>
+<% else %>
+  <% if @result[:success_no_array].any? %>
+    <p>以下导入编号的商品导入成功：</p>
+    <ul>
+      <% @result[:success_no_array].each do |no| %>
+        <li><%= no %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if @result[:failure_no_array].any? %>
+    <p>以下导入编号的商品导入失败，请检查导入编号是否正确或商品是否属于当前门店：</p>
+    <ul>
+      <% @result[:failure_no_array].each do |no| %>
+        <li><%= no %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% if @result[:error_ae_drop_shipper_no_array].any? %>
+    <p>以下导入编号的商品与自定义列表配置的是否跨境购不一致，请检查：</p>
+    <ul>
+      <% @result[:error_ae_drop_shipper_no_array].each do |no| %>
+        <li><%= no %></li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>

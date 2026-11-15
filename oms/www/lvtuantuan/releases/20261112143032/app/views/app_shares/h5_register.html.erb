@@ -1,0 +1,313 @@
+<% content_for :title, "注册/登录" %>
+
+<div id="h5_register">
+  <div class="logo"></div>
+  <div class="brand-tip">开启澳洲美好生活</div>
+
+  <div class="app-intro-img"></div>
+
+  <div class="form">
+    <div class="input-group phone">
+      <div class="label-icon"></div>
+
+      <input type="number" pattern="\d*" class="input" placeholder="请输入您的手机号，0488 188 888" />
+    </div>
+
+    <div class="input-group verification">
+      <div class="label-icon"></div>
+
+      <input type="number" pattern="\d*" class="input" placeholder="验证码" />
+
+      <div class="btn verification-code-btn">获取验证码</div>
+    </div>
+
+    <div class="input-group select">
+      <div class="label-icon"></div>
+
+      <select class="select" id="store_select_input">
+        <% @stores.each do |store| %>
+          <option class="option" value="<%= store.id %>" <% if store.is_default %> selected <% end %>>
+            <%= store.name %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+
+    <div class="input-group invite">
+      <div class="label-icon"></div>
+
+      <input class="input" placeholder="邀请码" value="<%= params[:invite_code] %>" />
+    </div>
+
+    <div class="btn submit-btn red">注册并获取新人优惠</div>
+
+    <div class="btn submit-btn green">用户登录</div>
+  </div>
+
+  <div id="newbie_coupon_templates_wrapper">
+    <%= render partial: "newbie_coupon_template", collection: @newbie_coupon_templates %>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    const baseUrl = 'app/api/v1';
+
+    const phoneInputEle = $('.input-group.phone .input');
+    const verificationInputEle = $('.input-group.verification .input');
+    const storeSelectEle = $('.input-group.select .select');
+    const inviteInputEle = $('.input-group.invite .input');
+
+    const verificationCodeBtnEle = $('.verification-code-btn');
+
+    const VERIFICATION_CODE_END_TIME_KEY = 'VERIFICATION_CODE_END_TIME_KEY';
+
+    const WAIT_SECOND = 60;
+    let timer = null;
+
+    const verificationCodeEndTime = localStorage.getItem(VERIFICATION_CODE_END_TIME_KEY);
+
+    if (verificationCodeEndTime) {
+      const now = new Date();
+      const endTime = +verificationCodeEndTime;
+
+      if (now < endTime) {
+        // 未过期
+        const duration = Math.ceil((endTime - now.getTime()) / 1000);
+
+        timer = countdown(duration, setRemaining, handleCountdownEnd);
+        verificationCodeBtnEle.addClass('disabled');
+      }
+    }
+
+    // 覆盖公共样式避免, 处理 iOS 键盘收起后页面不会恢复正常
+    $('html').css('overflow', 'visible');
+    $('body').css('overflow-y', 'visible');
+
+    // 处理 iOS 键盘收起后页面不会恢复正常
+    $('.input-group .input').on({
+      blur: function() {
+        const bodyEle = $('body');
+        const oldScrollTop = bodyEle.scrollTop();
+
+        bodyEle.scrollTop(oldScrollTop);
+      }
+    });
+
+    // 倒计时
+    function countdown (duration, onTick, onComplete) {
+      let secondsLeft = Math.round(duration),
+        tick = function () {
+          if (secondsLeft > 0) {
+            onTick(secondsLeft);
+            secondsLeft -= 1;
+          } else {
+            clearInterval(interval);
+            onComplete();
+          }
+        },
+        interval = setInterval(
+          (function (self) {
+            return function () {
+              tick.call(self);
+            };
+          })(this), 1000
+        );
+
+      // First tick.
+      tick.call(this);
+
+      return {
+        abort: function () {
+          clearInterval(interval);
+        },
+        getRemainingTime: function () {
+          return secondsLeft;
+        }
+      };
+    };
+
+    // 格式化手机号码
+    function formatPhoneNumber(number = '') {
+      number = String(number);
+
+      if (/^61/.test(number)) {
+        number = number.replace(/^61/, '');
+      } else if (/^0/.test(number)) {
+        number = number.replace(/^0/, '61');
+      } else {
+        number = `61${number}`;
+      }
+
+      return number;
+    }
+
+    // 校验手机号码
+    function validatePhone() {
+      if (['', '0', '61'].includes(formatPhoneNumber(phoneInputEle.val()))) {
+        layerPop('请填写正确的手机号码');
+        return false;
+      }
+
+      return true;
+    }
+
+    // 表单校验
+    function validateForm() {
+      if (!validatePhone()) {
+        return false;
+      }
+
+      if (verificationInputEle.val() === '') {
+        layerPop('请输入验证码');
+        return false;
+      }
+
+      if (storeSelectEle.val() === '') {
+        layerPop('请选择门店');
+        return false;
+      }
+
+      return true;
+    }
+
+    // 更新倒计时
+    function setRemaining(newVal) {
+      verificationCodeBtnEle.text(`${newVal}秒`);
+    }
+
+    // 验证码倒计时结束
+    function handleCountdownEnd() {
+      verificationCodeBtnEle.removeClass('disabled').text('获取验证码');
+      localStorage.removeItem(VERIFICATION_CODE_END_TIME_KEY);
+      timer = null;
+    }
+
+    // 获取验证码
+    verificationCodeBtnEle.click(function () {
+      if (timer) {
+        return;
+      }
+
+      if (!validatePhone()) {
+        return false;
+      }
+
+      const duration = WAIT_SECOND;
+      const now = new Date();
+      const endTime = +new Date(now.getTime() + 1000 * duration);
+
+      localStorage.setItem(VERIFICATION_CODE_END_TIME_KEY, endTime);
+
+      timer = countdown(duration, setRemaining, handleCountdownEnd);
+
+      $(this).addClass('disabled');
+
+      $.ajax({
+        type: 'get',
+        url: `/${baseUrl}/members/verification_code`,
+        dataType: 'json',
+        data: {
+          mobile: formatPhoneNumber(phoneInputEle.val()),
+          event: 'register_member'
+        },
+        success: function(res) {
+          if (res.code === 200) {
+            layerPop(res.message);
+          }
+        },
+        error: function(err) {
+          if (err && err.responseJSON && err.responseJSON.error_message) {
+            if (err && err.status === 40011) {
+              // 已注册过会员
+
+              timer.abort();
+              handleCountdownEnd();
+            }
+
+            layerPop(err.responseJSON.error_message);
+          }
+        }
+      });
+    });
+
+    // 加密手机号
+    function getEncryptedPhone(mobile, encryptedCount = 3) {
+      const mobileLen = mobile.length;
+      const prefix = mobile.substring(0, mobileLen - 3 - encryptedCount);
+      const suffix = mobile.substring(mobileLen, mobileLen - 3);
+      let stars = '';
+      let i = encryptedCount;
+
+      while(i > 0) {
+        stars += '*';
+        i--;
+      }
+
+      return `${prefix} ${stars} ${suffix}`;
+    }
+
+    // 选择门店
+    storeSelectEle.change(function() {
+      const storeId = this.value;
+      $.ajax({
+        type: 'get',
+        url: `/newbie_coupon_templates?store_id=${storeId}`,
+        success: function(res, text, opts) {
+          $('#newbie_coupon_templates_wrapper').html(res);
+        },
+        error: function(err) {
+          if (err && err.responseJSON && err.responseJSON.error_message) {
+            layerPop(err.responseJSON.error_message);
+          }
+        }
+      })
+    });
+
+    // 注册表单
+    $('.submit-btn.red').click(function() {
+      const thisBtnEle = $(this);
+
+      if (validateForm()) {
+        const mobile = formatPhoneNumber(phoneInputEle.val());
+        const originBtnText = $(this).text();
+
+        $(this).addClass('disabled').text('正在提交中...');
+
+        $.ajax({
+          type: 'post',
+          url: `/${baseUrl}/user/mobile`,
+          dataType: 'json',
+          data: {
+            mobile,
+            code: verificationInputEle.val(),
+            invite_code: inviteInputEle.val(),
+            store_id: storeSelectEle.val(),
+            h5_register: true
+          },
+          success: function(res, text, opts) {
+            if (opts.status === 201) {
+              const encryptedPhone = getEncryptedPhone(mobile);
+
+              // 加密手机号传递给注册成功页面
+              location.href = `/register_success?phone=${encryptedPhone}&store_id=${storeSelectEle.val()}`;
+            }
+          },
+          error: function(err) {
+            if (err && err.responseJSON && err.responseJSON.error_message) {
+              layerPop(err.responseJSON.error_message);
+            }
+          },
+          complete: function() {
+            thisBtnEle.removeClass('disabled').text(originBtnText);
+          }
+        });
+      }
+    });
+
+    // 用户登录
+    $('.submit-btn.green').click(function() {
+      location.href = '/app_shares';
+    });
+  });
+</script>

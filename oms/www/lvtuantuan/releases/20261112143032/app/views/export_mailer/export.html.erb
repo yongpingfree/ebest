@@ -1,0 +1,8 @@
+<%= @subject %>已导出。
+
+<% if @file_url.present? %>
+  <br>
+  <%= link_to "下载文件", @file_url %>
+  <br>
+  注意：文件有效期为2天，2 天后自动删除。
+<% end %>

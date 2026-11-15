@@ -1,0 +1,40 @@
+
+eBest 有新的订单，请赶快处理吧！
+
+<p>
+  订单编号: <a href=<%= @order.admin_detail_url %>><%= @order.no %></a>
+</p>
+<p>
+  买家账号：<%= @order.user_nickname %>
+</p>
+<p>
+  支付金额: <%= @order.actual_amount_for_display %>
+</p>
+<p>
+  收货人信息：<%= @order.human_receiver_properties %>
+</p>
+
+<table style="font-size:14px;line-height:24px;font-family:'微软雅黑',Helvetica,Arial,sans-serif;border-collapse:collapse;border: 1px solid #ccc;">
+  <thead>
+    <tr style="border: 1px solid #ccc;">
+      <th style="border: 1px solid #ccc;">产品名称</th>
+      <th style="border: 1px solid #ccc;">图片</th>
+      <th style="border: 1px solid #ccc;">商品货号</th>
+      <th style="border: 1px solid #ccc;">规格</th>
+      <th style="border: 1px solid #ccc;">实际单价（元）</th>
+      <th style="border: 1px solid #ccc;">购买数量（件）</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.each do |order_item|%>
+      <tr style="border: 1px solid #ccc;">
+        <td style="border: 1px solid #ccc;"><%=order_item.item_title %></td>
+        <td style="border: 1px solid #ccc;"><img src="<%=order_item.cover %>" width="120"> </td>
+        <td style="border: 1px solid #ccc;"><%=order_item.stock_keeping_unit_no %></td>
+        <td style="border: 1px solid #ccc;"><%=order_item.properties_text %></td>
+        <td style="border: 1px solid #ccc;"><%=order_item.real_price_in_yuan %></td>
+        <td style="border: 1px solid #ccc;"><%=order_item.quantity %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

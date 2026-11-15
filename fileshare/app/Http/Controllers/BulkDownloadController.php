@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DownloadLog;
 use App\Models\SharedFile;
 use Illuminate\Http\Request;
 use ZipArchive;
@@ -25,6 +26,7 @@ class BulkDownloadController extends Controller
 
         // zip entry name => absolute file path
         $entries = [];
+        $downloadedIds = [];
         $folderNames = [];
         $fileCount = 0;
 
@@ -37,6 +39,7 @@ class BulkDownloadController extends Controller
                 $file = $available()->find((int) substr($item, 2));
                 if ($file && is_file($base . $file->path)) {
                     $entries[$this->unique($entries, basename($file->path))] = $base . $file->path;
+                    $downloadedIds[] = $file->id;
                     $fileCount++;
                     $single = $file;
                 }
@@ -60,11 +63,14 @@ class BulkDownloadController extends Controller
                     // keep the structure from the selected folder down, e.g. "b/sub/x.pdf"
                     $name = substr($f->path, strlen($parent));
                     $entries[$this->unique($entries, $name)] = $base . $f->path;
+                    $downloadedIds[] = $f->id;
                 }
             }
         }
 
         abort_if(empty($entries), 404, 'Nothing available to download.');
+
+        DownloadLog::record($user->id, array_unique($downloadedIds));
 
         if (count($items) === 1 && $fileCount === 1 && isset($single)) {
             return response()->download($base . $single->path, basename($single->path));

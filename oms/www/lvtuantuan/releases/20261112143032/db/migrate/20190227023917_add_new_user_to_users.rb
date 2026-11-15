@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+class AddNewUserToUsers < ActiveRecord::Migration[5.2]
+  def change
+    add_column :users, :new_user, :boolean, default: true
+  end
+end

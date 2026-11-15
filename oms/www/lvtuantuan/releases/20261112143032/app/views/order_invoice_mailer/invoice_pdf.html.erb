@@ -1,0 +1,153 @@
+<% invoice_properties = order_invoice.invoice_properties %>
+<% order = order_invoice.order %>
+<% gst_amount_in_cent = order.order_items.sum(:gst_amount_in_cent) %>
+
+<%= image_tag wicked_pdf_asset_base64("logo.png"), style: "width:300px" %>
+<div style="width:100%">
+  <div style="width:50%;float:left">
+    <% if order.store.name == "Canberra" %>
+      <h2>EBEST CANBERRA PTY LTD</h2>
+      <p>3/143 Gladstone ST</p>
+      <p>Fyshwick ACT 2609</p>
+      <p>Phone: (02) 5105 1315</p>
+      <p>Email: <a href="mailto:info.can@ebest.com.au">info.can@ebest.com.au</a></p>
+      <p>ABN: 44 641 577 559</p>
+    <% else %>
+      <h2>EBEST PTY LTD</h2>
+      <p>457 Waterloo Rd</p>
+      <p>Greenacre</p>
+      <p>NSW Australia, 2190</p>
+      <p>Phone: (02) 8985 2622</p>
+      <p>Email: <a href="mailto:info@ebest.com.au">info@ebest.com.au</a></p>
+      <p>ABN: 42 618 200 427</p>
+    <% end %>
+  </div>
+  <div style="width:50%;float:left;text-align:right">
+    <h1 style="color:#555">TAX INVOICE</h1>
+    <p>INVOICE # <%= order_invoice.no %></p>
+    <p>DATE: <%= (order.delivered_at || order.delivery_date.to_date).strftime("%-d/%-m/%Y") %></p>
+  </div>
+</div>
+<div style="clear:both"></div>
+<div style="margin-top:1em">
+  <strong>TO:</strong>
+  <p><%= "#{invoice_properties["first_name"]} #{invoice_properties["last_name"]}" %></p>
+  <p>Email: <a href="mailto:<%= invoice_properties["email"] %>"><%= invoice_properties["email"] %></a></p>
+  <% ["title", "abn", "address"].each do |attr| %>
+    <% if invoice_properties[attr] %>
+      <p><%= invoice_properties[attr] %></p>
+    <% end %>
+  <% end %>
+  <% if invoice_properties["tel_number"] %>
+    <p>Phone: <%= invoice_properties["tel_number"] %></p>
+  <% end %>
+</div>
+
+<table style="width:100%;margin-top:2em">
+  <thead>
+    <th width="20%">ORDER NO.</th>
+    <th width="24%">DESCRIPTION</th>
+    <th width="6%"></th>
+    <th width="10%">QUANTITY</th>
+    <th width="10%">UNIT PRICE</th>
+    <th width="10%">TOTAL</th>
+    <th width="10%">RETURN</th>
+    <th width="10%">AFTER RETURN</th>
+  </thead>
+  <tbody>
+    <% total_refund_amount_in_cent = order.after_sales.refunded.sum(:amount_in_cent) %>
+    <%# total_refund_amount_in_cent_include_integral 包含了手续费 %>
+    <% total_refund_amount_in_cent_include_integral = order.after_sales.refunded.sum {|after_sale| after_sale.amount_in_cent + after_sale.return_gift_card_amount_in_cent + (after_sale.return_integral_amount * 100 / order.integral_deducted_from_one_yuan.to_f).to_i } %>
+    <% total_refund_integral_amount_in_cent = (order.after_sales.refunded.sum(:return_integral_amount) * 100 / order.integral_deducted_from_one_yuan.to_f).to_i %>
+    <% total_refund_gst_amount_in_cent = 0 %>
+    <% order.order_items.each do |order_item| %>
+      <% refund_amount_in_cent_include_integral = order_item.refunded_after_sales_order_items.sum(:real_amount_in_cent) %>
+      <% refund_gst_amount_in_cent = order_item.gst_amount_in_cent.positive? ? (refund_amount_in_cent_include_integral.to_f / (100 + order_item.gst_percent) * order_item.gst_percent).round(2): 0 %>
+      <% total_refund_gst_amount_in_cent += refund_gst_amount_in_cent %>
+      <tr>
+        <td style="text-align:center"><%= order.no %></td>
+        <td><%= order_item.title %></td>
+        <td style="text-align:center"><%= "*" if order_item.gst_amount_in_cent.positive? %></td>
+        <td style="text-align:right"><%= order_item.quantity %></td>
+        <td style="text-align:right"><%= order_item.real_price_in_yuan %></td>
+        <td style="text-align:right"><%= order_item.real_amount_in_yuan %></td>
+        <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((-refund_amount_in_cent_include_integral).to_i / 100.0, format: "%n", delimiter: "") %></td>
+        <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((order_item.real_amount_in_cent - refund_amount_in_cent_include_integral).to_i / 100.0, format: "%n", delimiter: "")  %></td>
+      </tr>
+    <% end %>
+
+    <%# 计算是总共退了多少手续费 %>
+    <% total_service_amount_in_cent = 0 %>
+    <% order.after_sales.refunded.each do |after_sale| %>
+      <% total_service_amount_in_cent += after_sale.after_sales_order_items.sum(:service_amount_in_cent) %>
+    <% end%>
+
+    <tr>
+      <td style="text-align:center"><%= order.no %></td>
+      <td>运费</td>
+      <td style="text-align:center"><%= "*" if gst_amount_in_cent.positive? %></td>
+      <td style="text-align:right">1</td>
+      <td style="text-align:right"><%= order.freight_in_yuan %></td>
+      <td style="text-align:right"><%= order.freight_in_yuan %></td>
+      <td style="text-align:right">0.00</td>
+      <td style="text-align:right"><%= order.freight_in_yuan %></td>
+    </tr>
+    <tr>
+      <% total_paid_without_service = total_refund_amount_in_cent_include_integral - total_service_amount_in_cent %>
+      <td colspan="5" style="text-align:right;border:0"><strong>Total(GST inclusive)</strong></td>
+      <td style="text-align:right"><%= order.total_payment_in_yuan %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((-total_paid_without_service).to_i / 100.0, format: "%n", delimiter: "") %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((order.total_payment_in_cent - total_paid_without_service).to_i / 100.0, format: "%n", delimiter: "") %></td>
+    </tr>
+    <tr>
+      <td colspan="5" style="text-align:right;border:0">Transaction fee</td>
+      <td style="text-align:right"><%= order.service_amount_aud_in_yuan %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((-total_service_amount_in_cent).to_i / 100.0, format: "%n", delimiter: "") %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((order.service_amount_aud_in_cent - total_service_amount_in_cent).to_i / 100.0, format: "%n", delimiter: "") %></td>
+    </tr>
+    <tr>
+      <%# GST要加上手续费，手续费也算按GST%（固定10%）来计算，service_amount * 10 / 110 %>
+      <% total_gst = gst_amount_in_cent + (order.service_amount_aud_in_cent / 11.0).round(2) %>
+      <% refund_gst = total_refund_gst_amount_in_cent + (total_service_amount_in_cent / 11.0).round(2) %>
+      <td colspan="5" style="text-align:right;border:0">GST amount</td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency(total_gst.round / 100.0, format: "%n", delimiter: "") %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((-refund_gst).round / 100.0, format: "%n", delimiter: "") %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((total_gst - refund_gst).round / 100.0, format: "%n", delimiter: "") %></td>
+    </tr>
+    <tr>
+      <td colspan="5" style="text-align:right;border:0">e coin(voucher)</td>
+      <td style="text-align:right"><%= order.cost_integral_amount_in_yuan %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((-total_refund_integral_amount_in_cent).to_i / 100.0, format: "%n", delimiter: "") %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((order.cost_integral_amount_in_cent - total_refund_integral_amount_in_cent).to_i / 100.0, format: "%n", delimiter: "") %></td>
+    </tr>
+    <tr>
+      <%# 实付要加上手续费，所以用final_amount_with_gift_card_in_yuan %>
+      <% refund_paid = total_refund_amount_in_cent + total_service_amount_in_cent %>
+      <td colspan="5" style="text-align:right;border:0">Paid</td>
+      <td style="text-align:right"><%= order.final_amount_with_gift_card_in_yuan %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((-refund_paid).to_i / 100.0, format: "%n", delimiter: "") %></td>
+      <td style="text-align:right"><%= ActiveSupport::NumberHelper.number_to_currency((order.final_amount_with_gift_card_in_cent - refund_paid).to_i / 100.0, format: "%n", delimiter: "") %></td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="margin-top:2rem">
+  <p>* Taxable items</p>
+</div>
+
+<div style="text-align:center;margin-top:4em">
+  <p><strong>THANK YOU FOR YOUR SHOPPING!</strong></p>
+</div>
+
+<style type="text/css" media="all">
+  p {
+    margin: 0.25em 0;
+  }
+  table {
+    border-collapse: collapse;
+  }
+  td, th {
+    border: 1px solid;
+    padding: 0.75em;
+  }
+</style>

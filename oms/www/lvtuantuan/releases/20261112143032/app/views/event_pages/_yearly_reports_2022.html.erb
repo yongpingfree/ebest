@@ -1,0 +1,66 @@
+<% content_for :title, "2022年度报告" %>
+
+<div id="yearly-reports-2022">
+  <% if @user_active %>
+    <div class="view-list">
+      <div class="item first">
+        <img class="bg-img full" src="<%= image_url('yearly_reports_2022_first.jpg') %>">
+
+        <div class="light fill-text total-amount-in-yuan"><%= @total_amount_in_yuan %></div>
+
+        <div class="light fill-text user-store-name"><%= @user_store_name %></div>
+
+        <div class="light fill-text total-amount-advance-percentage"><%= @total_amount_advance_percentage %></div>
+      </div>
+
+      <% if @user_title.present? %>
+        <div class="item role">
+          <img class="bg-img full" src="<%= image_url("yearly_reports_2022_#{@user_title}.jpg") %>">
+        </div>
+      <% end %>
+
+      <div class="item third">
+        <img class="bg-img full" src="<%= image_url('yearly_reports_2022_third.jpg') %>">
+
+        <div class="light fill-text sign-days"><%= @sign_days %></div>
+
+        <div class="light fill-text orders-count"><%= @orders_count %></div>
+
+        <div class="light fill-text total-quantity"><%= @total_quantity %></div>
+
+        <div class="light fill-text quantity-advance-percentage"><%= @quantity_advance_percentage %></div>
+
+        <div class="light fill-text use-coupon-orders-count"><%= @use_coupon_orders_count %></div>
+      </div>
+
+      <div class="item fourth">
+        <img class="bg-img full" src="<%= image_url('yearly_reports_2022_fourth.jpg') %>">
+
+        <div class="dark fill-text latest-order-time-format"><%= @latest_order_time_format %></div>
+
+        <div class="dark fill-text item-name"><%= @item_name %></div>
+      </div>
+
+      <div class="item last">
+        <img class="bg-img full" src="<%= image_url('yearly_reports_2022_last.jpg') %>">
+      </div>
+    </div>
+  <% else %>
+    <img class="inactive-img" src="<%= image_url('yearly_reports_2022_inactive.png') %>">
+  <% end %>
+</div>
+
+<script>
+  $(function () {
+    const isLogin = <%= current_user.present? %>;
+
+    if (!window.ReactNativeWebView) {
+      window.location.href = `/app_shares?type=webviewPage&path=${encodeURIComponent(window.location.href)}`;
+      return
+    }
+
+    if (!isLogin) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'login' }));
+    }
+  })
+</script>

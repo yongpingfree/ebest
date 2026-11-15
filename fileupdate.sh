@@ -5,6 +5,11 @@ app/Filament/Pages/UploadFiles.php
 resources/views/filament/pages/upload-files.blade.php
 app/Filament/App/Pages/Files.php
 resources/views/filament/app/pages/files.blade.php
+app/Filament/Widgets/FileActivityChart.php
+app/Models/DownloadLog.php
+app/Http/Controllers/FileDownloadController.php
+app/Http/Controllers/BulkDownloadController.php
+database/migrations/2026_11_11_000001_create_download_logs_table.php
 )
 files_old=(
 app/Providers/Filament/AdminPanelProvider.php

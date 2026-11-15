@@ -1,0 +1,9 @@
+<% if @member&.email_confirmed? %>
+  <%= image_tag "email-confirmation-image.png" %>
+<% else %>
+  <div class="error-message">
+    <h2>Oops!</h2>
+    <p>We were unable to confirm your email address at this time.</p>
+    <p>If this issue keeps coming up, don't hesitate to contact us at cs@ebest.com.au</p>
+  </div>
+<% end %>

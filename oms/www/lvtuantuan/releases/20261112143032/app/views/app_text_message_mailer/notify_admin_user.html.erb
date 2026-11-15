@@ -1,0 +1,11 @@
+<p>本次通知处理数据 <%= @processed_count %> 条。</p>
+
+<% if @failure_records.empty? %>
+  <p>所有消息发送成功。</p>
+<% else %>
+  <p>以下手机号客户通知失败（后面为失败原因）：</p>
+
+  <% @failure_records.each do |record| %>
+    <p><%= record[:mobile] %>: <%= record[:error_message] %></p>
+  <% end %>
+<% end %>

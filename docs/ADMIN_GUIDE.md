@@ -90,3 +90,9 @@
 **重要提示**:新设置只对之后处理的 PDF 生效。已经处理过的 PDF 仍使用当时的密码,而用户页面显示的始终是当前的用户密码。修改密码后,如需让旧文件使用新密码,请重新上传这些文件。
 
 **修改记录**:页面下方的 **Change history** 表格记录了三项参数的每次修改,包括时间、项目、旧值、新值和操作人(自动更换显示为 auto)。密码以明文显示,方便您查看。
+
+## create API token
+
+sh create_api_token.sh "apiadmin@ebest.com.au" ebest-admin123
+
+

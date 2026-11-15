@@ -1,0 +1,17 @@
+<p>
+  订单编号: <a href=<%= @order.admin_detail_url %>><%= @order.no %></a>
+</p>
+
+<br/>
+<% if @sku_messages[:less_than_messages].present? %>
+  <p>
+    <%= @sku_messages[:less_than_messages].join(", ") %>, 请及时补充库存
+  </p>
+  <br/>
+<% end %>
+
+<% if @sku_messages[:out_of_stock_messages].present? %>
+  <p>
+    <%= @sku_messages[:out_of_stock_messages].join(", ") %>, 请及时补充库存
+  </p>
+<% end %>

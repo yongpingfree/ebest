@@ -1,0 +1,24 @@
+<div class="coupon-box">
+  <div class="left">
+    <div class="price-box">
+      <span class="dollar">$</span>
+
+      <span class="amount"><%= newbie_coupon_template.denominations_in_yuan.to_i == newbie_coupon_template.denominations_in_yuan.to_f ? newbie_coupon_template.denominations_in_yuan.to_i : newbie_coupon_template.denominations_in_yuan.remove(/0+$/) %></span>
+    </div>
+
+    <span class="type">COUPON</span>
+  </div>
+
+  <div class="top-right-tag">App Only</div>
+
+  <div class="right">
+    <div class="content-box">
+      <div class="title"><%= newbie_coupon_template.title %></div>
+
+      <div class="instruction"><%= newbie_coupon_template.instruction %></div>
+      <% if newbie_coupon_template.start_at.present? && newbie_coupon_template.end_at.present? %>
+        <div class="desc">Date: <%= newbie_coupon_template.start_at.strftime("%Y-%m-%d %H:%M") %> -</br><%= newbie_coupon_template.end_at.strftime("%Y-%m-%d %H:%M") %></div>
+      <% end %>
+    </div>
+  </div>
+</div>

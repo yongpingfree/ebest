@@ -1,0 +1,16 @@
+zh-CN:
+  stripe:
+    errors:
+      incorrect_number: "信用卡号码不正确"
+      invalid_number: "信用卡号码不是一个有效的信用卡号码"
+      invalid_expiry_month: "到期月份无效"
+      invalid_expiry_year: "到期年份无效"
+      invalid_cvc: "信用卡验证码无效"
+      email_invalid: "邮箱地址无效"
+      expired_card: "信用卡已过期"
+      incorrect_cvc: "信用卡验证码不正确"
+      incorrect_zip: "信用卡验证码不被接纳"
+      card_declined: "信用卡被拒绝"
+      missing: "沒有客戶信用卡被付款"
+      processing_error: "在处理信用卡时发生错误"
+      rate_limit: "由于请求过快地触及API，因此发生错误。如果您一直遇到此错误，请告知我们。"

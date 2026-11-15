@@ -1,0 +1,16 @@
+en:
+  stripe:
+    errors:
+      incorrect_number: "Incorrent Number"
+      invalid_number: "Invalid Number"
+      invalid_expiry_month: "Invalid Expiry Month"
+      invalid_expiry_year: "Invalid Expiry Year"
+      invalid_cvc: "Invalid CVC"
+      email_invalid: "Invalid email"
+      expired_card: "Card Expired"
+      incorrect_cvc: "Incorrent CVC"
+      incorrect_zip: "Incorrect Zip"
+      card_declined: "Card Declined"
+      missing: "Card Missing"
+      processing_error: "Processing Error"
+      rate_limit: "Rate Limit"

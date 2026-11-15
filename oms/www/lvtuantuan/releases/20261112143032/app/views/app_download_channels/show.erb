@@ -1,0 +1,17 @@
+<div id="download_page">
+  <div class="wxtip" id="JweixinTip">
+    <p class="wxtip-txt">请点击右上角<br/>选择在浏览器中打开</p>
+  </div>
+  <header class="download-header"></header>
+
+  <div class="container">
+    <div class="logo">
+      <%= image_tag "https://cdn.minimall.donkibuy.com/images/200707/g0fk3bhd8.png", class: 'logo' %>
+    </div>
+    <h1>eBest <span><%= "正式版" %></span></h1>
+    <div id="image_area">
+      <%= image_tag @channel.qrcode, class: 'qrcode' %>
+      <p>请用手机扫码安装</p>
+    </div>
+  </div>
+</div>

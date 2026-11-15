@@ -1,0 +1,38 @@
+@function px2vw($px) {
+  @return 100vw * ($px / 750);
+}
+
+.page-memnber-info {
+  margin: 0;
+
+  .btn-container {
+    box-sizing: border-box;
+    position: fixed;
+    bottom: px2vw(32);
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
+    width: 100%;
+    padding: 0 px2vw(30);
+  }
+
+  .btn-add {
+    width: 100%;
+    height: px2vw(84);
+    background-color: #960030;
+    border-radius: px2vw(8);
+    color: #fff;
+    font-size: px2vw(28);
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+            align-items: center;
+    -webkit-justify-content: center;
+            justify-content: center;
+  }
+
+  video, audio, img {
+    max-width: 100%;
+    height: auto !important;
+  }
+}

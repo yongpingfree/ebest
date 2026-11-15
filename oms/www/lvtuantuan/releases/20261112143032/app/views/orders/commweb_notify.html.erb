@@ -1,0 +1,9 @@
+<script type="text/javascript">
+  $(function() {
+    if(window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: "paymentSuccess" }));
+    } else {
+      window.opener.postMessage(JSON.stringify({ type: "paymentSuccess" }), { targetOrigin: "*" });
+    }
+  })
+</script>

@@ -1,0 +1,17 @@
+<% if @success_mobiles.any? %>
+  <h2>成功分配优惠券的用户号码</h2>
+  <% @success_mobiles.each do |mobile| %>
+    <p><%= mobile %></p>
+  <% end %>
+<% end %>
+
+<br>
+
+<% if @failed_mobiles.any? %>
+  <h2>没有分配优惠券的用户号码</h2>
+  <% @failed_mobiles.each do |mobile| %>
+    <p><%= mobile %></p>
+  <% end %>
+  <br>
+  <p>请检查是否存在该手机号码的会员，或联系开发人员检查分配失败原因。</p>
+<% end %>

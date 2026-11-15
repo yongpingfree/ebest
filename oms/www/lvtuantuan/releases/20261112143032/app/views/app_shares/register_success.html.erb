@@ -1,0 +1,19 @@
+<% content_for :title, "优惠发放" %>
+
+<div id="register_success">
+  <div class="discount-img">
+    <div class="logo"></div>
+    <div class="desc">
+      新人优惠券已经发放到您的账户中</br>现在下载APP使用优惠
+    </div>
+  </div>
+
+
+  <%= render partial: "newbie_coupon_template", collection: @newbie_coupon_templates %>
+
+  <div class="phone-number">发放至手机号<%= params[:phone] %>的用户</div>
+
+  <a class="download-btn" href="/app_shares">下载APP</a>
+
+  <div class="app-store-search">或在应用商店搜索eBest</div>
+</div>

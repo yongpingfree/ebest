@@ -1,0 +1,123 @@
+---
+zh-CN:
+  error:
+    common:
+      missing_params: 缺少参数
+      missing_verification_code: 缺少验证码
+      invalid_captcha: 图形验证码错误，或图形验证码已过期
+      data_sync_exception: 数据同步异常，请重试。
+      not_found: 资源不存在！
+    mobile:
+      invalid_format: 手机号码格式错误
+      invalid_code: 验证码错误，或验证码过期
+      invalid_original_number: 原手机号码错误
+      code_aleady_sent: 验证码已经发送
+    student_email:
+      invalid_format: 邮箱格式错误
+    student_application:
+      application_exists: 您已提交申请，请等待审核
+    order:
+      fraud_account: 账号异常，请联系客服
+      gift_card_disabled: 该订单包含不可使用礼品券商品
+      not_supported_merchant_delivery_address: 您所选择的地址暂时不支持送货上门，请选择其他配送方式或者更换收件地址，谢谢您
+      delivery_time_presence: 配送日期和时间段必须填写
+      time_not_support_merchant_delivery: 您所选择的配送时间暂时不支持送货上门，请选择其他配送时间，谢谢您
+      time_not_support_self_pickup: 您所选择的配送时间暂时不支持自提，请选择其他配送时间，谢谢您
+      receiver_values_presence: 请填写名字/姓氏/电话
+      address_pure_detail_start_with_number: 街道地址需以街道号码开头
+      out_of_stock_and_refund: 仓库缺货，自动退款
+      too_many_pending_orders: 待支付订单数量超过限制
+      different_delivery_types: 不同配送方式的商品不可以一起下单
+      order_status_can_not_open_after_sale: 非交易成功状态不能重新打开售后
+      conflicted_items: "您当前订单中的商品 %{item_titles} 时间冲突，请您返回购物车重新选择商品"
+      same_day_conflicted_items: "您当前订单中的商品 %{item_titles} 无法当日配送，请您返回购物车重新选择商品"
+      same_day_time_period_not_exist: 配送时间段缺失
+      same_day_time_period_not_match: 配送时间段无法匹配
+      gift_out_of_stock: "赠品 %{sku_title} 库存不足！"
+      purchase_limit: "%{sku_title} 超过累计购买限制"
+      delivery_type_not_correct: 订单配送方式错误
+      cannot_join_your_group: 不能加入自己创建的拼团
+      already_join_group: 已加入这个拼团，请勿重复参团
+      sku_offline: "%{sku_title} 已停售"
+      sale_channel: "%{sku_title} 只在%{channel}上售卖"
+      invalid_free_shipping_code: 无效的免运费码
+      free_shipping_code_only_for_web_new_user: 网站新用户才能使用免运费码
+      wrong_status_to_create_warehouse_order: 订单状态不满足创建仓储订单条件
+      child_order_cannot_use_coupon: 子订单不能使用优惠券
+      child_order_cannot_use_integral: 子订单不能使用金币
+      order_closed_notice: 订单已被关闭，请重新下单
+      order_already_paid: 订单已支付，请勿重复支付
+      overweight: 邮寄订单，单笔限重20kg。超过限重，须移除部分商品，或分多笔下单。
+      please_select_not_virtual_item: 请选择非虚拟产品下单
+      please_select_not_gift_only_item: 请选择非赠品下单
+      coupon_already_used: 优惠券已被使用
+      ae_out_of_stock_and_refund: 跨境购商品库存不足，自动退款
+      deliver_order_cannot_be_refunded: 订单状态为待发货且不存在有效售后，才能退款
+      ae_order_cannot_be_refunded: 跨境购订单已发货不能退款
+      cannot_refund_child_order_after_delivery: 子单不能单独退款
+      refund_amount_exceeds_can_refund_amount: 退款金额超过可退金额，最大可退金额为 $%{can_refund_amount}
+      refund_amount_should_be_larger_than_zero: 退款金额不能为0
+    user:
+      not_found: 找不到该用户
+      login_first: 请先登录
+      bind_mobile: 请先绑定手机号
+      incorrect_password: 密码错误，请重新输入
+      login_more_than_times: 10分钟內登录超过5次，请稍后再试
+      old_password_not_correct: 原密码不正确
+      password_should_contain: 必须包含数字/大小写字母/特殊字符(-=?+._!@#$%^&*)
+    coupon_package:
+      expired: 优惠券礼包已过期，下次早点过来吧~
+      already_in_your_account: 您已经领取过该优惠券礼包，赶紧去消费吧。
+      not_eligible: 您不符合领取条件。
+      can_not_contain_memerb_coupon: 非会员礼包中不可包含会员类型的优惠券
+      random_discount_can_not_be_associated: 不能关联随机满减券
+    coupon_template:
+      not_a_member: 只有会员可以领取该优惠券，注册会员后再来领取吧~
+      not_new_user: 只有新用户才能领取该优惠券~
+      timeout: 已经超过领取时间，下次早点过来吧~
+      expired: 优惠券已过期，下次早点过来吧~
+      already_claimed_today: 今天已经领过券了，请明天再领哦~
+      reach_max_count: 这张优惠券只能领%{quantity}张哦，让你的朋友试试吧
+      getting_coupons: 正在抢券中，请稍等。
+      no_more_coupons: 优惠券已经领取完了，下次早点过来吧~
+      already_assigned: 操作失败，该优惠券已被领取。
+    order_invoice:
+      already_created: 该订单已生成过发票
+      not_invoicable_for_this_status: 该订单当前状态不能生成发票
+      not_invoicable_for_auction_item: 拍卖商品不能开发票
+      not_invoicable_for_consigned_item: 该订单包含特殊商品，请联系客服索取发票
+    sku_in_stock_notice:
+      become_member: 请先成为会员
+      already_subscribed: 已经添加过到货通知了
+      can_not_subscribe: 商品规格尚有库存，不能添加到货通知
+    gift_activity:
+      not_meet_the_conditions: 赠品活动不满足条件
+      at_most_one_can_be_chosen: 赠品优惠券和赠品只能选择一样
+      select_one_gift_only: 赠品只能选一样
+      choose_again: 赠品选择错误，请重新选择赠品
+      promotion_ended: 赠品活动已结束
+      unavaliable: 赠品 %{title} 库存不足或已下架
+      unsupported_delivery_type: 赠品 %{title} 不支持 %{delivery_type}
+    address:
+      invalid_suburb_or_postal_code: 不支持的区名或邮编
+    item:
+      virtual_item_can_not_add_to_cart: 虚拟商品不能加入到购物车
+      gift_only_item_can_not_add_to_cart: 赠品商品不能加入到购物车
+      not_same_day_item_cant_not_add_to_cart: 非当日达商品不能加入到购物车
+      not_found_in_current_store: 当前门店查询不到此商品
+    after_sale:
+      should_not_be_larger_than_total_amount: 不能大于总金额
+      should_not_be_larger_than_original_amount: 不能大于应退金额
+      cannot_be_modified: 不可修改，因为售后已经被同意或拒绝了
+    comment:
+      already_commented: 你已评论过
+      please_confirm_goods: 请先确认收货
+      no_permission_to_comment: 你无权评论此商品
+    event_form_record:
+      max_seven_dragon_balls: 最多只能提交七颗龙珠
+      max_records: 最多只能提交%{max_records}条记录
+      answers_cannot_be_empty: 答案不能为空
+      answers_cannot_be_repeated: 答案不能重复
+      wrong_line: 第%{lines}行答案错误
+    overseas_student_application:
+      invalid_format: 请使用正确格式的邮箱

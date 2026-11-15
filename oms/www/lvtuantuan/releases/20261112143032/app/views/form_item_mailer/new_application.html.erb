@@ -1,0 +1,12 @@
+
+eBest 有新的表格产品申请！
+
+<p>
+  表格产品: <%= @form_item.title %></a>
+</p>
+
+<% @form_item_application.apply_properties.each do |key, value| %>
+  <p>
+    <%= I18n.t("grape.form_items.form_options.#{key}") %>: <%= value %></a>
+  </p>
+<% end %>

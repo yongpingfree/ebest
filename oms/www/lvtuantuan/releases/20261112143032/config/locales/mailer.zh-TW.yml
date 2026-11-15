@@ -1,0 +1,10 @@
+---
+zh-TW:
+  order_invoice_mailer:
+    send_to_user:
+      title: 發票(訂單 %{number})
+      greeting: 親愛的客戶%{name}您好，
+      thanks_for_shopping: 非常感謝您的購物！
+      order_attachment: 附件是訂單 %{number} 的發票
+      welcome_back: 我们期待您的再次光临！
+      ending_thank: 謝謝

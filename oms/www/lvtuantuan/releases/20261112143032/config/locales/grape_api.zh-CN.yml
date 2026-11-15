@@ -1,0 +1,142 @@
+---
+zh-CN:
+  grape:
+    connection:
+      timeout: 连接超时
+    aliyun_oss:
+      file_exists: 文件已存在，不可覆盖
+    users:
+      account_deleted: 账号已注销
+      invalid_mobile: 手机号不一致
+      failed_to_auth_wechat_info: 微信授权失败，请稍后再试
+      already_a_member: 您已经是会员，无需重复注册
+      provide_correct_code: 请输入正确的邀请码
+      already_bound_to_wechat: 您已经绑定微信
+      be_bound_to_another_member_account: 该微信号已绑定其他会员账号
+      phone_number_taken: 该手机号码已经被绑定
+      become_member_first: 请先成为会员
+      failed_to_login: 登录失败，请稍后再试
+      fingerprint_already_bind: 指纹已绑定其他账号
+      already_invited: 您已被其他会员邀请过
+      not_registered_member: 您还未注册会员
+    student_application:
+      application_exists: 您已提交申请，请等待审核
+      already_an_overseas_student: "您已经是留学生，学生身份到期日期为%{date}"
+    shopping_cart_items:
+      record_not_unique: 已添加到购物车
+      new_user_buy_quota: "%{title} 新人限购 %{quota} 件"
+    auction_activities:
+      can_not_create_bid: 不能提交出价
+      already_submitted_automatic_bid: 已提交自动出价
+    orders:
+      receiver_info_is_required: 请输入收件人信息
+      can_not_pay: 不能支付
+      can_not_create_duplicated_order: 不能创建重复订单
+      coupon_and_skus_all_give: 及
+      gift_notice_text: "订单金额已满$%{amount}，可选下列赠品%{coupon_and_skus_all_give}赠券"
+      all_give_text: 赠品可多选
+      gift_options_notice_text: "买满$%{amount}，即送以下赠品。您的订单还差$%{still_need_amount}，再去选点吧。"
+      gift_card_can_not_use: 该礼品卡不可在当前门店使用
+      missing_recipient_info: 请输入收件人信息
+      missing_self_pick_up: 请选择自提点
+      invalid_address: 不支持的地址。请更新地址后再下单。
+      gift_card_insufficient_blance: 礼品卡使用金额不得大于余额
+      gift_card_used_or_expired: 该礼品卡已使用或已过期
+      gift_card_not_correct: 请输入正确的礼品卡信息
+      insufficient_integral: 积分不足
+      current_not_support_integral: 当前不支持积分支付
+      only_member_can_use_integral: 只有会员可以使用积分
+      max_integral_in_one_order: 每单最多允许使用%{amount}积分
+      delivery_is_full: "%{delivery_date} 配送量已满，请重新选择配送日期"
+      delivery_for_perfer_time_is_full: "%{prefer_time} 配送量已满，请选择其他时间段"
+      delivery_date_expired: 此配送日期已过期，请重新选择
+      insufficient_inventory: 库存不足
+      repeat_payment: 支付正在处理中，请勿重复支付
+      promo_code_no_balance: Promo Code 已没有可兑换额度
+      different_stores_promo_code: 不同门店的Promo Code不可一起使用
+      different_stores_skus: 不能同时购买多个门店的商品
+      different_ae_drop_shipper_skus: 不能同时购买自营和跨境购商品
+      shopping_cart_empty: 购物车是空的
+      select_virtual_order: 请选择虚拟产品下单
+      select_none_virtual_order: 请选择非虚拟产品下单
+      cannot_refund: 该订单不能申请退款
+      order_expired: 订单已过期，请重新下单
+      payment_data_incorrect: 支付信息错误
+      not_support_unionpay_apple_pay: 暂不支持银联ApplePay支付
+      not_support_vm_apple_pay: 暂不支持VISA/MASTERCARD ApplePay支付
+      not_support_google_pay: 暂不支持GooglePay
+      use_unionpay_card: 请使用银联卡进行支付
+      use_vm_card: 请使用VISA/MASTERCARD进行支付
+      use_vm_amex_card: 请使用VISA/MASTERCARD/AMEX进行支付
+      cannot_reorder: 该订单因下架、缺货等无法再次购买
+      products_cannot_reorder: 部分商品因下架、缺货等无法再次购买
+      groupon_cannot_create: 该拼团活动只能参团，不能发起拼团
+      groupon_product_not_match: 购买的产品与拼团产品不一致，请重试
+      groupon_is_full: 该拼团已经满员，请选择其他拼团加入
+      sku_groupon_blank: SKU拼团ID不能为空
+      sku_groupon_not_match: SKU与SKU拼团数据不一致
+      free_shipping_text: "满 $%{amount} 免基础派送费"
+      shipping_text: "消费未满$%{amount}，收取基础派送费$%{freight}，超远程运费$%{long_distance_fee}"
+      service_text: "手续费 $%{amount}"
+      already_get_this_gift: 您已经领过该礼品啦！请选择其他礼品吧！
+      concurrent_order_limit: 您当前有其他订单正在处理，请稍后再试
+      payment_system_busy: 支付系统繁忙，请稍后重试
+      ae_order_amount_limit: 跨境直邮订单，单笔订单金额不可以超过$1000，请重新修改订单内容。
+      mini_program_not_allowed: 下单请使用 eBest App，更多优惠等你来！
+    live_rooms:
+      failed_to_draw: 抽奖失败
+      subscribe_failed: 订阅失败，请稍后再试
+      subscribe_failed_when_live: 直播已经开始，不能订阅
+      subscribe_failed_when_finished: 直播已经结束，不能订阅
+      cannot_start_live: 不能开始这场直播
+      cannot_finish_live: 不能结束这场直播
+    delivery_areas:
+      not_delivery: 非常抱歉，我们暂不支持配送到此区域
+    promo_codes:
+      invalid: Promo Code 已失效
+      only_for_new_user: 该 Promo Code 仅限新人使用
+      use_time_invalid: 该 Promo Code 不可多次使用
+    channels:
+      app: APP
+      web: Web网站
+      mini_program: 小程序
+    members:
+      cannot_edit_birthday: 设置后不可修改
+      code_sent: 验证码已发送。若未收到验证码，请检查手机号码或邮箱输入是否正确。
+    items:
+      discount_rate_text: "%{rate}% OFF"
+    aliyun:
+      deprecated_unsafe_upload: 系统维护，图片上传请到 eBset app 操作
+      please_update_app: 请更新App，以获得更流畅的购物体验。
+    form_items:
+      form_options:
+        name: 姓名
+        mobile: 电话
+        email: 邮箱
+        birthday: 生日
+        address: 地址
+        remark: 备注
+      form_option_cannot_be_empty: "%{form_option}不能为空"
+    delivery:
+      today: 今天
+      tomorrow: 明天
+      date_strftime: "%-d %b %Y"
+      not_delivery: 非常抱歉，该商品在该地区暂不支持销售
+      delivery_reach_text: "%{time}前下单，预计%{delivery_time}送达"
+      express_delivery_text: "%{time}前下单，预计%{delivery_time}开始配送"
+      ae_choice_delivery_text: "预计%{delivery_time}开始配送"
+      estimated_text: "预计%{delivery_time}送达"
+    user_recommended_products:
+      times_limit: 您今天已达到推荐次数上限
+    gift_card_coupons:
+      store_not_available: 该礼品卡不可在当前门店使用
+      already_used: 该礼品卡已被使用
+      expired: 该礼品卡已过期
+      invalid_info: 请输入正确的礼品卡信息
+    sign_in_activities:
+      sign_in_limit: 每天只能签到一次哦
+    action_stores:
+      already_done: 您已操作成功，请勿重复此操作哦
+      action_failed: 操作失败
+    aws_oss:
+      file_already_exists: 文件已存在

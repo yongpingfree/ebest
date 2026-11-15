@@ -1,0 +1,12 @@
+{
+    "applinks":
+    {
+        "apps":[],
+        "details":[
+                {
+                    "appID":"SHKBV2X8B4.com.au.ebest",
+                    "paths":["/app/*"]
+                }
+            ]
+    }
+}

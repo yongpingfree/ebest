@@ -77,7 +77,7 @@
                                 <input type="checkbox" wire:model.live="selected" value="d:{{ $listing['prefix'] . $folder }}">
                             </td>
                             <td style="padding:.5rem;">
-                                📁 <a href="#" wire:click.prevent="openFolder(@js($folder))">{{ $folder }}</a>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="display:inline-block;vertical-align:middle;margin-right:4px;color:#FACC15" fill="currentColor" aria-hidden="true"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg> <a href="#" wire:click.prevent="openFolder(@js($folder))">{{ $folder }}</a>
                             </td>
                             <td></td><td></td>
                         </tr>
@@ -89,7 +89,18 @@
                                 <input type="checkbox" wire:model.live="selected" value="f:{{ $file->id }}">
                             </td>
                             <td style="padding:.5rem;">
-                                📄 <a href="{{ route('files.download', $file) }}">{{ basename($file->path) }}</a>
+                                @php
+                                    $ext = strtolower(pathinfo($file->path, PATHINFO_EXTENSION));
+                                    $iconStyle = 'display:inline-block;vertical-align:middle;margin-right:4px;';
+                                @endphp
+                                @if (in_array($ext, ['xls', 'xlsx']))
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="{{ $iconStyle }}" aria-label="Excel" role="img"><path fill="#107C41" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path fill="#fff" fill-opacity=".35" d="M14 2l6 6h-6z"/><path fill="#fff" d="M8.2 9h2l1.3 2.3L12.8 9h2l-2.3 3.5L15 16h-2l-1.5-2.6L10 16H8l2.5-3.5z"/></svg>
+                                @elseif ($ext === 'pdf')
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="{{ $iconStyle }}" aria-label="PDF" role="img"><path fill="#DC2626" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path fill="#fff" fill-opacity=".35" d="M14 2l6 6h-6z"/><text x="12" y="17" font-size="6.5" font-weight="700" font-family="Arial,sans-serif" text-anchor="middle" fill="#fff">PDF</text></svg>
+                                @else
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="{{ $iconStyle }}" aria-hidden="true"><path fill="#6B7280" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path fill="#fff" fill-opacity=".35" d="M14 2l6 6h-6z"/></svg>
+                                @endif
+                                <a href="{{ route('files.download', $file) }}">{{ basename($file->path) }}</a>
                             </td>
                             <td style="padding:.5rem;">{{ number_format($file->size / 1024, 1) }} KB</td>
                             <td style="padding:.5rem;">{{ $file->published_expires_at->format('Y-m-d H:i:s') }}</td>

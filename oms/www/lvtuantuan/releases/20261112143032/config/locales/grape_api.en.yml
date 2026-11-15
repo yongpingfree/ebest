@@ -1,0 +1,142 @@
+---
+en:
+  grape:
+    connection:
+      timeout: Connection Timeout.
+    aliyun_oss:
+      file_exists: File already exists, can not be overwritten
+    users:
+      account_deleted: Account has been deleted
+      invalid_mobile: Invalid mobile
+      failed_to_auth_wechat_info: WeChat authorization failed, please try again later
+      already_a_member: You are already a member, no need to register again
+      provide_correct_code: Please enter the correct invitation code
+      already_bound_to_wechat: You are already bound to WeChat
+      be_bound_to_another_member_account: This WeChat account has been bound to another member account
+      phone_number_taken: This phone number has already been bound
+      become_member_first: Please become a member first
+      failed_to_login: Login failed, please try again later
+      fingerprint_already_bind: Fingerprint has been bound to another account
+      already_invited: You have been invited by another member
+      not_registered_member: You have not registered as a member
+    student_application:
+      application_exists: You have submitted your application, please wait for review
+      already_an_overseas_student: "You are already an overseas student, valid until %{date}"
+    shopping_cart_items:
+      record_not_unique: Already added to cart
+      new_user_buy_quota: "%{title} is limited to %{quota} items for new users"
+    auction_activities:
+      can_not_create_bid: Cannot create bid
+      already_submitted_automatic_bid: Automatic bid has been submitted
+    orders:
+      receiver_info_is_required: Please enter recipient information
+      can_not_pay: Cannot process payment
+      can_not_create_duplicated_order: Cannot create duplicate order
+      coupon_and_skus_all_give: " and "
+      gift_notice_text: "Order amount over $%{amount}, you can choose from the following gifts%{coupon_and_skus_all_give}coupons"
+      all_give_text: Multiple gifts can be selected
+      gift_options_notice_text: "Spend $%{amount} or more, choose 1 free gift. You're $%{still_need_amount} away from a free gift. Add more to your cart to unlock it!"
+      gift_card_can_not_use: This gift card cannot be used at the current store
+      missing_recipient_info: Please enter recipient information
+      missing_self_pick_up: Please select a pickup point
+      invalid_address: Unsupported address. Please update your address before placing the order.
+      gift_card_insufficient_blance: Gift card amount cannot exceed balance
+      gift_card_used_or_expired: This gift card has been used or has expired
+      gift_card_not_correct: Please enter correct gift card information
+      insufficient_integral: Insufficient integral
+      current_not_support_integral: Integral payment is not currently supported
+      only_member_can_use_integral: Only members can use integral
+      max_integral_in_one_order: Maximum %{amount} integral can be used per order
+      delivery_is_full: "%{delivery_date} delivery slots are full, please select another delivery date"
+      delivery_for_perfer_time_is_full: "%{prefer_time} delivery slots are full, please select another time slot"
+      delivery_date_expired: This delivery date has expired, please select again
+      insufficient_inventory: Insufficient stock
+      repeat_payment: Payment is being processed, please do not submit again
+      promo_code_no_balance: Promo Code has no remaining balance
+      different_stores_promo_code: Promo Codes from different stores cannot be used together
+      different_stores_skus: Cannot purchase products from multiple stores at once
+      different_ae_drop_shipper_skus: Cannot purchase eBest self-operated and cross-border products together
+      shopping_cart_empty: Shopping cart is empty
+      select_virtual_order: Please select virtual products to order
+      select_none_virtual_order: Please select non-virtual products to order
+      cannot_refund: This order cannot be refunded
+      order_expired: Order has expired, please place a new order
+      payment_data_incorrect: Payment information is incorrect
+      not_support_unionpay_apple_pay: UnionPay Apple Pay is not currently supported
+      not_support_vm_apple_pay: VISA/MASTERCARD Apple Pay is not currently supported
+      not_support_google_pay: Google Pay is not currently supported
+      use_unionpay_card: Please use UnionPay card for payment
+      use_vm_card: Please use VISA/MASTERCARD for payment
+      use_vm_amex_card: Please use VISA/MASTERCARD/AMEX for payment
+      cannot_reorder: This order cannot be purchased again due to products being unavailable or out of stock
+      products_cannot_reorder: Some products cannot be purchased again due to being unavailable or out of stock
+      groupon_cannot_create: This group buy can only be joined, not initiated
+      groupon_product_not_match: Product does not match group buy product, please try again
+      groupon_is_full: This group buy is full, please join another group
+      sku_groupon_blank: SKU group buy ID cannot be empty
+      sku_groupon_not_match: The SKU and the SKU group-buying data are inconsistent
+      free_shipping_text: "Free Standard Delivery Fee on order over $%{amount}"
+      shipping_text: "Order under $%{amount}, will be charged $%{freight} for Standard Delivery Fee, Remote Area Surcharge $%{long_distance_fee}"
+      service_text: "Service fee $%{amount}"
+      already_get_this_gift: You have already received this gift! Please select another gift!
+      concurrent_order_limit: You have other orders being processed, please try again later
+      payment_system_busy: Payment system is busy, please try again later
+      ae_order_amount_limit: For cross-border direct shipping orders, the total order amount must not exceed $1,000. Please revise your order accordingly.
+      mini_program_not_allowed: Place your order on the eBest App and enjoy more offers!
+    live_rooms:
+      failed_to_draw: Drawing failed
+      subscribe_failed: Subscription failed, please try again later
+      subscribe_failed_when_live: The live has already started, cannot subscribe
+      subscribe_failed_when_finished: The live has already finished, cannot subscribe
+      cannot_start_live: Cannot start this live
+      cannot_finish_live: Cannot finish this live
+    delivery_areas:
+      not_delivery: Sorry, we currently do not deliver to this area
+    promo_codes:
+      invalid: Promo Code is invalid
+      only_for_new_user: This Promo Code is for new users only
+      use_time_invalid: This Promo Code cannot be used multiple times
+    channels:
+      app: APP
+      web: Website
+      mini_program: Mini Program
+    members:
+      cannot_edit_birthday: can not be modified
+      code_sent: Verification code sent. If not received, please check if phone number or email is correct.
+    items:
+      discount_rate_text: "%{rate}% OFF"
+    aliyun:
+      deprecated_unsafe_upload: System maintenance, please use eBest app for image uploads
+      please_update_app: Please update the app for a better shopping experience.
+    form_items:
+      form_options:
+        name: Name
+        mobile: Mobile
+        email: Email
+        birthday: Birthday
+        address: Address
+        remark: Remark
+      form_option_cannot_be_empty: "%{form_option} cannot be empty"
+    delivery:
+      today: Today
+      tomorrow: Tomorrow
+      date_strftime: "%-d %b %Y"
+      not_delivery: Sorry, we do not currently support shipping to this region.
+      delivery_reach_text: "Order before %{time}, delivery %{delivery_time}"
+      express_delivery_text: "Order before %{time}, delivery %{delivery_time}"
+      ae_choice_delivery_text: "Delivery %{delivery_time}"
+      estimated_text: "Delivery %{delivery_time}"
+    user_recommended_products:
+      times_limit: You have reached today's recommendation limit
+    gift_card_coupons:
+      store_not_available: This gift card cannot be used at the current store
+      already_used: This gift card has been used
+      expired: This gift card has expired
+      invalid_info: Please enter correct gift card information
+    sign_in_activities:
+      sign_in_limit: You can only sign in once per day
+    action_stores:
+      already_done: You have already done this action, please do not repeat it
+      action_failed: Action failed
+    aws_oss:
+      file_already_exists: File already exists

@@ -1,0 +1,7 @@
+<% if lookup_context.template_exists?(params[:slug], "event_pages", true) %>
+  <div class="<%= params[:slug] %>">
+    <%= render params[:slug] %>
+  </div>
+<% else %>
+  <%= render file: 'public/404', status: 404, formats: [:html] %>
+<% end %>

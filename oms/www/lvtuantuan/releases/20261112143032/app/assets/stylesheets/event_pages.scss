@@ -1,0 +1,254 @@
+// Place all the styles related to the EventPages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+html {
+  overflow: hidden;
+}
+
+body {
+  overflow-y: auto;
+}
+
+.event_pages {
+  .share-btn {
+    position: absolute;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 32px;
+    letter-spacing: 1.5px;
+    width: 65px;
+    padding: 0;
+    right: 10px;
+    top: 10px;
+    border: none;
+    color: #fff;
+    border-radius: 10px;
+    outline: none;
+    background-color: #ff2e5d;
+    box-shadow: 0 5px 10px -3px rgba(0, 0, 0, 0.2),
+      0 5px 10px -3px rgba(0, 0, 0, 0.2);
+  }
+
+  .collect_dragon_balls {
+    display: flex;
+    position: relative;
+    text-align: center;
+    flex-direction: column;
+
+    .bg-top {
+      width: 100%;
+    }
+
+    .activity-form {
+      display: flex;
+      flex-direction: column;
+      padding: 46px 20px 43px 20px;
+      text-align: center;
+      background-image: image_url("bg-bottom.jpg");
+      background-size: 100% 100%;
+      margin-top: -1px;
+
+      .form-contain {
+        .form-group {
+          display: flex;
+
+          .item {
+            overflow: hidden;
+            padding: 10px;
+            border: 1.5px solid #feadac;
+            height: 12px;
+            line-height: 12px;
+            font-size: 16px;
+            font-family: SourceHanSansCN;
+            font-weight: bold;
+            background-color: #ffdada;
+          }
+
+          .top {
+            flex: 0 0 60px;
+            border-radius: 10px 0 0;
+            color: #fff;
+            background-color: #d84343;
+          }
+
+          .brand {
+            flex: 1 1 auto;
+            border-radius: 0 10px 0 0;
+            background-color: #d84343;
+            color: #fff;
+          }
+
+          .label {
+            flex: 0 0 60px;
+            color: #d84343;
+            font-family: SourceHanSansCN-Bold;
+          }
+
+          .input-item {
+            flex: 1 1 auto;
+            text-align: center;
+            color: #d84343;
+            outline: none;
+            -webkit-appearance: none;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+          }
+        }
+
+        :nth-child(odd) {
+          .label {
+            background-color: #ffa1a0;
+          }
+
+          .input-item {
+            background-color: #ffa1a0;
+          }
+        }
+
+        :last-child {
+          .label {
+            border-radius: 0 0 0 10px;
+          }
+
+          .input-item {
+            border-radius: 0 0 10px 0;
+          }
+        }
+      }
+
+      .submit-contain {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .tip {
+          color: #d84343;
+          font-weight: 800;
+          font-size: 20px;
+          padding: 20px;
+        }
+
+        .submit-btn {
+          width: 192px;
+          height: 51px;
+          border: none;
+          border-radius: 8px;
+          font-size: 25px;
+          font-family: SourceHanSansCN;
+          font-weight: bold;
+          color: #fff;
+          background-color: #ff2e5d;
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .collect_slogans {
+    text-align: center;
+    font: bold 14px "SourceHanSansCN";
+    overflow: hidden;
+    background-color: #f9acae;
+
+    .slogan-top-image {
+      width: 100%;
+      position: relative;
+
+      img {
+        width: 100%;
+      }
+    }
+
+    .total-wrap {
+      height: 280px;
+      background-image: image_url("page-bottom.jpg");
+      background-size: 100%;
+      background-repeat: no-repeat;
+    }
+
+    .input-wrap {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 15px;
+      margin: 0 auto;
+      align-items: center;
+      height: 35px;
+      width: 346px;
+
+      input {
+        line-height: normal;
+        text-align: center;
+        border-radius: 17px;
+        border: 2px solid #ff2e5d;
+        padding: 3px;
+        width: 65%;
+        height: 60%;
+        outline-style: none;
+
+        &::placeholder {
+          color: #c9c9c9;
+          font-size: 13px;
+        }
+      }
+
+      button {
+        padding: 8px 8px;
+        background-color: #ff2e5d;
+        display: inline-block;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        vertical-align: middle;
+        text-align: center;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+
+    p {
+      color: #d84343;
+    }
+
+    .submit-content {
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      width: 340px;
+      color: #fff;
+
+      > :nth-child(odd) {
+        background-color: #ffa1a0;
+      }
+
+      > :nth-child(even) {
+        background-color: #ffd6d6;
+      }
+
+      > :nth-child(1) {
+        background-color: #d84343;
+        border-top-left-radius: 14px;
+        border-top-right-radius: 14px;
+      }
+
+      > :nth-child(4) {
+        border-bottom-left-radius: 14px;
+        border-bottom-right-radius: 14px;
+      }
+
+      > div {
+        display: flex;
+        min-height: 32px;
+        line-height: 32px;
+        border: 1px solid #feadac;
+
+        .left {
+          flex: 2;
+          border-right: 2px solid #feadac;
+        }
+
+        .right {
+          flex: 3;
+        }
+      }
+    }
+  }
+}

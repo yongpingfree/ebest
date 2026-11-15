@@ -1,0 +1,15 @@
+.pages {
+  box-sizing: border-box;
+  font-size: 14px;
+  width: 100%;
+  overflow-x: hidden;
+  line-height: 1.75;
+  word-break: break-all;
+  margin: 0;
+  padding: 15px;
+
+  video, audio, img {
+    max-width: 100%;
+    height: auto !important;
+  }
+}

@@ -1,0 +1,14 @@
+<div class="pages">
+  <div class="markdown-body rich-text-page">
+    <% if @page %>
+      <% if @page.creator_id == session[:admin_user_id] || @page.admin_user_ids.blank? || @page.admin_user_ids.include?(session[:admin_user_id]) %>
+        <%= content_for :title, @page.name %>
+        <%= rich_text_render(@page.content) %>
+      <% else %>
+        您无权查看该页面
+      <% end %>
+    <% else %>
+      页面不存在
+    <% end %>
+  </div>
+</div>

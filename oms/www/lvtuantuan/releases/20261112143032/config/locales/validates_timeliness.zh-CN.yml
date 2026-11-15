@@ -1,0 +1,17 @@
+zh-CN:
+  errors:
+    messages:
+      invalid_date: "无效的日期"
+      invalid_time: "无效的时间"
+      invalid_datetime: "无效的日期及时间"
+      is_at: "必须为 %{restriction}"
+      before: "必须在 %{restriction} 之前"
+      on_or_before: "必须等于或在 %{restriction} 之前"
+      after: "必须在 %{restriction} 之后"
+      on_or_after: "必须等于或在 %{restriction} 之后"
+      start_at_can_not_later_than_end_at: "开始时间不能大于结束时间"
+  validates_timeliness:
+    error_value_formats:
+      date: '%Y-%m-%d'
+      time: '%H:%M:%S'
+      datetime: '%Y-%m-%d %H:%M:%S'

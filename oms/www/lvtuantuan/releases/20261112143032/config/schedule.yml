@@ -1,0 +1,179 @@
+WechatAccessTokenJob:
+  cron: "*/90 * * * *"
+  class: WechatAccessTokenJob
+
+NotifyOrderAnalysesJob:
+  cron: "0 1 * * *"
+  class: NotifyOrderAnalysesJob
+
+SyncLogisticJob:
+  cron: "0 * * * *"
+  class: SyncLogisticJob
+  queue: logistic
+
+UpdateAudToCnyExchangeRateJob:
+  cron: "30 0 * * *"
+  class: UpdateAudToCnyExchangeRateJob
+
+SyncOneMonthOrdersToRedisJob:
+  cron: "0 0 * * *"
+  class: SyncOneMonthOrdersToRedisJob
+
+TimedExpireCouponsJob:
+  cron: "*/10 * * * *"
+  class: TimedExpireCouponsJob
+
+# 澳洲总共有4个时区 +8 + 9.5 +10 +11(悉尼冬令时)，搜索记录在凌晨比较少，就不特殊处理，把时间定在凌晨3点执行，可以兼容其他门店时区
+SaveItemSearchHistoryJob:
+  cron: "0 3 * * *"
+  class: SaveItemSearchHistoryJob
+
+CouponExpireNotificationJob:
+  cron: "0 6 * * *"
+  class: CouponExpireNotificationJob
+
+# 每周一两点发送赠品报表
+SendGiftDataEveryWeekJob:
+  cron: "0 2 * * 1"
+  class: SendGiftDataEveryWeekJob
+
+# 每天三点计算sku_level
+CalculateSkuLevelsJob:
+  cron: "0 3 * * *"
+  class: CalculateSkuLevelsJob
+
+CalculateSkuCanCoverWeeksJob:
+  cron: "0 3 * * *"
+  class: CalculateSkuCanCoverWeeksJob
+
+# 每天2点计算商品月销量
+UpdateActualMonthlySalesCountJob:
+  cron: "0 2 * * *"
+  class: UpdateActualMonthlySalesCountJob
+
+SaveUserHistoryJob:
+  cron: "0 1 * * *"
+  class: SaveUserHistoryJob
+
+ClearUserHistoriesJob:
+  cron: "0 2 * * *"
+  class: ClearUserHistoriesJob
+
+ExportMemberOrderDataJob:
+  cron: "0 1 * * *"
+  class: ExportMemberOrderDataJob
+
+# supay汇率是实时波动的，半小时更新一次
+SyncSupayAudToCnyExchangeRateJob:
+  cron: "*/30 * * * *"
+  class: SyncSupayAudToCnyExchangeRateJob
+
+UpdateItemExpirationDateJob:
+  cron: "0 2 * * *"
+  class: UpdateItemExpirationDateJob
+
+# 每天两点半计算毛利率
+CalculateSkusNominalGrossMarginRatioJob:
+  cron: "30 2 * * *"
+  class: CalculateSkusNominalGrossMarginRatioJob
+
+# 每天三点半计算用户猜你喜欢数据
+# CalculateGuessYouLikeJob:
+#   cron: "30 3 * * *"
+#   class: CalculateGuessYouLikeJob
+
+# 每天一点半计算产品有效库存日期
+RecordSkuValidInventoryEveryDayJob:
+  cron: "30 1 * * *"
+  class: RecordSkuValidInventoryEveryDayJob
+
+# 每周一0点计算sku周转率
+SaveSkuInventorySnapshotEveryWeekJob:
+  cron: "0 0 * * 1"
+  class: SaveSkuInventorySnapshotEveryWeekJob
+
+# 每天 00:20（堪培拉店同步时间） 和 22:20 (悉尼店同步时间) 生成仓储订单，当日达在每天15:20生成仓储订单
+# 堪培拉门店关闭了，先把0点移除，后续如果要打开，需要考虑生成独立仓储单的问题
+GenerateWarehouseOrdersJob:
+  cron: "50 23 * * *"
+  class: GenerateWarehouseOrdersJob
+
+# 每天1点定时同步ES数据
+# ReindexItemsJob:
+#   cron: "0 1 * * *"
+#   class: ReindexItemsJob
+
+# 每个月1号凌晨1点清除上一年的积分
+ClearLastYearIntegralEveryMonthJob:
+  cron: "0 1 1 * *"
+  class: ClearLastYearIntegralEveryMonthJob
+
+# 每天凌晨2点清除消息推送记录
+ClearUsersPushMessagesJob:
+  cron: "0 2 * * *"
+  class: ClearUsersPushMessagesJob
+
+# 每天凌晨3:30检查所有商品的限时优惠
+CheckItemTimeLimitedPromotionJob:
+  cron: "30 3 * * *"
+  class: CheckItemTimeLimitedPromotionJob
+
+# 每天14点检查未收到生日券的会员
+CheckMemberRewardBirthdayJob:
+  cron: "0 14 * * *"
+  class: CheckMemberRewardBirthdayJob
+
+# 每天9点同步ae库存(非跨境购)
+SyncAeInventoryJob:
+  cron: "0 9 * * *"
+  class: SyncAeInventoryJob
+
+# 每天1点同步Shopline用户
+SyncUsersFromShoplineJob:
+  cron: "0 1 * * *"
+  class: SyncUsersFromShoplineJob
+
+# 每8分钟批量同步Shopline库存
+# 目前shopline单量少，设置8分钟，后面单量多了，再改成长些
+BatchUpdateShoplineInventoryJob:
+  cron: "*/8 * * * *"
+  class: BatchUpdateShoplineInventoryJob
+
+# AE的token有效期是1个月，每20天刷新一次
+RefreshAeAccessTokenJob:
+  cron: "0 * */20 * *"
+  class: RefreshAeAccessTokenJob
+
+# 每天凌晨2点同步Shopline所有商品库存
+UpdateShoplineInventoryEveryDayJob:
+  cron: "0 2 * * *"
+  class: UpdateShoplineInventoryEveryDayJob
+
+# 每天14点软删除消失的AE产品，0点同步新增的AE产品及软删除消失的产品
+SyncAeItemsEveryDayJob:
+  cron: "0 14,0 * * *"
+  class: SyncAeItemsEveryDayJob
+
+# 每天0点同步AE产品库存
+SyncAeItemsInventoryJob:
+  cron: "0 0 * * *"
+  class: SyncAeItemsInventoryJob
+
+# 每天3点同步AE产品配送日期(必须在同步库存之后执行)
+SyncAeItemsDeliveryDateEveryDayJob:
+  cron: "0 3 * * *"
+  class: SyncAeItemsDeliveryDateEveryDayJob
+
+GenerateItemLambdaImageEveryDayJob:
+  cron: "0 4 * * *"
+  class: GenerateItemLambdaImageEveryDayJob
+
+# 每晚凌晨1点自动计算热卖榜排行
+CalculateItemsHotSellRankingJob:
+  cron: "0 1 * * *"
+  class: CalculateItemsHotSellRankingJob
+
+# 每1小时同步AE订单跟踪信息
+SyncAeOrderTrackingsEveryDayJob:
+  cron: "0 */1 * * *"
+  class: SyncAeOrderTrackingsEveryDayJob

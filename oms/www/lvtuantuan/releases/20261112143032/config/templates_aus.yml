@@ -1,0 +1,15 @@
+templates: &templates
+  # TODO: 正在申请新的小程序模版关键词
+  delivery: WZW-zp7FHCjJ0c9rucCja6Ow7so9F-ujP-SL-nID6U8
+  refund: p4OpfnTtpbybdKuULq3zMPVYK5ttIK9A7OAO0SITKQI
+  groupon_finished: BkECanb4UlKkEEhBKJlEE5OqHmLlxZEw1KEQa9YX1Ns
+  groupon_canceled: rC7-RvqEGBxA3LLBDjNpNjQ9LBKIapAjZOlhNbDtr9Q
+
+development:
+  <<: *templates
+
+staging:
+  <<: *templates
+
+production:
+  <<: *templates

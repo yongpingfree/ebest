@@ -1,0 +1,11 @@
+<p>本次导入处理数据 <%= @result[:processed_count] %> 条。</p>
+
+<% if @result[:error_messages].empty? %>
+  <p>所有数据导入成功。</p>
+<% else %>
+  <p>以下数据导入失败：</p>
+
+  <% @result[:error_messages].each do |record| %>
+    <p> <%= record %></p>
+  <% end %>
+<% end %>

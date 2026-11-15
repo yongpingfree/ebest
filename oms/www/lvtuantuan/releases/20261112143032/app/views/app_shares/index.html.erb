@@ -1,0 +1,35 @@
+<div id="app_share_page">
+  <div class="wxtip" id="JweixinTip">
+    <p class="wxtip-txt">请点击右上角<br/>选择在浏览器中打开</p>
+  </div>
+  <header class="download-header"></header>
+
+  <div class="container">
+    <div class="logo">
+      <%= image_tag "https://cdn.minimall.donkibuy.com/images/200707/g0fk3bhd8.png", class: 'logo' %>
+    </div>
+    <h1>eBest <span><%= "正式版" %></span></h1>
+    <div id="image_area">
+      <a href="ebestapp://<%= @target_url %>" target="_blank" id="share_btn">打开eBest</a>
+      <br/>
+    </div>
+    <% if params[:invite_code].present? %>
+      <div>
+        <h3>邀请码: <a id="inviteCode" onclick="copyToClipboard()" style="text-decoration:underline; color: #0038ff"><%= params[:invite_code] %></a></h3>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  function copyToClipboard() {
+    var copyText = document.getElementById("inviteCode").innerText;
+    var elem = document.createElement("textarea");
+    document.body.appendChild(elem);
+    elem.value = copyText;
+    elem.select();
+    document.execCommand("copy");
+    document.body.removeChild(elem);
+    alert("复制成功")
+  }
+</script>

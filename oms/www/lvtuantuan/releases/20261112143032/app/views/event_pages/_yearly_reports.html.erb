@@ -1,0 +1,56 @@
+<% content_for :title, "2021年度报告" %>
+
+<div id="yearly-reports">
+  <div class="header"></div>
+
+  <div class="statistical-data">
+    <div class="total-amount">
+      <div>总花费达</div>
+
+      <div>$<%= @total_amount_in_yuan %></div>
+
+      <div>澳元</div>
+    </div>
+
+    <div class="advance-percentage">超过了 <%= @advance_percentage %>% 的用户</div>
+
+    <% if @category_name.present? %>
+      <div class="category-name">您最喜欢购买 <%= @category_name %> 产品</div>
+    <% end %>
+  </div>
+
+  <div class="align-center">
+    <div class="trojan-horse"></div>
+
+    <div class="sign-days">
+      <div>不知不觉</div>
+
+      <div>eBest已陪伴您走过</div>
+
+      <div class="num-line-box"><span class="num"><%= @sign_days %></span>天</div>
+    </div>
+
+    <div class="new-year">新的一年希望我们继续相伴</div>
+
+    <div class="qr-code"></div>
+
+    <div class="years">根据2021年使用数据生成</div>
+
+    <div class="open-app">打开 eBest APP 查看您的【年度报告】</div>
+  </div>
+</div>
+
+<script>
+  $(function () {
+    const isLogin = <%= current_user.present? %>;
+
+    if (!window.ReactNativeWebView) {
+      window.location.href = `/app_shares?type=webviewPage&path=${encodeURIComponent(window.location.href)}`
+      return
+    }
+
+    if (!isLogin) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'login' }));
+    }
+  })
+</script>

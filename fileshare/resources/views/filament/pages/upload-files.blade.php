@@ -30,11 +30,14 @@
             x-on:dragover.prevent="over = true"
             x-on:dragleave.prevent="over = false"
             x-on:drop.prevent="over = false; onDrop($event)"
-            :style="over ? 'border-color:#f59e0b; background:#f59e0b14' : ''"
-            style="border:2px dashed #9ca3af; border-radius:.75rem; padding:2.5rem 1rem; text-align:center;"
+            :style="over ? 'border-color:#d97706; background:#fef3c7; transform:scale(1.01);' : ''"
+            style="border:3px dashed #3b82f6; background:#eff6ff; color:#1e3a8a; border-radius:1rem; padding:5rem 1rem; min-height:18rem; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; transition:all .15s;"
         >
-            <p style="font-weight:600;">Drag &amp; drop files or an entire folder here</p>
-            <p style="opacity:.7; margin:.25rem 0 1rem;">Folder structure is kept.</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width:5rem; height:5rem; margin-bottom:1rem;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z" />
+            </svg>
+            <p style="font-weight:700; font-size:1.25rem;">Drag &amp; drop files or an entire folder here</p>
+            <p style="opacity:.7; margin:.25rem 0 1.5rem;">Folder structure is kept. Or use the buttons below.</p>
 
             <input type="file" multiple x-ref="files" style="display:none" x-on:change="addList($event.target.files); $event.target.value=''">
             <input type="file" webkitdirectory x-ref="dir" style="display:none" x-on:change="addList($event.target.files); $event.target.value=''">
