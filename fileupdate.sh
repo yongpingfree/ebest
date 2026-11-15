@@ -1,5 +1,6 @@
 XPATH=~/Downloads/Tang/Stocks/eBest/security
 files=(
+pdf-transform/transform.py
 app/Services/PdfSettingsService.php
 app/Filament/Pages/UploadFiles.php
 resources/views/filament/pages/upload-files.blade.php
@@ -10,6 +11,12 @@ app/Models/DownloadLog.php
 app/Http/Controllers/FileDownloadController.php
 app/Http/Controllers/BulkDownloadController.php
 database/migrations/2026_11_11_000001_create_download_logs_table.php
+app/Services/FileIngestService.php
+app/Jobs/ProcessSharedFile.php
+app/Filament/Pages/PdfSettings.php
+app/Filament/Resources/Users/Schemas/UserForm.php
+app/Console/Commands/RotatePdfPasswords.php
+database/migrations/2026_11_15_000001_add_source_path_to_shared_files_table.php
 )
 files_old=(
 app/Providers/Filament/AdminPanelProvider.php

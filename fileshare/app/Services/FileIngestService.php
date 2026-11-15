@@ -18,10 +18,14 @@ class FileIngestService
         File::ensureDirectoryExists(dirname($dest), 02775);
         File::copy($sourceAbs, $dest);
 
+        // Excel files are published as macro-enabled .xlsm (carries the expiry macro).
+        $published = preg_match('/\.xlsx?$/i', $rel) ? preg_replace('/\.xlsx?$/i', '.xlsm', $rel) : $rel;
+
         $now = now();
         $file = SharedFile::updateOrCreate(
-            ['path' => $rel],
+            ['path' => $published],
             [
+                'source_path' => $published === $rel ? null : $rel,
                 'size' => filesize($dest),
                 'is_pdf' => str_ends_with(strtolower($rel), '.pdf'),
                 'status' => 'pending',

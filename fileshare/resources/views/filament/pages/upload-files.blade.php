@@ -1,11 +1,11 @@
 <x-filament-panels::page>
     {{ $this->form }}
 
-    <x-filament::section heading="PDF user password history (past 3 days)" collapsible collapsed>
+    <x-filament::section heading="PDF/Excel user password history (past 3 days)" collapsible collapsed>
         <table style="width:100%; font-size:.875rem; border-collapse:collapse;">
             <thead>
                 <tr style="text-align:left; border-bottom:1px solid #8884;">
-                    <th style="padding:.4rem">When</th><th>PDF user password</th><th>Changed by</th>
+                    <th style="padding:.4rem">When</th><th>PDF/Excel user password</th><th>Changed by</th>
                 </tr>
             </thead>
             <tbody>

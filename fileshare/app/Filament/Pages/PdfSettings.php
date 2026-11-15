@@ -17,13 +17,13 @@ class PdfSettings extends Page implements HasSchemas
 
     protected string $view = 'filament.pages.pdf-settings';
 
-    protected static ?string $navigationLabel = 'PDF settings';
-    protected static ?string $title = 'PDF protection settings';
+    protected static ?string $navigationLabel = 'PDF/Excel settings';
+    protected static ?string $title = 'PDF/Excel protection settings';
     protected static ?int $navigationSort = 2;
 
     public ?array $data = [];
 
-    // PDF passwords are for administrators only.
+    // PDF/Excel passwords are for administrators only.
     public static function canAccess(): bool
     {
         return auth()->user()?->isAdmin() ?? false;
@@ -45,7 +45,7 @@ class PdfSettings extends Page implements HasSchemas
         return $schema
             ->components([
                 TextInput::make('user_password')->label('User password')->required()->minLength(4)
-                    ->helperText('Needed to open the protected PDF.'),
+                    ->helperText('Needed to open the protected PDF or Excel file.'),
                 Toggle::make('user_auto')->label('Auto-refresh user password every day (midnight)'),
                 TextInput::make('owner_password')->label('Owner password')->required()->minLength(4)
                     ->different('user_password')

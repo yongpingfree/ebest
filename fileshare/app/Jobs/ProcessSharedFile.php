@@ -29,13 +29,16 @@ class ProcessSharedFile implements ShouldQueue
 
         $file->update(['status' => 'processing', 'error' => null]);
 
-        $src = rtrim(config('fileshare.originals'), '/') . '/' . $file->path;
+        $src = rtrim(config('fileshare.originals'), '/') . '/' . ($file->source_path ?: $file->path);
         $dst = rtrim(config('fileshare.published'), '/') . '/' . $file->path;
         File::ensureDirectoryExists(dirname($dst), 02775);
 
-        if ($file->is_pdf) {
+        if ($file->is_pdf || $file->source_path) {   // PDF, or Excel (.xls/.xlsx published as .xlsm)
             $settings = app(PdfSettingsService::class);
-            $tmp = $dst . '.part';
+            // transform.py chooses the format by suffix, so Excel's temp file must keep ".xlsm".
+            $tmp = $file->source_path
+                ? dirname($dst) . '/.part_' . basename($dst)
+                : $dst . '.part';
             $process = new Process([
                 config('fileshare.python'),
                 config('fileshare.script'),
@@ -51,7 +54,7 @@ class ProcessSharedFile implements ShouldQueue
             if (! $process->isSuccessful() || ! file_exists($tmp)) {
                 @unlink($tmp);
                 // Full, untruncated output; passwords are never logged.
-                Log::channel('transform')->error('PDF transform failed', [
+                Log::channel('transform')->error('File transform failed', [
                     'file' => $file->path,
                     'exit_code' => $process->getExitCode(),
                     'command' => implode(' ', [basename((string) config('fileshare.script')), $src, '<user-pw>', '-o', $tmp, '--hours', $settings->get(PdfSettingsService::HOURS), '--owner-password', '<owner-pw>']),

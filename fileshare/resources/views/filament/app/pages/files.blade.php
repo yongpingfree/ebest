@@ -8,16 +8,16 @@
 
     <x-filament::section>
         <div style="margin-bottom:1rem; padding:.6rem .8rem; border:1px solid #f59e0b; border-radius:.5rem;">
-            🔑 PDF password: <strong style="font-family:monospace; user-select:all;">{{ $this->getPdfPassword() }}</strong>
+            🔑 PDF/Excel password: <strong style="font-family:monospace; user-select:all;">{{ $this->getPdfPassword() }}</strong>
             <span style="opacity:.7;">(changes daily)</span>
         </div>
 
         @if ($this->canSeePasswordHistory())
-            <x-filament::section heading="PDF user password history (past 3 days)" collapsible collapsed style="margin-bottom:1rem;">
+            <x-filament::section heading="PDF/Excel user password history (past 3 days)" collapsible collapsed style="margin-bottom:1rem;">
                 <table style="width:100%; font-size:.875rem; border-collapse:collapse;">
                     <thead>
                         <tr style="text-align:left; border-bottom:1px solid #8884;">
-                            <th style="padding:.4rem">When</th><th>PDF user password</th><th>Changed by</th>
+                            <th style="padding:.4rem">When</th><th>PDF/Excel user password</th><th>Changed by</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -93,7 +93,7 @@
                                     $ext = strtolower(pathinfo($file->path, PATHINFO_EXTENSION));
                                     $iconStyle = 'display:inline-block;vertical-align:middle;margin-right:4px;';
                                 @endphp
-                                @if (in_array($ext, ['xls', 'xlsx']))
+                                @if (in_array($ext, ['xls', 'xlsx', 'xlsm']))
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="{{ $iconStyle }}" aria-label="Excel" role="img"><path fill="#107C41" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path fill="#fff" fill-opacity=".35" d="M14 2l6 6h-6z"/><path fill="#fff" d="M8.2 9h2l1.3 2.3L12.8 9h2l-2.3 3.5L15 16h-2l-1.5-2.6L10 16H8l2.5-3.5z"/></svg>
                                 @elseif ($ext === 'pdf')
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" style="{{ $iconStyle }}" aria-label="PDF" role="img"><path fill="#DC2626" d="M6 2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path fill="#fff" fill-opacity=".35" d="M14 2l6 6h-6z"/><text x="12" y="17" font-size="6.5" font-weight="700" font-family="Arial,sans-serif" text-anchor="middle" fill="#fff">PDF</text></svg>

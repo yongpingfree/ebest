@@ -299,6 +299,8 @@ ubuntu@ip-172-31-200-201:/var/www/fileshare$ php artisan optimize:clear
 22, in download file, the folder is in grey color, change it to yellow
 23, the file icon is also grey, please change icon as Excel file for xls and xlsx, icon as Pdf for pdf file
 24, for any Excel file uploaded
-- protect it by a password, and a similar expiry date by VBA script; using the same configuration (password and expiry hours)
+- protect it by a password, and a similar expiry date by VBA script; using the same configuration (password and expiry hours) and same python script
+- the python script protect file according to suffix (pdf and xls/xlsx)
 - change PDF setting to PDF/Excel setting
 - change PDF password to PDF/Excel password
+25, got error message on xlsx transformation: Excel output must end with .xlsm (macros cannot live in a .x...

@@ -28,7 +28,7 @@ class UserForm
                 ->label('Role')
                 ->options(User::ROLES)
                 ->descriptions([
-                    User::ROLE_ADMIN => 'User management, upload files, PDF settings.',
+                    User::ROLE_ADMIN => 'User management, upload files, PDF/Excel settings.',
                     User::ROLE_OPERATOR => 'Upload files only; no user management.',
                     User::ROLE_USER => 'Download files only.',
                 ])

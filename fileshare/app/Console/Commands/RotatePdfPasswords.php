@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 class RotatePdfPasswords extends Command
 {
     protected $signature = 'fileshare:rotate-passwords';
-    protected $description = 'Auto-refresh the PDF user (daily) and owner (weekly) passwords when due';
+    protected $description = 'Auto-refresh the PDF/Excel user (daily) and owner (weekly) passwords when due';
 
     public function handle(PdfSettingsService $settings): int
     {

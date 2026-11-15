@@ -1662,8 +1662,8 @@ module BeansApp
           "data"=>
             {
               "result"=>true,
-              "pay_info"=>"{\"appid\":\"wx79d7a20918ac064c\",\"noncestr\":\"4psY1nnUHDOwsCP0YSwOrKk0v4mHpROJ\",\"package\":\"Sign=WXPay\",\"partnerid\":\"554862491\",\"prepayid\":\"wx07181308732914bec4a93884de26880000\",\"sign\":\"9B0283E97872662F8502F270209FEE21906D8F2E0AD641584321863F14C0F12E\",\"timestamp\":\"1675764788\"}",
-              "sign"=>"6916b9253160d8eda534b4df21dac971",
+              "pay_info"=>"{\"appid\":\"71dxxxc064c\",\"noncestr\":\"4pi1s0YSwOrKk0v4AAAAmHpROJ\",\"package\":\"Sign=WXPay\",\"partnerid\":\"55XXXX4862491\",\"prepayid\":\"wx0718XXXX26880000\",\"sign\":\"9B0283E9787XXXX863F1AAAAA4C0F12E\",\"timestamp\":\"1111675764788\"}",
+              "sign"=>"691XXXXX1111111",
               "sign_type"=>"MD5"
             }
         }
