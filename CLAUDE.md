@@ -1,3 +1,5 @@
+@import issues/goal_10_issues.md
+
 # your role
 
 apps developer
@@ -109,6 +111,8 @@ apps developer
 - step 1:
   - found out same item between umall and ebest according to:
     - category similar e.g. fruits, 水果 are same category
+    - using umall json filename as primary category (translate to Chinese)
+    - for eBest category, use the field in category_name (e.g. 鸡蛋/蛋类)
     - same keywords in title or short title
     - if products are from different brand, they should not be matched
       - for eBest product, brand is typically in first few words in the title, excluding 【】
@@ -154,6 +158,7 @@ apps developer
   - save the matching rule in a configuration file
   - build a python script to do the matching according to the matching rule, output to a csv file with columns of:
     - common category, umall product title, umall sku, ebest product title, ebest sku, umall unit price, umall unit, ebest unit price, ebest unit
+    - by default, use the category name from umall as category
     - for any price, if there's promotion or discounted price, use the lower price for comparison purpose
     - umall and ebest json files folder as input to the python rather than specified in the matching rule json
 - step 2:
@@ -167,11 +172,14 @@ apps developer
     - category (including All option)
     - product (including All option)
     - overall status
-      # of umall price lower
-      # of ebest price lower
+      - # of umall price lower
+      - # of ebest price lower
+      - number of umall products not matched (clickable so details listed in below table)
+      - number of ebest products not matched (clickable so details listed in below table)
     - line chart of price
     - list of details (for multiple dates, same product can list multiple times with load_time difference)
     - below the details, provide two buttons, to download products which umall has higher price, and products which ebest has higher price
+    - 3rd button to download unmatched umall products; 4th button to download unmatched ebest products
   - list out the deployment steps
 
 

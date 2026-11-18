@@ -21,7 +21,7 @@ class RunPriceComparison implements ShouldQueue
         $svc->updateRun($this->runId, ['status' => 'running', 'started_at' => now()]);
         try {
             $n = $svc->run($this->fetchEbest);
-            $svc->updateRun($this->runId, ['status' => 'done', 'rows' => $n, 'message' => "Loaded $n rows.", 'finished_at' => now()]);
+            $svc->updateRun($this->runId, ['status' => 'done', 'rows' => $n, 'message' => "Loaded $n rows ({$svc->ebestNote}).", 'finished_at' => now()]);
         } catch (\Throwable $e) {
             Log::error('Price comparison failed', ['error' => $e->getMessage()]);
             $svc->updateRun($this->runId, ['status' => 'failed', 'message' => $e->getMessage(), 'finished_at' => now()]);

@@ -17,7 +17,14 @@ def has_term(text, term):
     return term in text
 
 
+ALIASES = {}
+MIN_SHARED = 3
+
+
 def norm(text):
+    text = text or ''
+    for a, b in ALIASES.items():
+        text = text.replace(a, b)
     return re.sub(r'\s+', ' ', (text or '').lower().replace('-', ' ').replace('_', ' '))
 
 
@@ -35,13 +42,21 @@ class Rules:
             for w in words:
                 syn.append((w.lower(), key))
         self.syn = sorted(syn, key=lambda x: -len(x[0]))
+        global MIN_SHARED
+        MIN_SHARED = self.c.get('min_shared_tokens', 3)
+        ALIASES.clear()
+        ALIASES.update(self.c.get('text_aliases', {}))
         self.stop = sorted((w.lower() for w in self.c['stopwords']), key=len, reverse=True)
 
     # ---------- 类别 ----------
     def group_by_title(self, text):
         t = norm(text)
         best, best_score = None, 0
+        pe = self.c['produce_exclusion_markers']
+        processed = any(m in t for m in pe['markers'])
         for g, words in self.c['category_title_keywords'].items():
+            if processed and g in pe['groups']:
+                continue
             s, tt = 0, t
             for w in sorted((w.lower() for w in words), key=len, reverse=True):
                 if has_term(tt, w):
@@ -290,15 +305,31 @@ def prepare(r, rows, cjk_brands=(), vocab=()):
         x['variety'] = r.varieties(x['keytext'])
         x['brand'] = r.brand(x['title'], cjk_brands) if r.c['brand_rules']['enabled'] else None
         x['flat'] = Rules.bnorm(x['text'])
+        ft = r.first_token(x['title'])
+        mm = CJK.fullmatch(ft) if ft else None
+        x['wbrand'] = ft if mm and 2 <= len(ft) <= 5 and not r.keys(ft) and not any(ft == s or (len(s) >= 2 and ft.startswith(s)) for s in r.stop) else None
         x['keys'] = r.keys(x['keytext'])
         core = strip_brand(x['text'], x['brand'], vocab)
         first = r.first_token(x['title'])
         if x['brand'] and first.isascii():
             core = core.lower().replace(first, ' ')
         x['toks'] = r.tokens(core)
+        x['toks_alt'] = r.tokens(strip_brand(x['title'], x['brand'], vocab))   # 仅主标题（不含短标题/英文链接词）
         x['attrs'] = r.attrs(x['keytext'])
         x['dim'], x['size'], _ = r.spec(x['text'])
     return rows
+
+
+def sim(u, e):
+    """标题核心词相似度：主标题与完整文本（含短标题、英文词）交叉比较，取最高。"""
+    best = 0.0
+    for a in (u['toks'], u['toks_alt']):
+        for b in (e['toks'], e['toks_alt']):
+            s = jac(a, b)
+            if len(a & b) < MIN_SHARED:
+                s = min(s, 0.3)
+            best = max(best, s)
+    return best
 
 
 def jac(a, b):
@@ -308,7 +339,8 @@ def jac(a, b):
 def score(r, u, e):
     tol = r.c['price_tolerance']
     classified = bool(u['group'] and e['group'])
-    if classified and not r.same_group(u['group'], e['group']):
+    sm = sim(u, e)
+    if classified and not r.same_group(u['group'], e['group']) and sm < r.c['group_relax_score']:
         return None
     # 产地、品种、品牌：不同则不匹配
     if u['country'] and e['country'] and not (u['country'] & e['country']):
@@ -318,11 +350,25 @@ def score(r, u, e):
             return None
     elif r.c.get('variety_strict') and (u['variety'] or e['variety']):
         return None
-    if (u['brand'] and u['brand'] not in e['flat']) or (e['brand'] and e['brand'] not in u['flat']):
-        return None
+    for a, b in ((u, e), (e, u)):
+        if a['brand'] and a['brand'] not in b['flat']:
+            # 对方也识别出了别的品牌 -> 品牌不同；对方没有品牌 -> 仅在标题几乎一致时放行
+            if b['brand'] or sm < r.c['brand_one_side_missing_min_score']:
+                return None
+            if b['wbrand'] and b['wbrand'] not in a['flat'] and u['group'] not in r.c['relaxed_token_groups']:
+                return None
     for g in u['attrs']:
-        if u['attrs'][g] and e['attrs'][g] and not (u['attrs'][g] & e['attrs'][g]):
+        a, b = u['attrs'][g], e['attrs'][g]
+        if g in r.c['attribute_exact_groups']:
+            if a != b and (a or b) and not ((not a) and not b):
+                if a and b or (a or b):
+                    return None
+        elif a and b and not (a & b):
             return None
+    wb = r.c['weak_brand']
+    if wb['enabled'] and u['wbrand'] and e['wbrand'] and u['group'] not in r.c['relaxed_token_groups'] \
+            and u['wbrand'] not in e['flat'] and e['wbrand'] not in u['flat']:
+        return None
     # 关键词：两边都识别出关键词则必须有交集
     if u['keys'] and e['keys']:
         mod = set(r.c['modifier_keys'])
@@ -330,17 +376,24 @@ def score(r, u, e):
         if (ku and ke and not (ku & ke)) or not (u['keys'] & e['keys']):
             return None
         if (u['group'] not in r.c['relaxed_token_groups'] or e['group'] not in r.c['relaxed_token_groups']) \
-                and jac(u['toks'], e['toks']) < r.c['keyed_min_token_score']:
+                and sim(u, e) < r.c['keyed_min_token_score']:
             return None
-        title = 0.7 * jac(u['keys'], e['keys']) + 0.3 * jac(u['toks'], e['toks'])
+        title = 0.7 * jac(u['keys'], e['keys']) + 0.3 * sim(u, e)
     else:
-        title = jac(u['toks'], e['toks'])
+        title = sim(u, e)
         if title < (r.c['min_title_score'] if classified else r.c['min_title_score_unclassified']):
             return None
     # 规格：维度必须一致（重量/容量/件数），不同规格折算单价后比较
+    pack = False
     if u['dim'] != e['dim'] and not (u['dim'] is None and e['dim'] is None):
-        return None
-    if u['dim']:
+        fb = r.c['pack_price_fallback']
+        if not (fb['enabled'] and sm >= fb['min_score']):
+            return None
+        pack = True
+    if pack:
+        spec_sim = 0.5
+        up, ep = u['price'], e['price']
+    elif u['dim']:
         spec_sim = min(u['size'], e['size']) / max(u['size'], e['size'])
         up, _ = unit_price(u['price'], u['dim'], u['size'])
         ep, _ = unit_price(e['price'], e['dim'], e['size'])
@@ -358,6 +411,7 @@ def main():
     ap.add_argument('--umall-dir', required=True, help='umall 商品 json 所在目录')
     ap.add_argument('--ebest', required=True, help='ebest 商品 json 文件，或包含该文件的目录')
     ap.add_argument('--extended', action='store_true', help='额外输出类别、价格差异等列（供系统入库）')
+    ap.add_argument('--unmatched-out', help='未匹配商品清单 csv（umall 与 ebest 两侧）')
     ap.add_argument('--rules', default=os.path.join(BASE, 'matching_rules.json'))
     ap.add_argument('--out')
     a = ap.parse_args()
@@ -375,6 +429,7 @@ def main():
     cols = list(r.c['output']['columns']) + (['umall price (AUD)', 'ebest price (AUD)', 'price diff pct'] if a.extended else [])
     out = a.out or os.path.join(BASE, r.c['output']['file'])
     n_match = n_unmatched = 0
+    matched_e, unmatched_u = set(), []
     with open(out, 'w', newline='', encoding='utf-8-sig') as f:
         w = csv.writer(f)
         w.writerow(cols)
@@ -390,16 +445,31 @@ def main():
                     cands.append((s, e))
             if not cands:
                 n_unmatched += 1
+                unmatched_u.append(u)
                 continue
             cands.sort(key=lambda x: -x[0])
             for s, e in cands[:r.c['max_matches_per_umall']]:
-                up, uu = unit_price(u['price'], u['dim'], u['size']) if u['dim'] else (u['price'], 'AUD/pc')
-                ep, eu = unit_price(e['price'], e['dim'], e['size']) if e['dim'] else (e['price'], 'AUD/pc')
+                if u['dim'] != e['dim']:     # 无法折算单价：按整包价格比较
+                    up, uu, ep, eu = u['price'], r.c['pack_price_fallback']['unit'], e['price'], r.c['pack_price_fallback']['unit']
+                else:
+                    up, uu = unit_price(u['price'], u['dim'], u['size']) if u['dim'] else (u['price'], 'AUD/pc')
+                    ep, eu = unit_price(e['price'], e['dim'], e['size']) if e['dim'] else (e['price'], 'AUD/pc')
                 row = [u['group'] or e['group'] or '其他', u['title'], u['sku'], e['title'], e['sku'], round(up, 2), uu, round(ep, 2), eu]
                 if a.extended:
                     row += [u['price'], e['price'], round((ep / up - 1) * 100, 1)]
                 w.writerow(row)
+                matched_e.add(e['sku'])
                 n_match += 1
+    if a.unmatched_out:
+        def up_of(x):
+            return unit_price(x['price'], x['dim'], x['size']) if x['dim'] else (x['price'], 'AUD/pc')
+        with open(a.unmatched_out, 'w', newline='', encoding='utf-8-sig') as f:
+            w = csv.writer(f)
+            w.writerow(['side', 'common category', 'product title', 'sku', 'unit price', 'unit'])
+            for side, items in (('umall', unmatched_u), ('ebest', [e for e in eb if e['sku'] not in matched_e])):
+                for x in items:
+                    pr, un = up_of(x)
+                    w.writerow([side, x['group'] or '其他', x['title'], x['sku'], round(pr, 2), un])
     print(f'umall 商品 {len(um)}，ebest 候选 {len(eb)}，匹配 {n_match}，未匹配 {n_unmatched}\n输出: {out}')
 
 
