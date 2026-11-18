@@ -1,0 +1,203 @@
+{
+ "url": "https://m.umall.com.au/category/citrus-orange-grapefruit-lemon-392",
+ "category": "citrus-orange-grapefruit-lemon-392",
+ "category_id": "392",
+ "total_count": 76,
+ "items": [
+  {
+   "item_id": 84103,
+   "item_name": "澳洲西柚 Grapefruit 1个",
+   "brief": "果肉鲜红、酸甜清新、汁水丰富。微苦回甘、香气馥郁，榨汁或鲜食皆宜，健康低糖首选。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/05/31/b5dbecf38c76bec1e0a072e99ad4296eWjtJUssaThh2UyMMq6GZSfHM0MH4BevZ.jpg",
+    "https://image.umall.com.au/image/1/2024/05/31/8d342a4c6f7896bc8c7fb243d356138bQphRqPX5dLa5cpj2zdtV8xMgSCLBCwEg.jpg"
+   ],
+   "price": 149,
+   "market_price": 399,
+   "goods_id": 84103,
+   "store": 59,
+   "store_status": 1,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 84103,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "https://image.umall.com.au/umall/2026/20260124/4e7ed1e0d33b23dd77c9e40fe37b18eb.png",
+   "item_category": "147",
+   "templates_id": 5,
+   "seo_en": "1-grapefruit",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 149,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 73147,
+   "item_name": "澳洲柠檬 Lemon 3个",
+   "brief": "果皮光滑亮泽、果汁酸爽纯净。香气浓郁、清新提神，是烹饪调味、饮品搭配与健康饮食的必备。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/08/28/fbf09300d59082c49a98443d4781b4e20o0n3XXToJ5nUntAfCQ3dzC8CXMm0214.jpg",
+    "https://image.umall.com.au/image/1/2024/03/20/b0ad576cbe89a565d2911d0e9a00a866JHElqOG6BommOEtg06cJSQMIAZET1VMe.jpg",
+    "https://image.umall.com.au/image/1/2024/03/20/2c07ff8ba28cd3344e8cf2ba18dad62cibuGXE5FT2z1k21jcSGRqKrLFXzgfohd.jpg"
+   ],
+   "price": 299,
+   "market_price": 0,
+   "goods_id": 73147,
+   "store": 48,
+   "store_status": 1,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 73147,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "https://image.umall.com.au/umall/2026/20260124/4e7ed1e0d33b23dd77c9e40fe37b18eb.png",
+   "item_category": "147",
+   "templates_id": 5,
+   "seo_en": "freshumall-own-lemon-about-550-600g",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 299,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 73148,
+   "item_name": "澳洲青柠 Lime 约500g",
+   "brief": "",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/08/28/fbf09300d59082c49a98443d4781b4e2EWw0LX1PNjEsxobgKrLCkck04nmebHeH.jpg",
+    "https://image.umall.com.au/image/1/2024/02/24/116e401bf167145f0e6fedea92c813d53S8EQob5EHAO44yziJQdGJn2zF7MwrkR.jpg"
+   ],
+   "price": 579,
+   "market_price": 0,
+   "goods_id": 73148,
+   "store": 20,
+   "store_status": 1,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 73148,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "https://image.umall.com.au/umall/2026/20260124/4e7ed1e0d33b23dd77c9e40fe37b18eb.png",
+   "item_category": "147",
+   "templates_id": 5,
+   "seo_en": "freshumall-self-supporting-lime-about-500g",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 579,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 73146,
+   "item_name": "新鲜甜橙 3kg",
+   "brief": "",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/04/17/886f4e310487b1cc51eaa5c1e0187317lTp4IQlPNssovOPJJVuHuiXMEPuC844s.jpg"
+   ],
+   "price": 499,
+   "market_price": 949,
+   "goods_id": 73146,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 73146,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "https://image.umall.com.au/umall/2026/20260124/4e7ed1e0d33b23dd77c9e40fe37b18eb.png",
+   "item_category": "147",
+   "templates_id": 5,
+   "seo_en": "freshumalls-own-navel-orange-about-3kg",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 499,
+   "promotion_activity": [
+    {
+     "promotion_id": "3591",
+     "tag_type": "limited_time_sale",
+     "activity_price": "449",
+     "start_time": "1788184800",
+     "end_time": "1919681999",
+     "item_id": "73146",
+     "promotion_tag": "",
+     "is_free_shipping": "0",
+     "expiring_date": 0,
+     "quit_date": 0
+    }
+   ],
+   "activity_price": "449",
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 119283,
+   "item_name": "越南进口翡翠甜柚 Pomelo 1个",
+   "brief": "果肉细嫩清甜，酸度柔和；汁水丰富不涩口，风味清爽。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2026/05/28/817755f7f1299b053e07e539ba45718blgLqYaPQPio42tI4Ii4KPUhMWyMg0RnY.jpg",
+    "https://image.umall.com.au/image/1/2026/05/28/817755f7f1299b053e07e539ba45718blwapWSqu6rKLn60XH8WnZelv8kC4IOmm.jpg"
+   ],
+   "price": 2499,
+   "market_price": 0,
+   "goods_id": 119283,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 119283,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "https://image.umall.com.au/umall/2026/20260124/4e7ed1e0d33b23dd77c9e40fe37b18eb.png",
+   "item_category": "147",
+   "templates_id": 5,
+   "seo_en": "honeybush-golden-grapefruit-approx-600-800g",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 2499,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  }
+ ]
+}

@@ -1,0 +1,203 @@
+{
+ "url": "https://m.umall.com.au/category/honeydew-watermelon-395",
+ "category": "honeydew-watermelon-395",
+ "category_id": "395",
+ "total_count": 34,
+ "items": [
+  {
+   "item_id": 82619,
+   "item_name": "澳洲哈密瓜 Rockmelon 1个",
+   "brief": "果肉金橙色泽，香气馥郁、口感柔滑。甜度高、汁水多，是早餐与甜品拼盘的完美选择。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/05/07/95a77a93a0dd1d74767fa36d4a2c7628LP1Tpv4mmiM5c2IL8O5tjiUtgUxgVfs0.jpg",
+    "https://image.umall.com.au/image/1/2024/05/07/95a77a93a0dd1d74767fa36d4a2c7628A3kfTlKiql9gZoEkzcAfO4nMRA3ZvfGt.jpg",
+    "https://image.umall.com.au/image/1/2024/05/07/95a77a93a0dd1d74767fa36d4a2c7628ieZorUzSdUdAH2hNMbjmMhdGvZdHHe0u.jpg",
+    "https://image.umall.com.au/image/1/2024/05/07/95a77a93a0dd1d74767fa36d4a2c7628ZErNbVEXCB3xzspHSLf6DEMiTbzBfr07.jpg"
+   ],
+   "price": 299,
+   "market_price": 1129,
+   "goods_id": 82619,
+   "store": 6,
+   "store_status": 1,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 82619,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "150",
+   "templates_id": 5,
+   "seo_en": "freshrockmelon-cantaloupe-1pc",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 299,
+   "promotion_activity": [
+    {
+     "promotion_id": "3591",
+     "tag_type": "limited_time_sale",
+     "activity_price": "269",
+     "start_time": "1788184800",
+     "end_time": "1919681999",
+     "item_id": "82619",
+     "promotion_tag": "",
+     "is_free_shipping": "0",
+     "expiring_date": 0,
+     "quit_date": 0
+    }
+   ],
+   "activity_price": "269",
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 84517,
+   "item_name": "澳洲白兰瓜 Hami Melon 1个",
+   "brief": "果肉细腻、香甜爽口，甜度高、清香四溢。外皮光滑白亮，是高颜值与高口感的代表。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/08/28/b6798036db2f0cb6ede4d19d9b1be7e6DqbIwdwDIz7kKwsZhIK84m2TKD87P0Rt.jpg",
+    "https://image.umall.com.au/image/1/2024/06/07/71129ab3981c1061e52544ba01b24a0eaOO8G4lu8A0hsnXFIjiuScXtKKmSsjbe.jpg",
+    "https://image.umall.com.au/image/1/2024/06/07/71129ab3981c1061e52544ba01b24a0eM3KXb5bA4GMurCWeV7UE7wI36BWuB0jJ.jpg"
+   ],
+   "price": 359,
+   "market_price": 0,
+   "goods_id": 84517,
+   "store": 132,
+   "store_status": 1,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 84517,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "150",
+   "templates_id": 5,
+   "seo_en": "1-white-orchid-melon",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 359,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 80465,
+   "item_name": "澳洲青皮西瓜 Watermelon 约3–4kg",
+   "brief": "果皮翠绿、果肉深红、甜度高。汁多清爽、口感沙脆，是夏季清凉解渴的不二之选。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/06/04/9f6103dd4a56f5492c741516bacb1f87loRxyzmgjuha5ycPvXXq1E7mqwaxlwp1.jpg"
+   ],
+   "price": 899,
+   "market_price": 999,
+   "goods_id": 80465,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 80465,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "150",
+   "templates_id": 5,
+   "seo_en": "watermelon-3-4kg",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 899,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 80289,
+   "item_name": "澳洲圣诞蜜瓜 Christmas Melon 约1.5kg",
+   "brief": "果皮翠绿、果肉橙红细腻、甜度高。香气馥郁、入口爽滑，是澳洲限定的节日鲜果。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/03/20/b16e63ebb4b85292334d423b47abadcbTNp4fX5uV4tS3Ha5lXLcoXj1NvP3fLfE.jpg"
+   ],
+   "price": 379,
+   "market_price": 0,
+   "goods_id": 80289,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 80289,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "150",
+   "templates_id": 5,
+   "seo_en": "freshumall-own-christmas-honeydew-melon-small-1pc",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 379,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 97997,
+   "item_name": "澳洲青皮西瓜 Watermelon 约4–5kg",
+   "brief": "果皮翠绿、果肉深红、甜度爆表。多汁清甜、入口冰爽，是解暑解渴的经典鲜果。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/12/18/cb4b08d89b83c833a93e7834d3721b85eiuVNSotRcmCUFGGILUmMICI1GjRuube.jpg"
+   ],
+   "price": 1199,
+   "market_price": 0,
+   "goods_id": 97997,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 97997,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "150",
+   "templates_id": 5,
+   "seo_en": "green-watermelon-about-4-5kg",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 1199,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  }
+ ]
+}

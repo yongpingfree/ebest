@@ -1,0 +1,1163 @@
+{
+  "_说明": "umall 与 ebest 同款商品匹配规则；修改本文件即可调整匹配行为，无需改动脚本",
+  "inputs": {
+    "umall_price_divisor": 100,
+    "ebest_only_on_sale": true
+  },
+  "price_tolerance": 0.5,
+  "min_title_score": 0.15,
+  "max_matches_per_umall": 1,
+  "category_groups": {
+    "水果": {
+      "umall_slugs": [
+        "apple-pear-peach",
+        "banana-fruit",
+        "cherry-grapes",
+        "citrus-orange",
+        "honeydew-watermelon",
+        "kiwi-date",
+        "litchi",
+        "tropical-fruits",
+        "whole-fruit",
+        "seasonal-fruits",
+        "wines-2014"
+      ],
+      "umall_slug_ids": [
+        "1882"
+      ],
+      "ebest_categories": [
+        "浆果/葡提",
+        "桃李/核果",
+        "苹果/梨蕉",
+        "莓果/其他",
+        "热带水果",
+        "柑橘",
+        "瓜类",
+        "水果",
+        "鲜果",
+        "冷冻蔬果"
+      ]
+    },
+    "蔬菜": {
+      "umall_slugs": [
+        "fresh-vegetables",
+        "leafy-cauliflower",
+        "eggplant-and-melon",
+        "chillies",
+        "mushrooms-and-legumes",
+        "onion-ginger-and-garlic",
+        "potato-stems",
+        "week_seckill-16"
+      ],
+      "umall_slug_ids": [
+        "1549",
+        "1878"
+      ],
+      "ebest_categories": [
+        "青菜/叶菜",
+        "茄果瓜",
+        "根茎菜",
+        "菌菇",
+        "蔬菜"
+      ]
+    },
+    "蛋类": {
+      "umall_slugs": [
+        "eggs"
+      ],
+      "ebest_categories": [
+        "鸡蛋/蛋类"
+      ]
+    },
+    "豆制品": {
+      "umall_slugs": [
+        "soy-products"
+      ],
+      "ebest_categories": [
+        "豆制品",
+        "豆腐"
+      ]
+    },
+    "饮品": {
+      "umall_slugs": [
+        "australian-local-juice"
+      ],
+      "ebest_categories": [
+        "果汁/乳饮",
+        "咖啡/茶饮",
+        "碳酸/功能"
+      ]
+    }
+  },
+  "category_synonyms_note": "同一大类下的中英文叫法（如 fruits 与 水果）归为同一类，用于按标题关键词反推 umall 商品的真实类别",
+  "category_title_keywords": {
+    "饮品": [
+      "果汁",
+      "juice",
+      "饮料",
+      "drink",
+      "茶",
+      "tea",
+      "咖啡",
+      "coffee",
+      "奶茶",
+      "豆奶",
+      "乳饮"
+    ],
+    "豆制品": [
+      "豆腐",
+      "tofu",
+      "豆干",
+      "豆皮",
+      "腐竹",
+      "豆浆",
+      "soy",
+      "百叶",
+      "豆皮"
+    ],
+    "蛋类": [
+      "蛋",
+      "egg"
+    ],
+    "水果": [
+      "水果",
+      "fruit",
+      "香蕉",
+      "banana",
+      "苹果",
+      "apple",
+      "梨",
+      "pear",
+      "桃",
+      "peach",
+      "李",
+      "plum",
+      "樱桃",
+      "cherry",
+      "葡萄",
+      "提子",
+      "grape",
+      "蓝莓",
+      "blueberry",
+      "草莓",
+      "strawberry",
+      "树莓",
+      "覆盆子",
+      "raspberry",
+      "橙",
+      "orange",
+      "柠檬",
+      "lemon",
+      "西柚",
+      "grapefruit",
+      "柚",
+      "柑",
+      "橘",
+      "mandarin",
+      "西瓜",
+      "watermelon",
+      "哈密瓜",
+      "rockmelon",
+      "蜜瓜",
+      "honeydew",
+      "芒果",
+      "mango",
+      "菠萝",
+      "pineapple",
+      "奇异果",
+      "猕猴桃",
+      "kiwi",
+      "牛油果",
+      "avocado",
+      "榴莲",
+      "durian",
+      "荔枝",
+      "lychee",
+      "椰",
+      "coconut",
+      "火龙果",
+      "dragon",
+      "柿",
+      "persimmon",
+      "枣",
+      "date",
+      "石榴",
+      "pomegranate",
+      "无花果",
+      "fig",
+      "杨梅",
+      "龙眼",
+      "山竹",
+      "mangosteen",
+      "木瓜",
+      "papaya",
+      "百香果",
+      "passion"
+    ],
+    "蔬菜": [
+      "蔬菜",
+      "vegetable",
+      "白菜",
+      "bok choy",
+      "菠菜",
+      "spinach",
+      "生菜",
+      "lettuce",
+      "西兰花",
+      "broccoli",
+      "花菜",
+      "cauliflower",
+      "菜花",
+      "芹菜",
+      "celery",
+      "韭菜",
+      "chive",
+      "葱",
+      "shallot",
+      "姜",
+      "ginger",
+      "蒜",
+      "garlic",
+      "洋葱",
+      "onion",
+      "土豆",
+      "马铃薯",
+      "potato",
+      "红薯",
+      "sweet potato",
+      "番茄",
+      "西红柿",
+      "tomato",
+      "黄瓜",
+      "cucumber",
+      "茄子",
+      "eggplant",
+      "秋葵",
+      "okra",
+      "辣椒",
+      "chilli",
+      "pepper",
+      "南瓜",
+      "pumpkin",
+      "冬瓜",
+      "丝瓜",
+      "苦瓜",
+      "胡萝卜",
+      "carrot",
+      "萝卜",
+      "radish",
+      "玉米",
+      "corn",
+      "豌豆",
+      "pea",
+      "毛豆",
+      "edamame",
+      "四季豆",
+      "bean",
+      "蘑菇",
+      "mushroom",
+      "金针菇",
+      "enoki",
+      "香菇",
+      "菌",
+      "芦笋",
+      "asparagus",
+      "白萝卜",
+      "菜心",
+      "choy",
+      "空心菜",
+      "茼蒿",
+      "香菜",
+      "coriander",
+      "cabbage",
+      "卷心菜",
+      "包菜",
+      "芥蓝",
+      "kale",
+      "蒜苔",
+      "莴笋",
+      "山药",
+      "yam",
+      "藕",
+      "lotus",
+      "笋",
+      "bamboo"
+    ],
+    "速冻面点": [
+      "饺子",
+      "馄饨",
+      "包子",
+      "馒头",
+      "汤圆",
+      "烧麦",
+      "年糕",
+      "手抓饼",
+      "小笼包",
+      "煎包",
+      "粽",
+      "春卷",
+      "水饺",
+      "面点",
+      "点心",
+      "锅贴",
+      "生煎",
+      "烧卖"
+    ],
+    "方便速食": [
+      "方便面",
+      "泡面",
+      "螺蛳粉",
+      "自热",
+      "速食",
+      "粥",
+      "拌面",
+      "米线",
+      "碗面",
+      "杯面",
+      "冲泡"
+    ],
+    "零食": [
+      "饼干",
+      "薯片",
+      "巧克力",
+      "软糖",
+      "糖果",
+      "坚果",
+      "肉干",
+      "辣条",
+      "果冻",
+      "蜜饯",
+      "果脯",
+      "瓜子",
+      "棒棒糖",
+      "膨化",
+      "威化",
+      "零食",
+      "chocolate",
+      "biscuit",
+      "chips",
+      "candy",
+      "冰淇淋",
+      "雪糕"
+    ],
+    "乳品烘焙": [
+      "面包",
+      "吐司",
+      "蛋糕",
+      "酸奶",
+      "牛奶",
+      "奶酪",
+      "芝士",
+      "黄油",
+      "bread",
+      "cake",
+      "yogurt",
+      "milk",
+      "cheese",
+      "千层",
+      "月饼",
+      "泡芙",
+      "甜品"
+    ],
+    "肉类": [
+      "猪肉",
+      "牛肉",
+      "羊肉",
+      "鸡肉",
+      "鸭肉",
+      "排骨",
+      "五花",
+      "里脊",
+      "牛排",
+      "培根",
+      "香肠",
+      "火腿",
+      "pork",
+      "beef",
+      "lamb",
+      "chicken",
+      "duck",
+      "wagyu",
+      "和牛",
+      "鸡翅",
+      "鸡腿",
+      "猪蹄",
+      "腊肉",
+      "牛腩",
+      "牛腱"
+    ],
+    "海鲜": [
+      "三文鱼",
+      "鱼",
+      "虾",
+      "蟹",
+      "贝",
+      "鲍",
+      "鱿",
+      "章鱼",
+      "海参",
+      "带子",
+      "生蚝",
+      "海鲜",
+      "龙虾",
+      "salmon",
+      "prawn",
+      "fish",
+      "squid",
+      "seafood",
+      "oyster",
+      "scallop"
+    ],
+    "调味粮油": [
+      "酱油",
+      "醋",
+      "酱",
+      "盐",
+      "食用油",
+      "大米",
+      "面粉",
+      "调味",
+      "咖喱",
+      "火锅底料",
+      "蚝油",
+      "花生油",
+      "橄榄油",
+      "糯米",
+      "燕麦",
+      "红豆",
+      "绿豆",
+      "黑豆",
+      "芝麻",
+      "粉丝",
+      "挂面",
+      "意面",
+      "sauce",
+      "rice",
+      "flour",
+      "oil",
+      "noodle",
+      "pasta"
+    ],
+    "个护美妆": [
+      "洗发",
+      "护发",
+      "面膜",
+      "牙膏",
+      "牙刷",
+      "洗面奶",
+      "面霜",
+      "精华",
+      "防晒",
+      "口红",
+      "卸妆",
+      "沐浴",
+      "洗手液",
+      "护手霜",
+      "乳液",
+      "爽肤水",
+      "shampoo",
+      "conditioner",
+      "cream",
+      "serum",
+      "sunscreen"
+    ],
+    "母婴": [
+      "纸尿裤",
+      "奶粉",
+      "辅食",
+      "婴儿",
+      "宝宝",
+      "儿童",
+      "奶瓶",
+      "拉拉裤"
+    ],
+    "宠物": [
+      "猫",
+      "狗",
+      "宠物",
+      "猫砂",
+      "pet"
+    ],
+    "酒类": [
+      "啤酒",
+      "红酒",
+      "白酒",
+      "葡萄酒",
+      "威士忌",
+      "清酒",
+      "黄酒",
+      "米酒",
+      "烧酒",
+      "beer",
+      "wine",
+      "whisky",
+      "vodka",
+      "gin"
+    ],
+    "日用家居": [
+      "纸巾",
+      "卫生纸",
+      "洗衣",
+      "清洁",
+      "垃圾袋",
+      "保鲜",
+      "收纳",
+      "厨房",
+      "毛巾",
+      "牙线",
+      "湿巾",
+      "洗洁精",
+      "tissue",
+      "detergent"
+    ]
+  },
+  "keyword_synonyms": {
+    "banana": [
+      "香蕉",
+      "banana"
+    ],
+    "apple": [
+      "苹果",
+      "apple"
+    ],
+    "pear": [
+      "梨",
+      "pear"
+    ],
+    "peach": [
+      "桃",
+      "peach"
+    ],
+    "plum": [
+      "李子",
+      "西梅",
+      "plum"
+    ],
+    "cherry": [
+      "樱桃",
+      "车厘子",
+      "cherry"
+    ],
+    "grape": [
+      "葡萄",
+      "提子",
+      "grape",
+      "红提",
+      "青提"
+    ],
+    "blueberry": [
+      "蓝莓",
+      "blueberry"
+    ],
+    "strawberry": [
+      "草莓",
+      "strawberry"
+    ],
+    "raspberry": [
+      "树莓",
+      "覆盆子",
+      "raspberry"
+    ],
+    "orange": [
+      "橙",
+      "orange"
+    ],
+    "lemon": [
+      "柠檬",
+      "lemon"
+    ],
+    "grapefruit": [
+      "西柚",
+      "grapefruit"
+    ],
+    "mandarin": [
+      "柑",
+      "橘",
+      "mandarin"
+    ],
+    "watermelon": [
+      "西瓜",
+      "watermelon"
+    ],
+    "rockmelon": [
+      "哈密瓜",
+      "rockmelon",
+      "cantaloupe"
+    ],
+    "honeydew": [
+      "蜜瓜",
+      "honeydew"
+    ],
+    "mango": [
+      "芒果",
+      "mango"
+    ],
+    "pineapple": [
+      "菠萝",
+      "凤梨",
+      "pineapple"
+    ],
+    "kiwi": [
+      "奇异果",
+      "猕猴桃",
+      "kiwi"
+    ],
+    "avocado": [
+      "牛油果",
+      "avocado"
+    ],
+    "durian": [
+      "榴莲",
+      "durian"
+    ],
+    "lychee": [
+      "荔枝",
+      "lychee",
+      "litchi"
+    ],
+    "coconut": [
+      "椰青",
+      "椰子",
+      "coconut"
+    ],
+    "dragonfruit": [
+      "火龙果",
+      "dragon"
+    ],
+    "persimmon": [
+      "柿",
+      "persimmon"
+    ],
+    "pomegranate": [
+      "石榴",
+      "pomegranate"
+    ],
+    "papaya": [
+      "木瓜",
+      "papaya"
+    ],
+    "passionfruit": [
+      "百香果",
+      "passion"
+    ],
+    "bokchoy": [
+      "上海白",
+      "小白菜",
+      "bok choy",
+      "pak choi"
+    ],
+    "spinach": [
+      "菠菜",
+      "spinach"
+    ],
+    "lettuce": [
+      "生菜",
+      "lettuce"
+    ],
+    "broccoli": [
+      "西兰花",
+      "broccoli"
+    ],
+    "cauliflower": [
+      "花菜",
+      "菜花",
+      "cauliflower"
+    ],
+    "celery": [
+      "芹菜",
+      "celery"
+    ],
+    "chive": [
+      "韭菜",
+      "chive"
+    ],
+    "shallot": [
+      "葱",
+      "shallot",
+      "spring onion"
+    ],
+    "ginger": [
+      "姜",
+      "ginger"
+    ],
+    "garlic": [
+      "蒜",
+      "garlic"
+    ],
+    "onion": [
+      "洋葱",
+      "onion"
+    ],
+    "potato": [
+      "土豆",
+      "马铃薯",
+      "potato"
+    ],
+    "sweetpotato": [
+      "红薯",
+      "地瓜",
+      "sweet potato"
+    ],
+    "tomato": [
+      "番茄",
+      "西红柿",
+      "tomato"
+    ],
+    "cucumber": [
+      "黄瓜",
+      "cucumber"
+    ],
+    "eggplant": [
+      "茄子",
+      "eggplant"
+    ],
+    "okra": [
+      "秋葵",
+      "okra"
+    ],
+    "chilli": [
+      "辣椒",
+      "chilli",
+      "chili"
+    ],
+    "pumpkin": [
+      "南瓜",
+      "pumpkin"
+    ],
+    "carrot": [
+      "胡萝卜",
+      "carrot"
+    ],
+    "radish": [
+      "白萝卜",
+      "萝卜",
+      "radish"
+    ],
+    "corn": [
+      "玉米",
+      "corn"
+    ],
+    "edamame": [
+      "毛豆",
+      "edamame"
+    ],
+    "beans": [
+      "四季豆",
+      "豆角",
+      "bean"
+    ],
+    "enoki": [
+      "金针菇",
+      "enoki"
+    ],
+    "shiitake": [
+      "香菇",
+      "shiitake"
+    ],
+    "mushroom": [
+      "蘑菇",
+      "mushroom",
+      "菌"
+    ],
+    "asparagus": [
+      "芦笋",
+      "asparagus"
+    ],
+    "coriander": [
+      "香菜",
+      "coriander"
+    ],
+    "cabbage": [
+      "卷心菜",
+      "包菜",
+      "cabbage"
+    ],
+    "kale": [
+      "芥蓝",
+      "kale"
+    ],
+    "choysum": [
+      "菜心",
+      "choy sum"
+    ],
+    "garlicshoot": [
+      "蒜苔",
+      "garlic shoot"
+    ],
+    "egg": [
+      "鸡蛋",
+      "egg"
+    ],
+    "tofu": [
+      "豆腐",
+      "tofu"
+    ],
+    "juice": [
+      "果汁",
+      "juice"
+    ],
+    "duckegg": [
+      "鸭蛋",
+      "鹅蛋"
+    ],
+    "centuryegg": [
+      "皮蛋",
+      "松花蛋"
+    ],
+    "saltedegg": [
+      "咸蛋"
+    ],
+    "freerange": [
+      "cage free",
+      "free range",
+      "走地",
+      "散养",
+      "放养",
+      "谷物散养"
+    ],
+    "cage": [
+      "笼养",
+      "caged",
+      "cage"
+    ],
+    "apricot": [
+      "杏桃",
+      "杏子",
+      "杏",
+      "apricot"
+    ],
+    "nectarine": [
+      "油桃",
+      "nectarine"
+    ]
+  },
+  "stopwords": [
+    "新鲜",
+    "澳洲",
+    "澳州",
+    "农场",
+    "直供",
+    "原生态",
+    "聚划算",
+    "独家",
+    "预售",
+    "到货",
+    "约",
+    "进口",
+    "精选",
+    "特价",
+    "促销",
+    "包邮",
+    "当日达",
+    "鲜",
+    "冻",
+    "原箱",
+    "盒装",
+    "袋装",
+    "一盒",
+    "一袋",
+    "一份",
+    "freshumall",
+    "fresh",
+    "australian",
+    "pack",
+    "the",
+    "and",
+    "of"
+  ],
+  "units": {
+    "weight_g": {
+      "kg": 1000,
+      "公斤": 1000,
+      "千克": 1000,
+      "g": 1,
+      "克": 1,
+      "斤": 500,
+      "lb": 453.592,
+      "磅": 453.592
+    },
+    "volume_ml": {
+      "l": 1000,
+      "升": 1000,
+      "ml": 1,
+      "毫升": 1
+    },
+    "count": [
+      "个",
+      "只",
+      "颗",
+      "枚",
+      "包",
+      "盒",
+      "袋",
+      "片",
+      "支",
+      "根",
+      "捆",
+      "把",
+      "粒",
+      "条",
+      "瓶",
+      "罐",
+      "pcs",
+      "pc",
+      "ea"
+    ]
+  },
+  "output": {
+    "file": "umall_ebest_matches.csv",
+    "columns": [
+      "common category",
+      "umall product title",
+      "umall sku",
+      "ebest product title",
+      "ebest sku",
+      "umall unit price",
+      "umall unit",
+      "ebest unit price",
+      "ebest unit"
+    ]
+  },
+  "category_title_keywords_note": "按顺序判断，先命中先归类。umall 全站商品按标题归入粗分类；ebest 商品按 category_name / 父类别归类",
+  "ebest_title_override_groups": [
+    "饮品",
+    "豆制品"
+  ],
+  "ebest_title_override_groups_note": "ebest 商品标题命中这些类别关键词时，以标题归类为准（如 柠檬果汁归饮品而非水果）",
+  "_输入说明": "umall 与 ebest 的 json 目录/文件由脚本参数 --umall-dir 和 --ebest 传入，不在本文件中配置",
+  "countries": {
+    "AU": [
+      "澳洲",
+      "澳州",
+      "澳大利亚",
+      "本地",
+      "australian",
+      "australia"
+    ],
+    "CN": [
+      "中国",
+      "国产"
+    ],
+    "NZ": [
+      "新西兰",
+      "new zealand"
+    ],
+    "TH": [
+      "泰国",
+      "thai",
+      "thailand"
+    ],
+    "KR": [
+      "韩国",
+      "korea"
+    ],
+    "JP": [
+      "日本",
+      "japan"
+    ],
+    "US": [
+      "美国",
+      "usa"
+    ],
+    "CL": [
+      "智利",
+      "chile"
+    ],
+    "PE": [
+      "秘鲁",
+      "peru"
+    ],
+    "ZA": [
+      "南非"
+    ],
+    "VN": [
+      "越南"
+    ],
+    "PH": [
+      "菲律宾"
+    ],
+    "TW": [
+      "台湾"
+    ],
+    "MX": [
+      "墨西哥"
+    ],
+    "EG": [
+      "埃及"
+    ],
+    "ID": [
+      "印尼"
+    ]
+  },
+  "countries_note": "标题中出现的产地词；两边都识别出产地且没有交集则不匹配",
+  "varieties": {
+    "fuji": [
+      "富士",
+      "fuji"
+    ],
+    "gala": [
+      "royal gala",
+      "嘎啦",
+      "gala"
+    ],
+    "granny": [
+      "granny smith",
+      "青苹果"
+    ],
+    "pinklady": [
+      "pink lady",
+      "粉红佳人"
+    ],
+    "cosmic": [
+      "cosmic crisp",
+      "宇宙脆"
+    ],
+    "rubygold": [
+      "ruby gold"
+    ],
+    "akizuki": [
+      "秋月"
+    ],
+    "shinko": [
+      "新高",
+      "shinko"
+    ],
+    "korla": [
+      "库尔勒",
+      "korla",
+      "香梨"
+    ],
+    "yulu": [
+      "玉露香"
+    ],
+    "nashi": [
+      "雪梨"
+    ],
+    "mermaid": [
+      "美人鱼",
+      "mermaid"
+    ],
+    "golden": [
+      "黄金梨"
+    ],
+    "danxia": [
+      "丹霞"
+    ],
+    "asian": [
+      "亚洲梨",
+      "asian pear"
+    ]
+  },
+  "varieties_note": "品种词；两边都识别出品种且没有交集则不匹配；variety_strict 为 true 时，仅一方有品种另一方没有也不匹配",
+  "brand_rules": {
+    "enabled": true,
+    "generic_latin": [
+      "organic",
+      "fresh",
+      "baby",
+      "mini",
+      "premium",
+      "large",
+      "extra",
+      "jumbo",
+      "seedless",
+      "green",
+      "red",
+      "white",
+      "yellow",
+      "local",
+      "chinese",
+      "japanese",
+      "australian",
+      "new",
+      "sweet",
+      "golden",
+      "gold"
+    ],
+    "cjk_brands": [
+      "汇源",
+      "农夫山泉",
+      "梅香",
+      "明发",
+      "三关六码头",
+      "五谷堂",
+      "神丹",
+      "钎诚",
+      "张小宝",
+      "果子熟了",
+      "第二十八街",
+      "维他",
+      "八月十五"
+    ],
+    "min_cjk_brand_freq": 3,
+    "说明": "品牌取标题（去掉【】和产地词）的第一个词：英文开头取其英文部分，中文须在 cjk_brands 内或在数据中作为首词出现不少于 min_cjk_brand_freq 次。一方识别出品牌而另一方标题中不含该品牌则不匹配"
+  },
+  "variety_strict": true,
+  "ebest_parent_groups": {
+    "1": "蔬菜",
+    "978": "水果",
+    "296": "肉类",
+    "646": "海鲜",
+    "124": "零食",
+    "151": "速冻面点",
+    "4": "速冻面点",
+    "854": "方便速食",
+    "76": "饮品",
+    "77": "乳品烘焙",
+    "51": "调味粮油",
+    "3": "个护美妆",
+    "5": "日用家居",
+    "156": "母婴",
+    "48": "宠物",
+    "738": "酒类"
+  },
+  "ebest_parent_groups_note": "ebest 父类别 id 到粗分类；category_groups 中按 category_name 的精确映射优先",
+  "compatible_groups": [
+    [
+      "饮品",
+      "乳品烘焙"
+    ],
+    [
+      "肉类",
+      "速冻面点"
+    ],
+    [
+      "海鲜",
+      "速冻面点"
+    ],
+    [
+      "零食",
+      "乳品烘焙"
+    ],
+    [
+      "方便速食",
+      "速冻面点",
+      "调味粮油"
+    ],
+    [
+      "零食",
+      "速冻面点"
+    ]
+  ],
+  "compatible_groups_note": "这些粗分类之间视为同类（如 牛奶 属于饮品或乳品）",
+  "min_title_score_unclassified": 0.3,
+  "min_title_score_unclassified_note": "任一方无法归类时，标题相似度需不低于该值",
+  "price_rules": {
+    "说明": "比较价格时，如有促销价/折扣价，取较低者",
+    "umall_price_field": "price",
+    "umall_promo_price_fields": [
+      "activity_price"
+    ],
+    "umall_promo_tag_types": [
+      "limited_time_sale",
+      "limited_date_sale"
+    ],
+    "umall_check_promo_window": true,
+    "ebest_price_field": "price_in_yuan",
+    "ebest_promo_price_fields": [
+      "new_user_price_in_yuan"
+    ]
+  },
+  "max_token_df": 400,
+  "max_token_df_note": "倒排索引中出现在超过该数量 ebest 商品里的词不用于选候选（太常见）"
+}

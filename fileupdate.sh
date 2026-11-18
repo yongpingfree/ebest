@@ -1,6 +1,36 @@
 XPATH=~/Downloads/Tang/Stocks/eBest/security
 files=(
+routes/console.php
 pdf-transform/transform.py
+routes/web.php
+config/fileshare.php
+app/Http/Controllers/ReportController.php
+reports/report1.php
+reports/report2.php
+app/Filament/Pages/UmallTracking.php
+resources/views/filament/pages/umall-tracking.blade.php
+database/migrations/2026_11_18_000002_add_user_id_to_price_comparison_runs.php
+app/Services/PriceComparisonService.php
+app/Jobs/RunPriceComparison.php
+app/Console/Commands/RunPriceComparisonCommand.php
+database/migrations/2026_11_18_000001_create_price_comparison_tables.php
+compare-tool/match_products.py
+compare-tool/matching_rules.json
+compare-tool/fetch_all_items.py
+.env.example
+)
+files_old2=(app/Services/UmallTrackingService.php
+app/Jobs/RunUmallTracking.php
+app/Filament/Pages/UmallTracking.php
+app/Console/Commands/RunUmallTrackingCommand.php
+app/Support/Permissions.php
+database/migrations/2026_11_16_000002_create_umall_tracking_runs_table.php
+resources/views/filament/pages/umall-tracking.blade.php
+database/migrations/2026_11_16_000001_create_umall_tracking_table.php
+umall-tool/script1_fetch.py
+umall-tool/script2_to_csv.py
+umall-tool/productList.md
+umall-tool/categoryMapping.csv
 app/Services/PdfSettingsService.php
 app/Filament/Pages/UploadFiles.php
 resources/views/filament/pages/upload-files.blade.php
@@ -52,6 +82,7 @@ database/migrations/2026_11_10_000001_create_pdf_settings_tables.php
 database/migrations/2026_11_10_100000_add_role_to_users_table.php
 database/migrations/2026_11_10_110000_add_last_login_at_to_users_table.php
 )
+ssh -i $XPATH/SecurityInformServer.pem ubuntu@52.62.119.114 'mkdir -p /var/www/fileshare/umall-tool /var/www/fileshare/reports'
 for file in "${files[@]}"
 do
 echo "filename: $file"

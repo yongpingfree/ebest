@@ -4,6 +4,9 @@ namespace App\Support;
 
 class Permissions
 {
+    /** Permission required to trigger the UM tracking fetch from the admin page. */
+    public const UM = 'UM';
+
     /** Permission names from settings/permissions.json (file format: {a,b,c}). */
     public static function all(): array
     {
@@ -13,6 +16,7 @@ class Permissions
             ? $decoded
             : array_map('trim', explode(',', trim($raw, " \t\n\r{}[]")));
 
+        $names[] = self::UM;   // always offered, even if missing from the file
         $names = array_values(array_unique(array_filter($names, 'strlen')));
 
         return array_combine($names, $names);

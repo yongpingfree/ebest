@@ -1,0 +1,121 @@
+{
+ "url": "https://m.umall.com.au/category/cherry-grapes-394",
+ "category": "cherry-grapes-394",
+ "category_id": "394",
+ "total_count": 226,
+ "items": [
+  {
+   "item_id": 95869,
+   "item_name": "新鲜樱桃 28-30mm 约500g",
+   "brief": "",
+   "pics": [
+    "https://image.umall.com.au/image/1/2024/11/13/f422ae4bcc57342cffa6df5fcebb886ewbv8ZqhYFrL5zS5aZvWL673fzY7qFuYb.jpg",
+    "https://image.umall.com.au/image/1/2024/11/13/f422ae4bcc57342cffa6df5fcebb886efVWL3BjnoJ11KnfSsxkgaR1pXkrl6xpA.jpg"
+   ],
+   "price": 1500,
+   "market_price": 0,
+   "goods_id": 95869,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 95869,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "149",
+   "templates_id": 5,
+   "seo_en": "fresh-cherry-28-30mm-about-500g",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 1500,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 112216,
+   "item_name": "【原箱】Smiths Fruit Royal Tioga樱桃 30-32mm 礼盒装 约2kg",
+   "brief": "硬度中，酸甜口感",
+   "pics": [
+    "https://image.umall.com.au/image/1/2025/11/12/466fd32b0890c23e0ce0aff56f2c7a18d9w3P6f4NIfOUyHZ4IwUxXglTYXYYQfb.jpg",
+    "https://image.umall.com.au/image/1/2025/11/12/466fd32b0890c23e0ce0aff56f2c7a186CatTFJUd9ztnElsSsQFDzDuiA2XrdZ4.jpg",
+    "https://image.umall.com.au/image/1/2025/11/12/466fd32b0890c23e0ce0aff56f2c7a18LpGyYU8btDUrxLTLfUkmcOyrtnmUMwtG.jpg",
+    "https://image.umall.com.au/image/1/2025/11/12/466fd32b0890c23e0ce0aff56f2c7a18hVVGqhuQPRTgtmtxlvIpgw7v03TC3fEl.jpg"
+   ],
+   "price": 7700,
+   "market_price": 0,
+   "goods_id": 112216,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 112216,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "149",
+   "templates_id": 5,
+   "seo_en": "original-boxsmithsfruitroyaltioga-cherries-30-32mm-gift-box-approx-2kg",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 7700,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  },
+  {
+   "item_id": 111589,
+   "item_name": "【原箱】澳州樱桃WVF Royal Tioga Cherry Size28-30mm 礼盒装 约2kg",
+   "brief": "甄选WVF顶级Royal Tioga品种，果粒饱满亮红、光泽诱人。酸甜平衡、硬度中上，入口爽脆多汁，风味纯正，是节日送礼与品鲜首选。",
+   "pics": [
+    "https://image.umall.com.au/image/1/2025/10/31/3745cf3a05ee29ab0cf5d410c617c2bdHYfac1qi41ZivLnMM9XBDwc48jiXfZJr.jpg",
+    "https://image.umall.com.au/image/1/2026/11/02/f177f49a37de1ce4ddbd998507683a61.jpg",
+    "https://image.umall.com.au/image/1/2025/10/31/3745cf3a05ee29ab0cf5d410c617c2bd6K0ZCVgvOuadlXQvEWLerUbqx1JwNhQo.jpg",
+    "https://image.umall.com.au/image/1/2025/10/31/3745cf3a05ee29ab0cf5d410c617c2bdQvBGIx90Ky8dYsP7EPT5hZ8w2iz5tgFD.jpg",
+    "https://image.umall.com.au/image/1/2025/10/31/3745cf3a05ee29ab0cf5d410c617c2bduSZISz8x1biq8IVLkIBrK2OFXXTWdEOT.jpg"
+   ],
+   "price": 7200,
+   "market_price": 0,
+   "goods_id": 111589,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 111589,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "2013",
+   "templates_id": 5,
+   "seo_en": "original-boxwvfroyaltioga-cherry-28-30mm-gift-box-approx-2kg",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 7200,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  }
+ ]
+}

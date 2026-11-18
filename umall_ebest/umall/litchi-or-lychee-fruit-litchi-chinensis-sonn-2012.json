@@ -1,0 +1,45 @@
+{
+ "url": "https://m.umall.com.au/category/litchi-or-lychee-fruit-litchi-chinensis-sonn-2012",
+ "category": "litchi-or-lychee-fruit-litchi-chinensis-sonn-2012",
+ "category_id": "2012",
+ "total_count": 37,
+ "items": [
+  {
+   "item_id": 95876,
+   "item_name": "澳洲Souey Tung荔枝 Lychee 约500g",
+   "brief": "果皮红润如玉、果肉晶莹剔透。口感柔嫩多汁、甜香沁心，香气层层散开。注：含糖量 ≈ 15.4%（数据见主图第二张）",
+   "pics": [
+    "https://image.umall.com.au/image/1/2025/11/18/452ac52465084f6a65ff85b68258b4c307WftbqFMfTQcpItggRrNZcO9Em4aw3N.jpg",
+    "https://image.umall.com.au/image/1/2025/11/18/452ac52465084f6a65ff85b68258b4c32WGM80U93jkdt8zsc44zENoKJjcQ1srS.jpg",
+    "https://image.umall.com.au/image/1/2025/11/18/452ac52465084f6a65ff85b68258b4c3AFWj64k1HYJ9Et0MlR0AHnwfIcMP8HjQ.jpg"
+   ],
+   "price": 2339,
+   "market_price": 0,
+   "goods_id": 95876,
+   "store": 0,
+   "store_status": 0,
+   "distributor_id": 0,
+   "pcs": 1,
+   "is_default": 1,
+   "default_item_id": 95876,
+   "is_show_specimg": 0,
+   "nospec": "true",
+   "brand_id": 1568,
+   "brand_logo": "",
+   "item_category": "151",
+   "templates_id": 5,
+   "seo_en": "soueytung-lychee-about-500g",
+   "is_bundled": 0,
+   "min_unit_val": 0,
+   "min_unit": "",
+   "min_dq": 1,
+   "distributor_info": [],
+   "pcs_price": 2339,
+   "everBuy": 0,
+   "tagList": [
+    "当日达"
+   ],
+   "removed_tags": []
+  }
+ ]
+}
