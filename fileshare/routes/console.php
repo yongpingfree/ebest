@@ -14,5 +14,5 @@ Illuminate\Support\Facades\Schedule::command('fileshare:rotate-passwords')->dail
 // The command is checked every minute and only runs when today's random time has passed.
 Illuminate\Support\Facades\Schedule::command('umall:run --due')->everyMinute()->withoutOverlapping();
 
-// Umall vs ebest comparison: once a day after 13:00 (checked every minute, runs once per day).
+// Umall vs ebest comparison: once a day after 13:30 (COMPARE_START_HOUR / COMPARE_START_MINUTE) (checked every minute, runs once per day).
 Illuminate\Support\Facades\Schedule::command('compare:run --due')->everyMinute()->withoutOverlapping();

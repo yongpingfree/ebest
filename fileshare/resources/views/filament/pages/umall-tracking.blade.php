@@ -33,7 +33,7 @@
         </x-filament::section>
 
         <x-filament::section heading="Price comparison history (umall vs ebest)" style="margin-top:1rem;">
-            <p style="font-size:.85rem;opacity:.7;margin-bottom:.5rem">Runs automatically once a day after 13:00. Fetches ebest items only and compares them with the umall data already loaded; umall is never fetched by this job. {{ $i['cmp_running'] ? 'Currently RUNNING.' : '' }}</p>
+            <p style="font-size:.85rem;opacity:.7;margin-bottom:.5rem">Runs automatically once a day after {{ sprintf('%02d:%02d', config('fileshare.compare_start_hour'), config('fileshare.compare_start_minute')) }}. Fetches ebest items only and compares them with the umall data already loaded; umall is never fetched by this job. {{ $i['cmp_running'] ? 'Currently RUNNING.' : '' }}</p>
             <table style="width:100%; font-size:.875rem; border-collapse:collapse;">
                 <thead>
                     <tr style="text-align:left; border-bottom:1px solid #8884;">

@@ -25,10 +25,16 @@ class PriceComparisonService
             ->where('created_at', '>=', now()->subMinutes(self::STALE_MINUTES))->exists();
     }
 
+    /** Daily start time as minutes after midnight (COMPARE_START_HOUR + COMPARE_START_MINUTE). */
+    public function startMinuteOfDay(): int
+    {
+        return (int) config('fileshare.compare_start_hour') * 60 + (int) config('fileshare.compare_start_minute');
+    }
+
     /** True once the daily start hour has passed and ebest has not been fetched yet today (scheduled or manual full run). */
     public function isDue(): bool
     {
-        return now()->hour >= (int) config('fileshare.compare_start_hour')
+        return $this->startMinuteOfDay() <= now()->hour * 60 + now()->minute
             && ! DB::table('price_comparison_runs')->whereIn('trigger', ['scheduled', 'manual'])   // runs that fetch ebest
                 ->where('created_at', '>=', now()->startOfDay())->exists();   // 'manual (no fetch)' does not count
     }
@@ -114,6 +120,7 @@ class PriceComparisonService
                     'side' => $row['side'], 'category' => $row['common category'],
                     'title' => mb_substr($row['product title'], 0, 500), 'sku' => $row['sku'],
                     'unit_price' => $row['unit price'] === '' ? null : $row['unit price'], 'unit' => $row['unit'],
+                    'promo_note' => mb_substr($row['promo note'] ?? '', 0, 500) ?: null,
                     'load_time' => $loadTime,
                 ];
                 $n++;
@@ -154,6 +161,8 @@ class PriceComparisonService
                     'umall_unit_price' => $u, 'umall_unit' => $row['umall unit'],
                     'ebest_unit_price' => $e, 'ebest_unit' => $row['ebest unit'],
                     'price_diff_pct' => $row['price diff pct'],
+                    'umall_promo_note' => mb_substr($row['umall promo note'] ?? '', 0, 500) ?: null,
+                    'ebest_promo_note' => mb_substr($row['ebest promo note'] ?? '', 0, 500) ?: null,
                     'lower_side' => abs($u - $e) < 0.005 ? 'equal' : ($u < $e ? 'umall' : 'ebest'),
                     'load_time' => $loadTime,
                 ];

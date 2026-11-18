@@ -85,9 +85,9 @@ return function (Request $request) {
         return response()->streamDownload(function () use ($q, $latest) {
             $o = fopen('php://output', 'w');
             fwrite($o, "\xEF\xBB\xBF");
-            fputcsv($o, ['common category', 'product title', 'sku', 'unit price', 'unit', 'load time'], ',', '"', '');
+            fputcsv($o, ['common category', 'product title', 'sku', 'unit price', 'unit', 'promo note', 'load time'], ',', '"', '');
             foreach ($q->cursor() as $x) {
-                fputcsv($o, [$x->category, $x->title, $x->sku, $x->unit_price, $x->unit, $latest], ',', '"', '');
+                fputcsv($o, [$x->category, $x->title, $x->sku, $x->unit_price, $x->unit, $x->promo_note, $latest], ',', '"', '');
             }
             fclose($o);
         }, $side . '_unmatched_' . date('Ymd') . '.csv', ['Content-Type' => 'text/csv; charset=utf-8']);
@@ -109,11 +109,12 @@ return function (Request $request) {
                 $o = fopen('php://output', 'w');
                 fwrite($o, "\xEF\xBB\xBF");
                 fputcsv($o, ['common category', 'umall product title', 'umall sku', 'ebest product title', 'ebest sku',
-                    'umall unit price', 'umall unit', 'ebest unit price', 'ebest unit', 'price diff pct', 'load time'], ',', '"', '');
+                    'umall unit price', 'umall unit', 'ebest unit price', 'ebest unit', 'price diff pct', 'umall promo note', 'ebest promo note', 'load time'], ',', '"', '');
                 foreach ($latest as $r) {
                     if ($r->lower_side === $lowerSide) {
                         fputcsv($o, [$r->category, $r->umall_title, $r->umall_sku, $r->ebest_title, $r->ebest_sku,
-                            $r->umall_unit_price, $r->umall_unit, $r->ebest_unit_price, $r->ebest_unit, $r->price_diff_pct, $r->load_time], ',', '"', '');
+                            $r->umall_unit_price, $r->umall_unit, $r->ebest_unit_price, $r->ebest_unit, $r->price_diff_pct,
+                            $r->umall_promo_note, $r->ebest_promo_note, $r->load_time], ',', '"', '');
                     }
                 }
                 fclose($o);
@@ -170,6 +171,8 @@ return function (Request $request) {
   button{padding:8px 14px;border:0;border-radius:6px;background:#1d4ed8;color:#fff;font-size:14px;cursor:pointer}
   th{background:#f0f4f8;position:sticky;top:0}
   .tblwrap{max-height:520px;overflow:auto}
+  .cat{min-width:110px;white-space:nowrap}
+  .ttl{max-width:240px;word-break:break-word}
   .lo-umall{color:#1a7f37;font-weight:600}.lo-ebest{color:#1d4ed8;font-weight:600}
   .muted{color:#7b8794;font-size:13px}
 </style></head><body><div class="wrap">
@@ -190,8 +193,8 @@ return function (Request $request) {
 </div><div class="muted">按所选时间范围内每个商品最近一次对比结果统计，单价已折算为每 kg / 每 L / 每件</div></div>
 <div class="card"><div class="chartwrap"><canvas id="chart"></canvas></div><div class="muted" id="note"></div></div>
 <div class="card"><div id="tbltitle" class="muted" style="margin-bottom:6px"></div><div class="tblwrap"><table><thead id="thead"><tr>
-  <th>加载时间</th><th>类别</th><th>Umall 商品</th><th>Umall SKU</th><th>eBest 商品</th><th>eBest SKU</th>
-  <th>Umall 单价</th><th>eBest 单价</th><th>差异 %</th><th>价格更低</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <th>加载时间</th><th class="cat">类别</th><th class="ttl">Umall 商品</th><th>Umall SKU</th><th class="ttl">eBest 商品</th><th>eBest SKU</th>
+  <th>Umall 单价</th><th>eBest 单价</th><th>差异 %</th><th>价格更低</th><th>促销说明（未计入比价）</th></tr></thead><tbody id="rows"></tbody></table></div>
   <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
     <button id="dl_u" type="button">下载 Umall 价格更高的商品 (CSV)</button>
     <button id="dl_e" type="button">下载 eBest 价格更高的商品 (CSV)</button>
@@ -205,6 +208,7 @@ let meta, chart, mode = 'matched';
 const MATCHED_HEAD = $('thead').innerHTML;
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const qs = o => '?' + new URLSearchParams({key: KEY, ...o});
+const promo = x => [x.umall_promo_note && 'Umall：' + esc(x.umall_promo_note), x.ebest_promo_note && 'eBest：' + esc(x.ebest_promo_note)].filter(Boolean).join('<br>');
 const LOW = {umall: 'Umall', ebest: 'eBest', equal: '相同'};
 
 function fillProducts() {
@@ -226,20 +230,21 @@ async function load() {
     options: {maintainAspectRatio: false, scales: {y: {title: {display: true, text: 'AUD'}}}}});
   if (mode !== 'matched') { return showUnmatched(mode); }
   $('thead').innerHTML = MATCHED_HEAD; $('tbltitle').textContent = '';
-  $('rows').innerHTML = r.rows.map(x => `<tr><td>${esc(x.load_time)}</td><td>${esc(x.category)}</td>
-    <td>${esc(x.umall_title)}</td><td>${esc(x.umall_sku)}</td><td>${esc(x.ebest_title)}</td><td>${esc(x.ebest_sku)}</td>
+  $('rows').innerHTML = r.rows.map(x => `<tr><td>${esc(x.load_time)}</td><td class="cat">${esc(x.category)}</td>
+    <td class="ttl">${esc(x.umall_title)}</td><td>${esc(x.umall_sku)}</td><td class="ttl">${esc(x.ebest_title)}</td><td>${esc(x.ebest_sku)}</td>
     <td>${x.umall_unit_price} ${esc(x.umall_unit)}</td><td>${x.ebest_unit_price} ${esc(x.ebest_unit)}</td>
-    <td>${x.price_diff_pct}</td><td class="lo-${x.lower_side}">${LOW[x.lower_side]}</td></tr>`).join('')
-    || '<tr><td colspan="10" class="muted">没有数据</td></tr>';
+    <td>${x.price_diff_pct}</td><td class="lo-${x.lower_side}">${LOW[x.lower_side]}</td>
+    <td>${promo(x)}</td></tr>`).join('')
+    || '<tr><td colspan="11" class="muted">没有数据</td></tr>';
 }
 async function showUnmatched(side) {
   mode = side;
   const r = await (await fetch(qs({data: 'unmatched', side, category: $('cat').value, start: $('start').value, end: $('end').value}))).json();
-  $('thead').innerHTML = '<tr><th>加载时间</th><th>类别</th><th>商品</th><th>SKU</th><th>单价</th></tr>';
+  $('thead').innerHTML = '<tr><th>加载时间</th><th class="cat">类别</th><th class="ttl">商品</th><th>SKU</th><th>单价</th><th>促销说明（未计入比价）</th></tr>';
   $('tbltitle').innerHTML = (side === 'umall' ? 'Umall' : 'eBest') + ' 未匹配商品（' + r.rows.length + '，最多显示 5000）　<a href="#" id="back">返回匹配明细</a>';
   $('back').onclick = e => { e.preventDefault(); mode = 'matched'; load(); };
-  $('rows').innerHTML = r.rows.map(x => `<tr><td>${esc(r.load_time)}</td><td>${esc(x.category)}</td><td>${esc(x.title)}</td>
-    <td>${esc(x.sku)}</td><td>${x.unit_price ?? ''} ${esc(x.unit)}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">没有数据</td></tr>';
+  $('rows').innerHTML = r.rows.map(x => `<tr><td>${esc(r.load_time)}</td><td class="cat">${esc(x.category)}</td><td class="ttl">${esc(x.title)}</td>
+    <td>${esc(x.sku)}</td><td>${x.unit_price ?? ''} ${esc(x.unit)}</td><td>${esc(x.promo_note)}</td></tr>`).join('') || '<tr><td colspan="6" class="muted">没有数据</td></tr>';
   $('rows').closest('.card').scrollIntoView({behavior: 'smooth'});
 }
 $('c_um').onclick = () => showUnmatched('umall'); $('c_eb').onclick = () => showUnmatched('ebest');

@@ -15,6 +15,7 @@ return [
     'compare_dir' => env('COMPARE_TOOL_DIR', base_path('compare-tool')),
     'compare_umall_dir' => env('COMPARE_UMALL_DIR', storage_path('app/umall/script1_output')),
     'compare_start_hour' => (int) env('COMPARE_START_HOUR', 13),
+    'compare_start_minute' => (int) env('COMPARE_START_MINUTE', 30),
     // Umall tracking scripts (admin > Umall tracking)
     'umall_dir' => env('UMALL_TOOL_DIR', base_path('umall-tool')),
     'umall_python' => env('UMALL_PYTHON', 'python3'),

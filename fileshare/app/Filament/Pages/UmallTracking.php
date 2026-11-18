@@ -47,7 +47,7 @@ class UmallTracking extends Page
         Notification::make()->title('Fetch started')->body('Runs in the background; see the run history below.')->success()->send();
     }
 
-    /** Manually triggers the daily 1pm comparison job (ebest fetch + match + load); never fetches umall. */
+    /** Manually triggers the daily comparison job (ebest fetch + match + load); never fetches umall. */
     public function runComparison(): void
     {
         $this->startComparison(true);
