@@ -40,10 +40,16 @@ class Rules:
     # ---------- 类别 ----------
     def group_by_title(self, text):
         t = norm(text)
+        best, best_score = None, 0
         for g, words in self.c['category_title_keywords'].items():
-            if any(has_term(t, w.lower()) for w in words):
-                return g
-        return None
+            s, tt = 0, t
+            for w in sorted((w.lower() for w in words), key=len, reverse=True):
+                if has_term(tt, w):
+                    s += len(w)
+                    tt = tt.replace(w, ' ' * len(w))   # 命中后遮蔽，避免短词重复计分
+            if s > best_score:       # 同分取列表中靠前的类别
+                best, best_score = g, s
+        return best
 
     def group_by_slug(self, slug, cid):
         for g, d in self.c['category_groups'].items():
@@ -79,6 +85,10 @@ class Rules:
             toks.update(run[i:i + 2] for i in range(len(run) - 1))
         return toks
 
+    def attrs(self, text):
+        t = norm(text)
+        return {g: {w for w in ws if w in t} for g, ws in self.c['attribute_groups'].items()}
+
     def same_group(self, a, b):
         if a == b:
             return True
@@ -100,7 +110,7 @@ class Rules:
         return self._hits(text, self.c['varieties'])
 
     def first_token(self, title):
-        t = re.sub(r'【[^】]*】|\[[^\]]*\]|\([^)]*\)|（[^）]*）', ' ', title).lower().replace('’', "'")
+        t = re.sub(r'【[^】]*】|\[[^\]]*\]|\([^)]*\)|（[^）]*）|[#】【\[\]*]', ' ', title).lower().replace('’', "'")
         words = [w for ws in list(self.c['countries'].values()) + list(self.c['varieties'].values()) for w in ws]
         for w in sorted(words, key=len, reverse=True):
             t = re.sub(r'(?<![a-z])' + re.escape(w.lower()) + r'(?![a-z])', ' ', t) if w.isascii() else t.replace(w, ' ')
@@ -252,14 +262,41 @@ def learn_cjk_brands(r, *datasets):
     return set(br['cjk_brands']) | auto
 
 
-def prepare(r, rows, cjk_brands=()):
+def brand_vocab(r, rows, cjk_brands):
+    """品牌词：已知品牌 + 标题前几个词里反复出现的纯中文词。"""
+    br = r.c['brand_rules']
+    cnt = {}
+    for rows_ in rows:
+        for x in rows_:
+            t = re.sub(r'【[^】]*】|\[[^\]]*\]', ' ', x['title'])
+            for tok in t.split()[:br['brand_token_positions']]:
+                m = CJK.fullmatch(tok)
+                if m and 2 <= len(tok) <= 6:
+                    cnt[tok] = cnt.get(tok, 0) + 1
+    vocab = set(cjk_brands)
+    vocab |= {w for w, n in cnt.items() if n >= br['min_cjk_brand_freq'] and not r.keys(w) and not any(s in w for s in r.stop)}
+    return vocab
+
+
+def strip_brand(text, brand, vocab):
+    for w in sorted(vocab, key=len, reverse=True):
+        text = text.replace(w, ' ')
+    return text
+
+
+def prepare(r, rows, cjk_brands=(), vocab=()):
     for x in rows:
         x['country'] = r.countries(x['keytext'])
         x['variety'] = r.varieties(x['keytext'])
         x['brand'] = r.brand(x['title'], cjk_brands) if r.c['brand_rules']['enabled'] else None
         x['flat'] = Rules.bnorm(x['text'])
         x['keys'] = r.keys(x['keytext'])
-        x['toks'] = r.tokens(x['text'])
+        core = strip_brand(x['text'], x['brand'], vocab)
+        first = r.first_token(x['title'])
+        if x['brand'] and first.isascii():
+            core = core.lower().replace(first, ' ')
+        x['toks'] = r.tokens(core)
+        x['attrs'] = r.attrs(x['keytext'])
         x['dim'], x['size'], _ = r.spec(x['text'])
     return rows
 
@@ -283,9 +320,17 @@ def score(r, u, e):
         return None
     if (u['brand'] and u['brand'] not in e['flat']) or (e['brand'] and e['brand'] not in u['flat']):
         return None
+    for g in u['attrs']:
+        if u['attrs'][g] and e['attrs'][g] and not (u['attrs'][g] & e['attrs'][g]):
+            return None
     # 关键词：两边都识别出关键词则必须有交集
     if u['keys'] and e['keys']:
-        if not (u['keys'] & e['keys']):
+        mod = set(r.c['modifier_keys'])
+        ku, ke = u['keys'] - mod, e['keys'] - mod
+        if (ku and ke and not (ku & ke)) or not (u['keys'] & e['keys']):
+            return None
+        if (u['group'] not in r.c['relaxed_token_groups'] or e['group'] not in r.c['relaxed_token_groups']) \
+                and jac(u['toks'], e['toks']) < r.c['keyed_min_token_score']:
             return None
         title = 0.7 * jac(u['keys'], e['keys']) + 0.3 * jac(u['toks'], e['toks'])
     else:
@@ -319,7 +364,8 @@ def main():
     r = Rules(a.rules)
     um, eb = load_umall(r, a.umall_dir), load_ebest(r, a.ebest)
     cjk_brands = learn_cjk_brands(r, um, eb)
-    um, eb = prepare(r, um, cjk_brands), prepare(r, eb, cjk_brands)
+    vocab = brand_vocab(r, (um, eb), cjk_brands)
+    um, eb = prepare(r, um, cjk_brands, vocab), prepare(r, eb, cjk_brands, vocab)
     # 倒排索引：按共同的词（或关键词）选候选，避免全量两两比较
     index, max_df = {}, r.c['max_token_df']
     for i, e in enumerate(eb):

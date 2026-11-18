@@ -110,7 +110,7 @@ class Rules:
         return self._hits(text, self.c['varieties'])
 
     def first_token(self, title):
-        t = re.sub(r'【[^】]*】|\[[^\]]*\]|\([^)]*\)|（[^）]*）', ' ', title).lower().replace('’', "'")
+        t = re.sub(r'【[^】]*】|\[[^\]]*\]|\([^)]*\)|（[^）]*）|[#】【\[\]*]', ' ', title).lower().replace('’', "'")
         words = [w for ws in list(self.c['countries'].values()) + list(self.c['varieties'].values()) for w in ws]
         for w in sorted(words, key=len, reverse=True):
             t = re.sub(r'(?<![a-z])' + re.escape(w.lower()) + r'(?![a-z])', ' ', t) if w.isascii() else t.replace(w, ' ')
@@ -325,7 +325,12 @@ def score(r, u, e):
             return None
     # 关键词：两边都识别出关键词则必须有交集
     if u['keys'] and e['keys']:
-        if not (u['keys'] & e['keys']):
+        mod = set(r.c['modifier_keys'])
+        ku, ke = u['keys'] - mod, e['keys'] - mod
+        if (ku and ke and not (ku & ke)) or not (u['keys'] & e['keys']):
+            return None
+        if (u['group'] not in r.c['relaxed_token_groups'] or e['group'] not in r.c['relaxed_token_groups']) \
+                and jac(u['toks'], e['toks']) < r.c['keyed_min_token_score']:
             return None
         title = 0.7 * jac(u['keys'], e['keys']) + 0.3 * jac(u['toks'], e['toks'])
     else:
