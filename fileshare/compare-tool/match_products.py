@@ -55,6 +55,10 @@ class Rules:
         weak = set(self.c['category_weak_words'])
         pe = self.c['produce_exclusion_markers']
         processed = any(m in t for m in pe['markers'])
+        if not any(x in t for x in self.c.get('category_title_patterns_exclude', [])):
+            for g, pats in self.c.get('category_title_patterns', {}).items():
+                if any(re.search(pt, t) for pt in pats):
+                    return g
         for g, words in self.c['category_title_keywords'].items():
             if processed and g in pe['groups']:
                 continue
@@ -70,6 +74,12 @@ class Rules:
     def group_by_slug(self, slug, cid):
         for g, d in self.c['category_groups'].items():
             if any(slug.startswith(s) for s in d.get('umall_slugs', [])) or str(cid) in d.get('umall_slug_ids', []):
+                return g
+        return None
+
+    def group_by_file(self, slug):
+        for pre, g in self.c.get('umall_file_categories', {}).items():
+            if slug.startswith(pre):
                 return g
         return None
 
@@ -272,7 +282,7 @@ def load_umall(r, umall_dir):
             grp = r.group_by_title(it['item_name']) or r.group_by_slug(slug, d.get('category_id'))
             if umall_price(r, it) <= 0:
                 continue
-            items[sid] = dict(sku=sid, title=it['item_name'], text=text, keytext=it['item_name'], group=grp,
+            items[sid] = dict(sku=sid, title=it['item_name'], text=text, keytext=it['item_name'], group=grp, fgroup=(grp if grp in r.c.get('title_priority_groups', []) else None) or r.group_by_slug(slug, d.get('category_id')) or r.group_by_file(slug) or grp,
                               price=umall_price(r, it), promo=umall_promo(r, it))
     return list(items.values())
 
@@ -288,6 +298,8 @@ def load_ebest(r, ebest):
         grp = r.group_by_ebest(it.get('category_name')) or r.c['ebest_parent_groups'].get(str(it.get('parent_category_id')))
         tgrp = r.group_by_title(f"{it['title']} {it.get('short_title') or ''}")
         if tgrp in r.c['ebest_title_override_groups'] or (grp and it.get('category_name') == '冷冻蔬果' and tgrp):
+            grp = tgrp
+        if grp and tgrp in r.c.get('ebest_title_override_pairs', {}).get(grp, []):
             grp = tgrp
         if ebest_price(r, it) <= 0:
             continue
@@ -444,7 +456,10 @@ def score(r, u, e):
     for a, b in ((u, e), (e, u)):
         if a['brand'] and a['brand'] not in b['flat']:
             # 对方也识别出了别的品牌 -> 品牌不同；对方没有品牌 -> 仅在标题几乎一致时放行
-            if b['brand'] or sm < r.c['brand_one_side_missing_min_score']:
+            # 水果蔬菜：两边识别出同一品种（如 Santina）时，一方多出的供应商品牌（如 Cotsaris）不阻止匹配
+            variety_ok = (not b['brand']) and r.c.get('variety_overrides_missing_brand') \
+                and u['group'] in r.c['relaxed_token_groups'] and bool(u['variety'] & e['variety'])
+            if (b['brand'] or sm < r.c['brand_one_side_missing_min_score']) and not variety_ok:
                 return None
             if b['wbrand'] and b['wbrand'] not in a['flat'] and u['group'] not in r.c['relaxed_token_groups']:
                 return None
@@ -563,9 +578,8 @@ def main():
                 else:
                     up, uu = unit_price(u['price'], u['dim'], u['size']) if u['dim'] else (u['price'], 'AUD/pc')
                     ep, eu = unit_price(e['price'], e['dim'], e['size']) if e['dim'] else (e['price'], 'AUD/pc')
-                cat = u['group'] or e['group'] or '其他'
-                if r.c['category_conflict_use_ebest'] and e['group'] and u['group'] != e['group']:
-                    cat = e['group']      # umall 标题关键词归类与 ebest 类别不一致时，以 ebest 的 category_name 为准
+                # 4.2 有 ebest 类别时始终用 ebest 的 category_name；否则用 umall json 文件名对应的中文类别
+                cat = e['group'] or u['fgroup'] or u['group'] or '其他'
                 row = [cat, u['title'], u['sku'], e['title'], e['sku'], round(up, 2), uu, round(ep, 2), eu]
                 if a.extended:
                     row += [u['price'], e['price'], round((ep / up - 1) * 100, 1), u['promo'], e['promo']]
@@ -577,11 +591,11 @@ def main():
             return unit_price(x['price'], x['dim'], x['size']) if x['dim'] else (x['price'], 'AUD/pc')
         with open(a.unmatched_out, 'w', newline='', encoding='utf-8-sig') as f:
             w = csv.writer(f)
-            w.writerow(['side', 'common category', 'product title', 'sku', 'unit price', 'unit', 'promo note'])
+            w.writerow(['side', 'common category', 'product title', 'sku', 'unit price', 'unit', 'promo note', 'selling price'])
             for side, items in (('umall', unmatched_u), ('ebest', [e for e in eb if e['sku'] not in matched_e])):
                 for x in items:
                     pr, un = up_of(x)
-                    w.writerow([side, x['group'] or '其他', x['title'], x['sku'], round(pr, 2), un, x['promo']])
+                    w.writerow([side, (x.get('fgroup') if side == 'umall' else None) or x['group'] or '其他', x['title'], x['sku'], round(pr, 2), un, x['promo'], x['price']])
     print(f'umall 商品 {len(um)}，ebest 候选 {len(eb)}，匹配 {n_match}，未匹配 {n_unmatched}\n输出: {out}')
 
 

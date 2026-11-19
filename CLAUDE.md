@@ -157,8 +157,8 @@ apps developer
 
   - save the matching rule in a configuration file
   - build a python script to do the matching according to the matching rule, output to a csv file with columns of:
-    - common category, umall product title, umall sku, ebest product title, ebest sku, umall unit price, umall unit, ebest unit price, ebest unit
-    - by default, use the category name from umall as category
+    - common category, umall product title, umall sku, ebest product title, ebest sku, umall unit price, umall unit, ebest unit price, ebest unit, umall/ebest售价 (一个字段用/分割，加价格的加粗体并用价格更低的颜色)
+    - by default, use the category name from ebest as category
     - for any price, if there's promotion or discounted price, use the lower price for comparison purpose
     - umall and ebest json files folder as input to the python rather than specified in the matching rule json
 - step 2:
@@ -168,6 +168,7 @@ apps developer
   - in the UM page, add one button to manually trigger this 1pm job (note: this job should never fetch any umall products); another button just update the comparision without re-fetch ebest products
   - do the comparison, and load into DB with load_time
   - the report has the following
+    - product search field and button (match by keyword)
     - data range
     - category (including All option)
     - product (including All option)
@@ -177,6 +178,9 @@ apps developer
       - number of umall products not matched (clickable so details listed in below table)
       - number of ebest products not matched (clickable so details listed in below table)
     - line chart of price
+    - regarding color code, use red for Umall, and green for eBest
+    - in the comparison page, hide any entry with load time earlier than latest timestamp with different category as latest entry. they should also not in export data. 
+    - in the comparison page, for any entry pair does not have latest timestamp, hide them. they should also not in export data.
     - list of details (for multiple dates, same product can list multiple times with load_time difference)
     - below the details, provide two buttons, to download products which umall has higher price, and products which ebest has higher price
     - 3rd button to download unmatched umall products; 4th button to download unmatched ebest products

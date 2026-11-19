@@ -90,8 +90,57 @@ class PriceComparisonService
 
         $loadTime = now()->toDateTimeString();    // same load_time for matched and unmatched rows
         $this->loadUnmatched($unmatched, $loadTime);
+        $n = $this->loadCsv($csv, $loadTime);
+        $this->exportLatestFiles($loadTime);      // the 4 download files of the report page
 
-        return $this->loadCsv($csv, $loadTime);
+        return $n;
+    }
+
+    /** The four files the report page downloads (generated at the end of every comparison run). */
+    public const EXPORT_FILES = ['umall_higher', 'ebest_higher', 'unmatched_umall', 'unmatched_ebest'];
+
+    public function exportPath(string $name): string
+    {
+        return storage_path('app/compare/latest/' . $name . '.csv');
+    }
+
+    /** Write the 4 download files from the comparison just loaded ($loadTime); files are replaced atomically. */
+    public function exportLatestFiles(string $loadTime): void
+    {
+        File::ensureDirectoryExists(dirname($this->exportPath('x')), 0775);
+        $head = ['common category', 'umall product title', 'umall sku', 'ebest product title', 'ebest sku',
+            'umall/ebest selling price', 'umall selling price', 'ebest selling price', 'umall unit price', 'umall unit',
+            'ebest unit price', 'ebest unit', 'price diff pct', 'umall promo note', 'ebest promo note', 'load time'];
+        foreach (['umall', 'ebest'] as $higher) {          // files list products where this side is the more expensive one
+            $lower = $higher === 'umall' ? 'ebest' : 'umall';
+            $q = DB::table('price_comparison')->where('load_time', $loadTime)->where('lower_side', $lower)
+                ->orderBy('category')->orderBy('umall_title');
+            $this->writeCsv($this->exportPath($higher . '_higher'), $head, $q, fn ($r) => [
+                $r->category, $r->umall_title, $r->umall_sku, $r->ebest_title, $r->ebest_sku,
+                ($r->umall_price ?? '') . '/' . ($r->ebest_price ?? ''), $r->umall_price, $r->ebest_price,
+                $r->umall_unit_price, $r->umall_unit, $r->ebest_unit_price, $r->ebest_unit, $r->price_diff_pct,
+                $r->umall_promo_note, $r->ebest_promo_note, $r->load_time]);
+        }
+        foreach (['umall', 'ebest'] as $side) {
+            $q = DB::table('price_comparison_unmatched')->where('load_time', $loadTime)->where('side', $side)
+                ->orderBy('category')->orderBy('title');
+            $this->writeCsv($this->exportPath('unmatched_' . $side),
+                ['common category', 'product title', 'sku', 'selling price', 'unit price', 'unit', 'promo note', 'load time'], $q,
+                fn ($x) => [$x->category, $x->title, $x->sku, $x->price, $x->unit_price, $x->unit, $x->promo_note, $x->load_time]);
+        }
+    }
+
+    private function writeCsv(string $path, array $header, $query, callable $map): void
+    {
+        $tmp = $path . '.tmp';
+        $o = fopen($tmp, 'w');
+        fwrite($o, "\xEF\xBB\xBF");
+        fputcsv($o, $header, ',', '"', '');
+        foreach ($query->cursor() as $r) {
+            fputcsv($o, $map($r), ',', '"', '');
+        }
+        fclose($o);
+        rename($tmp, $path);
     }
 
     private function exec(array $cmd, string $cwd, string $name): void
@@ -121,6 +170,7 @@ class PriceComparisonService
                     'title' => mb_substr($row['product title'], 0, 500), 'sku' => $row['sku'],
                     'unit_price' => $row['unit price'] === '' ? null : $row['unit price'], 'unit' => $row['unit'],
                     'promo_note' => mb_substr($row['promo note'] ?? '', 0, 500) ?: null,
+                    'price' => ($row['selling price'] ?? '') === '' ? null : $row['selling price'],
                     'load_time' => $loadTime,
                 ];
                 $n++;
@@ -161,6 +211,8 @@ class PriceComparisonService
                     'umall_unit_price' => $u, 'umall_unit' => $row['umall unit'],
                     'ebest_unit_price' => $e, 'ebest_unit' => $row['ebest unit'],
                     'price_diff_pct' => $row['price diff pct'],
+                    'umall_price' => ($row['umall price (AUD)'] ?? '') === '' ? null : $row['umall price (AUD)'],
+                    'ebest_price' => ($row['ebest price (AUD)'] ?? '') === '' ? null : $row['ebest price (AUD)'],
                     'umall_promo_note' => mb_substr($row['umall promo note'] ?? '', 0, 500) ?: null,
                     'ebest_promo_note' => mb_substr($row['ebest promo note'] ?? '', 0, 500) ?: null,
                     'lower_side' => abs($u - $e) < 0.005 ? 'equal' : ($u < $e ? 'umall' : 'ebest'),

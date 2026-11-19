@@ -135,7 +135,11 @@
       "腌制",
       "调料",
       "酱料",
-      "底料"
+      "底料",
+      "玉米油",
+      "菜籽油",
+      "大豆油",
+      "葵花籽油"
     ],
     "豆制品": [
       "豆腐",
@@ -612,6 +616,18 @@
       "自在水",
       "气泡冰酿",
       "电解质水"
+    ],
+    "药品保健": [
+      "暖贴",
+      "膏药",
+      "药贴",
+      "贴膏",
+      "同仁堂",
+      "艾灸贴",
+      "止痛贴",
+      "退热贴",
+      "护膝贴",
+      "药膏"
     ]
   },
   "keyword_synonyms": {
@@ -1387,6 +1403,28 @@
     "干蒜头": [
       "干蒜头",
       "whole garlic"
+    ],
+    "cherry_santina": [
+      "santina"
+    ],
+    "cherry_tioga": [
+      "royal tioga",
+      "tioga"
+    ],
+    "cherry_samba": [
+      "samba"
+    ],
+    "cherry_royal_lyn": [
+      "royal lyn"
+    ],
+    "cherry_sequoia": [
+      "sequoia"
+    ],
+    "cherry_lapins": [
+      "lapins"
+    ],
+    "cherry_rainier": [
+      "rainier"
     ]
   },
   "varieties_note": "品种词；两边都识别出品种且没有交集则不匹配；variety_strict 为 true 时，仅一方有品种另一方没有也不匹配",
@@ -1674,6 +1712,8 @@
   "group_relax_score_note": "两边类别不同也不兼容时，若标题核心词相似度不低于该值仍可匹配（防止分类规则不一致造成漏配）",
   "brand_one_side_missing_min_score": 0.8,
   "brand_one_side_missing_min_score_note": "仅一方标题带品牌、另一方标题没有品牌词且不含该品牌时，标题核心词相似度不低于该值才匹配（如 Manildra 超白面粉 与 超白面粉）",
+  "variety_overrides_missing_brand": true,
+  "variety_overrides_missing_brand_note": "水果、蔬菜、蛋类：两边都识别出相同品种，且仅一方带品牌时，不因品牌缺失而拒绝（如 Cotsaris Santina樱桃 与 Santina樱桃）",
   "pack_price_fallback": {
     "enabled": true,
     "min_score": 0.85,
@@ -1887,6 +1927,36 @@
   ],
   "category_weak_weight": 0.4,
   "category_weak_words_note": "食材/口味类词，只按 category_weak_weight 折算得分，避免 黑芝麻汤圆 归入调味粮油、抹茶饼干归入饮品；真正的商品类型词（汤圆、饼干、粥……）得分更高",
+  "umall_file_categories": {
+    "adult-product": "成人用品",
+    "beauty-care": "个护美妆",
+    "beauty-tools": "个护美妆",
+    "color-cosmetics": "个护美妆",
+    "personal-care": "个护美妆",
+    "beef": "肉类",
+    "lamb": "肉类",
+    "pork": "肉类",
+    "chicken": "肉类",
+    "duck-meat": "肉类",
+    "wagyu": "肉类",
+    "sausage-salami": "肉类",
+    "casual-snacks": "零食",
+    "catering-deli": "熟食",
+    "chinese-and-foreign-famous-wines": "酒类",
+    "daily-use": "日用家居",
+    "kitchen-": "日用家居",
+    "paper-": "日用家居",
+    "dairy-bakery": "乳品烘焙",
+    "frozen-food": "速冻面点",
+    "japanese-and-korean-cuisine": "日韩料理",
+    "maternal-and-child-health": "母婴",
+    "pet-life": "宠物",
+    "rice-flour-grain-and-oil": "调味粮油",
+    "seafood-aquatic": "海鲜",
+    "water-based-brewing": "饮品",
+    "week_seckill-391": "水果"
+  },
+  "umall_file_categories_note": "umall json 文件名（slug）前缀 -> 中文类别；仅 umall 未匹配商品使用（4.3），已匹配商品始终使用 ebest 类别（4.2）",
   "category_conflict_use_ebest": true,
   "category_conflict_use_ebest_note": "匹配成功后，若 umall 按标题归出的类别与 ebest 的类别不同，输出时使用 ebest 的类别（ebest 的 category_name 更可靠）",
   "produce_max_spec_diff": 0.4,
@@ -1908,5 +1978,28 @@
       "满\\s*\\d+\\s*(?:元|件)?\\s*(?:减|折|送)\\s*\\d*",
       "任选\\s*[0-9一二三四五六]+\\s*[件份个盒包袋]?"
     ]
-  }
+  },
+  "ebest_title_override_pairs": {
+    "海鲜": [
+      "速冻面点"
+    ]
+  },
+  "ebest_title_override_pairs_note": "ebest 按类别归入左侧类别、但标题关键词命中右侧类别时，以标题为准（如 海鲜速食 下的 鲜虾春卷 是速冻面点，不是海鲜）",
+  "category_title_patterns": {
+    "药品保健": [
+      "\\d+\\s*贴"
+    ]
+  },
+  "category_title_patterns_exclude": [
+    "面膜",
+    "美甲",
+    "贴纸",
+    "指甲",
+    "锅贴"
+  ],
+  "category_title_patterns_note": "标题命中正则则直接归入该类别（如 10贴装：以“贴”为单位的通常是药类）；含 exclude 词时不适用",
+  "title_priority_groups": [
+    "药品保健"
+  ],
+  "title_priority_groups_note": "标题归入这些类别时，umall 未匹配商品也以标题类别为准，不使用 json 文件名类别（如 生姜暖贴 位于蔬菜文件中）"
 }

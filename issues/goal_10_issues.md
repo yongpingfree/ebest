@@ -464,6 +464,27 @@ umall_higher,587,调味粮油,维力  炸酱面 90g*5袋/包,1534,【低价清�
 - 乐事 薯片 黄瓜味 70g,5066,【聚划算】乐事薯片 黄瓜味70g,1604,完全相同
 - 【整箱】Nudie 儿童纯果汁 苹果汁 200ml*10,83675,【整箱】Nudie 苹果儿童果汁 200ml *10,163134,名称差异
 - (actually missed!)【整箱】三得利 乌龙茶 低糖 500ml*15瓶/箱,52064,(未找到ebest低糖款),,ebest仅有无糖款，应不匹配
+4,category
+4.1 if the category is updated for a product in latest load time, discard the previous record in the report UI
+4.2 always use eBest category when available
+4.3 for umall alone product, use the json filename translation of Chinese
+5, wrong category
+- rice-flour-grain-and-oil-22.json:   "item_name": "88 玉米油 1L",
+- "item_name": "【冻】Emerald 鲜虾春卷 480g", not 海鲜
+6，after click umall unmatch, not able to go back to comparison
+7, wrong category
+- 蔬菜	北京同仁堂 内廷上用生姜暖贴（10贴装）
+  - anything with 贴 as unit is normally 药类
+  - 北京同仁堂 typically offers 药类
+8, wrong comparison for cherry:
+8.1 not same product
+- 原箱】澳州樱桃WVF Royal Tioga Cherry Size28-30mm 礼盒装 约2kg	111589	Cherry Santina樱桃 30-32mm 2kg/箱 甜香爽脆	13917
+8.2 should be same but missed
+umall
+【原箱】Cotsaris Santina樱桃 30-32mm 礼盒装 约2kg
+ebest
+Cherry Santina樱桃 30-32mm 2kg/箱 甜香爽脆	13917
+
 # enhancement
 1, for any mentioning of below, list in notes and include in table view and export csv:
 such as "5.99，三件8折". It looks like a multi-buy promotion you spotted. Our price rule doesn't handle "buy 3, get 20% off", so it's probably an input for a rule change.
