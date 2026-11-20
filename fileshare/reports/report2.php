@@ -74,7 +74,12 @@ return function (Request $request) {
             ->orderBy('umall_title')->get();
 
         return response()->json([
-            'categories' => $current()->distinct()->orderBy('category')->pluck('category'),
+            // categories of the matched pairs plus those that only have unmatched products (latest load)
+            'categories' => $current()->distinct()->pluck('category')
+                ->merge(DB::table('price_comparison_unmatched')
+                    ->where('load_time', DB::table('price_comparison_unmatched')->max('load_time') ?? '0000-00-00 00:00:00')
+                    ->whereNotNull('category')->where('category', '<>', '')->distinct()->pluck('category'))
+                ->unique()->sort()->values(),
             'products' => $prods,
             'min' => DB::table('price_comparison')->min('load_time'),
             'max' => DB::table('price_comparison')->max('load_time'),

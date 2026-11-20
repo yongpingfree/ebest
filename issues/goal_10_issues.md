@@ -484,7 +484,81 @@ umall
 【原箱】Cotsaris Santina樱桃 30-32mm 礼盒装 约2kg
 ebest
 Cherry Santina樱桃 30-32mm 2kg/箱 甜香爽脆	13917
+9, there is 冈本 products from eBest, but it's not fetched in latest json file
+please fix.
+10, following not mapped
 
+10.1
+umall
+Ora2 皓乐齿 果味口气清新剂便携清新口喷 西柚味 6ml
+ebest
+日本Ora2皓乐齿 口气清新剂 西柚味 6ml
+umall:
+ 	满小饱 麻辣红油米线 262g
+ebest
+	【亏本清仓】满小饱 麻辣红油米线 262g
+
+umall:
+		银鹭 好粥道 椰奶燕麦粥 280g
+ebest:
+		【整箱】银鹭 好粥道 椰奶燕麦粥280g*12
+(although there's single product match, box product can be matched with single product as well)
+umall
+	Ecoway 除霉啫喱 120ml
+ebest
+	【聚划算】Ecoway除霉啫喱120ML封条除霉神器去霉去污 *
+other umall products not matched:
+冈本 避孕套 001系列 超润滑款 6只装
+冈本 避孕套 003 黄金超薄 10只装
+Malory 果蔬奶瓶餐具清洗剂 400ml
+Malory 洗衣凝珠 四效合一 含精油 20颗
+万代 吉伊卡哇儿童二合一洗发护发露 300ml
+花王 儿童木糖醇牙膏 草莓味 70g
+小林制药 宝宝发烧退热贴 12枚入
+Obento 寿司米 10kg
+Obento 紫菜（寿司用） 25g
+Sunrice 中粒米 10kg
+三关六码头 梅干菜烤笋 280g
+不等 蟹黄鲜酱 100g
+【冻】安井 杂粮包 800g
+【冻】思念 虾仁菌菇水饺 400g
+【冻】我爱饺子 牛肉羊肉饺子 480g
+【冻】淘大 糯米鸡 180g
+南翔 香菇菜包 480g
+潮力版 中式精酿啤酒 蜜桃乌龙 1L
+红星 二锅头 清香型白酒 56度 500ml
+Meiji 欣欣手指杯 巧克力味 50g
+Meiji 欣欣手指杯 草莓味 50g
+Peppito 苏打饼干 松茸奇亚籽味 336g
+Peppito 苏打饼干 黑松露芝士焗龙虾味 336g
+【整盒】友臣 肉松芋泥面包 400g
+【整盒】友臣 肉松蛋黄酥 408g
+三关六码头 手工牛轧糖 300g
+三关六码头 桃酥 130g
+三关六码头 脏脏年糕条 红糖味 250g
+三关六码头 苏式梅梅半话李 280g
+三关六码头 虎皮年糕片 椒盐味 100g
+三关六码头 黄鱼酥 75g
+上好佳 玉米卷 80g
+上好佳 田园泡 玉米口味 80g
+乐事 薯片 墨西哥鸡汁番茄味 70g
+乐事 薯片 岩烧海苔味 70g
+乐事 薯片 意大利香浓红烩味 70g
+乐事 薯片 美国经典原味 70g
+乐事 薯片 西安限定 油泼辣子味 70g
+乐事 薯片 麻辣香锅味 70g
+乐事 薯片 黄瓜味 70g
+【整箱】元气森林 气泡水 冰柠可乐味 480ml*15瓶/箱
+【整箱】元气森林 外星人电解质水 低糖椰子味 600ml*15瓶/箱
+【整箱】元气森林 外星人电解质水 低糖西柚味 600ml*15瓶/箱
+【整箱】农夫山泉 茶π 蜜桃乌龙茶  500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶π 西柚茉莉花茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶π 青提乌龙茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶π柚子绿茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶兀 茉莉花柠檬茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】喜茶 小奶茉 茉莉浓抹牛乳茶奶茶饮料 350ML*15
+refer to latest ebest product in umall_ebest/ebest folder
+11， in the drop down menu, even an entire category is not matched, the category should be listed as well.
 # enhancement
 1, for any mentioning of below, list in notes and include in table view and export csv:
 such as "5.99，三件8折". It looks like a multi-buy promotion you spotted. Our price rule doesn't handle "buy 3, get 20% off", so it's probably an input for a rule change.

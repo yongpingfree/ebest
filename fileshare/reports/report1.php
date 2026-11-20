@@ -79,7 +79,7 @@ return function (Request $request) {
     // Compare the first load with the last load inside [start, end]
     $compare = function () use ($base) {
         $loads = $base()->distinct()->orderBy('load_time')->pluck('load_time');
-        $res = ['counts' => ['up' => 0, 'down' => 0, 'same' => 0, 'new' => 0, 'missing' => 0], 'rows' => [], 'first' => null, 'last' => null];
+        $res = ['counts' => ['up' => 0, 'down' => 0, 'same' => 0, 'new' => 0, 'missing' => 0, 'stockdown' => 0, 'stockup' => 0], 'rows' => [], 'first' => null, 'last' => null];
         if ($loads->isEmpty()) {
             return $res;
         }
@@ -88,9 +88,12 @@ return function (Request $request) {
         $res['first'] = $first;
         $res['last'] = $last;
         $items = [];
+        $qty = [];
         foreach ($base()->whereIn('load_time', array_unique([$first, $last]))->get() as $r) {
             $eff = $r->promotion_price_aud !== null ? (float) $r->promotion_price_aud : ($r->price_aud !== null ? (float) $r->price_aud : null);
-            $items[$r->category . "\x1f" . $r->item_name][$r->load_time === $last ? 'last' : 'first'] = $eff;
+            $slot = $r->load_time === $last ? 'last' : 'first';
+            $items[$r->category . "\x1f" . $r->item_name][$slot] = $eff;
+            $qty[$r->category . "\x1f" . $r->item_name][$slot] = $r->available_quantity !== null ? (float) $r->available_quantity : null;
         }
         foreach ($items as $k => $v) {
             [$cat, $name] = explode("\x1f", $k, 2);
@@ -106,7 +109,16 @@ return function (Request $request) {
                 $status = $hasNew ? 'new' : 'missing';
             }
             $res['counts'][$status]++;
-            $res['rows'][] = ['category' => $cat, 'item_name' => $name, 'old_price' => $old, 'new_price' => $new, 'status' => $status];
+            $oq = $qty[$k]['first'] ?? null;
+            $nq = $qty[$k]['last'] ?? null;
+            $stock = 'same';
+            if ($oq !== null && $nq !== null && $first !== $last) {
+                $stock = $nq < $oq ? 'stockdown' : ($nq > $oq ? 'stockup' : 'same');
+            }
+            if ($stock !== 'same') {
+                $res['counts'][$stock]++;
+            }
+            $res['rows'][] = ['category' => $cat, 'item_name' => $name, 'old_price' => $old, 'new_price' => $new, 'old_qty' => $oq, 'new_qty' => $nq, 'status' => $status, 'stock' => $stock];
         }
 
         return $res;
@@ -114,17 +126,17 @@ return function (Request $request) {
 
     if ($data === 'compare') {
         $res = $compare();
-        $res['rows'] = array_values(array_filter($res['rows'], fn ($r) => $change === 'all' || $r['status'] === $change));
+        $res['rows'] = array_values(array_filter($res['rows'], fn ($r) => $change === 'all' || $r['status'] === $change || $r['stock'] === $change));
 
         return response()->json($res);
     }
 
     if ($data === 'series') {
         $keep = null;
-        if (in_array($change, ['up', 'down', 'same', 'new', 'missing'], true)) {
+        if (in_array($change, ['up', 'down', 'same', 'new', 'missing', 'stockdown', 'stockup'], true)) {
             $keep = [];
             foreach ($compare()['rows'] as $r) {
-                if ($r['status'] === $change) {
+                if ($r['status'] === $change || $r['stock'] === $change) {
                     $keep[$r['category'] . "\x1f" . $r['item_name']] = true;
                 }
             }
@@ -195,7 +207,7 @@ return function (Request $request) {
   <div class="box"><label>Change type</label>
     <select id="change">
       <option value="all">All</option><option value="up">Price up</option><option value="down">Price down</option>
-      <option value="same">Unchanged</option><option value="new" class="nt">New</option><option value="missing" class="nt">Not appearing today</option>
+      <option value="same">Unchanged</option><option value="stockdown">库存减少</option><option value="stockup">库存增加</option><option value="new" class="nt">New</option><option value="missing" class="nt">Not appearing today</option>
     </select></div>
   <button id="csv">Export CSV (latest)</button>
 </div>
@@ -204,6 +216,8 @@ return function (Request $request) {
   <div class="tile" data-c="up" title="Click to list these items below"><div>Price up</div><div class="n up" id="t_up">0</div></div>
   <div class="tile" data-c="down" title="Click to list these items below"><div>Price down</div><div class="n down" id="t_down">0</div></div>
   <div class="tile" data-c="same" title="Click to list these items below"><div>Unchanged</div><div class="n" id="t_same">0</div></div>
+  <div class="tile" data-c="stockdown" title="Click to list these items below"><div>库存减少</div><div class="n down" id="t_stockdown">0</div></div>
+  <div class="tile" data-c="stockup" title="Click to list these items below"><div>库存增加</div><div class="n up" id="t_stockup">0</div></div>
   <div class="tile nt" data-c="new" title="Click to list these items below"><div>New</div><div class="n" id="t_new">0</div></div>
   <div class="tile nt" data-c="missing" title="Click to list these items below"><div>Not appearing today</div><div class="n" id="t_missing">0</div></div>
 </div>
@@ -235,7 +249,7 @@ const get = o => fetch(params(o)).then(r => r.json());
 const fmt = v => v === null || v === undefined ? '' : v;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const selected = sel => Array.from(sel.selectedOptions).map(o => o.value).filter(v => v !== '');   // (All) = empty = no filter
-const label = {up:'Price up', down:'Price down', same:'Unchanged', new:'New', missing:'Not appearing today'};
+const label = {up:'Price up', down:'Price down', same:'Unchanged', stockdown:'库存减少', stockup:'库存增加', new:'New', missing:'Not appearing today'};
 let chart, tableCols = [], tableRows = [], timer, forceCompare = false;
 
 function filters(){
@@ -274,8 +288,10 @@ async function refresh(){
     tableRows = series.slice().reverse().map(r => [r.load_time, cat, f.product, fmt(r.price_aud), fmt(r.promotion_price_aud), fmt(r.available_quantity)]);
     \$('tinfo').textContent = 'Details of the selected product over time';
   } else {
-    tableCols = ['category','product','old_price','new_price','change'];
-    tableRows = cmp.rows.map(r => [r.category, r.item_name, fmt(r.old_price), fmt(r.new_price), label[r.status]]);
+    tableCols = ['category','product','old_price','new_price','old_qty','new_qty','change'];
+    const sd = f.change === 'stockdown', su = f.change === 'stockup';
+    if (sd) tableCols.push('疑似销量'); else if (su) tableCols.push('疑似采购量');
+    tableRows = cmp.rows.map(r => [r.category, r.item_name, fmt(r.old_price), fmt(r.new_price), fmt(r.old_qty), fmt(r.new_qty), (f.change === 'stockdown' || f.change === 'stockup') ? label[r.stock] : label[r.status] + (r.stock !== 'same' ? ' / ' + label[r.stock] : '')].concat(sd ? [fmt(r.old_qty - r.new_qty)] : su ? [fmt(r.new_qty - r.old_qty)] : []));
     \$('tinfo').textContent = 'Comparison of the selected items' + (f.change !== 'all' ? ' - ' + label[f.change] : '') + ' (' + tableRows.length + ' rows)';
   }
   \$('thead').innerHTML = '<tr>' + tableCols.map(h => '<th>' + h + '</th>').join('') + '</tr>';

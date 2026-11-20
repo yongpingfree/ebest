@@ -136,7 +136,7 @@ class Rules:
         return self._hits(text, self.c['varieties'])
 
     def first_token(self, title):
-        t = re.sub(r'【[^】]*】|\[[^\]]*\]|\([^)]*\)|（[^）]*）|[#】【\[\]*]', ' ', title).lower().replace('’', "'")
+        t = norm(re.sub(r'【[^】]*】|\[[^\]]*\]|\([^)]*\)|（[^）]*）|[#】【\[\]*]', ' ', title)).replace('’', "'")
         words = [w for ws in list(self.c['countries'].values()) + list(self.c['varieties'].values()) for w in ws]
         for w in sorted(words, key=len, reverse=True):
             t = re.sub(r'(?<![a-z])' + re.escape(w.lower()) + r'(?![a-z])', ' ', t) if w.isascii() else t.replace(w, ' ')
@@ -167,7 +167,7 @@ class Rules:
     # ---------- 规格 ----------
     def spec(self, text):
         """返回 (维度, 基础数量, 件数)。维度: weight(g) / volume(ml) / count / None"""
-        t = norm(text)
+        t = re.sub(r'(?<=[a-z\d])x(?=\d)', '*', norm(text))      # 12gX10 / 6x250ml 的 x 当作乘号
         size = dim = None
         # 形如 900g-1kg / 0.9-1kg / 约1kg
         m = re.search(NUM + r'\s*(' + self.unit_re + r')?' + RANGE + NUM + r'\s*(' + self.unit_re + r')(?![a-z])', t)
@@ -183,6 +183,10 @@ class Rules:
             if m:
                 dim, f = self.factor(m.group(2))
                 size, end = float(m.group(1)) * f, m.end()
+        pre = re.search(r'(\d+)\s*(?:pk|pack|瓶|罐|听|支)\s*[*x×]\s*' + NUM + r'\s*(' + self.unit_re + r')(?![a-z])', t)
+        if pre:      # 6pk*330ml：件数在前、单件规格在后
+            dim, f = self.factor(pre.group(3))
+            return dim, int(pre.group(1)) * float(pre.group(2)) * f, None
         if size:
             mult = re.match(r'\s*[*x×]\s*(\d+)', t[end:])
             if mult:
@@ -349,6 +353,7 @@ def core_chars(r, x, vocab):
     t = re.sub(r'【[^】]*】|\[[^\]]*\]|\([^)]*\)|（[^）]*）', ' ', x['title'])
     t = norm(t)
     t = re.sub(NUM + r'\s*(' + r.unit_re + r')(?![a-z])', ' ', t)
+    t = re.sub(r'\d+\s*(?:颗|粒|只|个|枚|片|入|条|支|瓶|盒|袋|包|pcs|pc)(?![a-z])', ' ', t)    # 件数写法不同（20颗 / 20粒）不应影响标题字比较
     for w in r.stop:
         t = t.replace(w, ' ')
     t = strip_brand(t, x['brand'], vocab)
@@ -411,17 +416,31 @@ FLAVOR_RE = re.compile(r'([一-鿿]{1,6})(?:味|口味|风味|香型)')
 
 
 def flavors(text):
-    t = re.sub(r'【[^】]*】|\[[^\]]*\]', ' ', text)
-    return {m.strip() for m in FLAVOR_RE.findall(t)}
+    t = norm(re.sub(r'【[^】]*】|\[[^\]]*\]', ' ', text))
+    # 位于标题开头的 “X味”（如 超友味、珍之味）是品牌名，不是口味
+    return {m.group(1).strip() for m in FLAVOR_RE.finditer(t) if m.start() > len(t) - len(t.lstrip())}
+
+
+GENERIC_FLAVORS = {'果', '香', '新'}
+FLAVOR_STRIP = re.compile(r'^(?:低糖|无糖|微糖|加量|0糖)|口$')
+
+
+def flavor_set(text):
+    out = set()
+    for f in flavors(text):
+        f = FLAVOR_STRIP.sub('', FLAVOR_STRIP.sub('', f))
+        if f and f not in GENERIC_FLAVORS:      # “果味” 的 果 这类泛称不足以区分口味
+            out.add(f)
+    return out
 
 
 def flavor_ok(r, u, e):
-    """两边标题都写了 X味 时，口味必须一致（一方是另一方的结尾词算一致，如 水白桃 与 白桃）；
+    """两边标题都写了 X味 时，每个口味都要在对方找到一致的（互相包含算一致，如 水白桃 与 白桃、低糖椰子 与 椰子口味）；
     一方带口味词（flavor_words）而另一方没有同一个词，也视为不同款。"""
-    fu, fe = flavors(u['keytext']), flavors(e['keytext'])
+    fu, fe = flavor_set(u['keytext']), flavor_set(e['keytext'])
     if fu and fe:
         for a in fu:
-            if not any(a.endswith(b) or b.endswith(a) for b in fe):
+            if not any(a in b or b in a for b in fe):
                 return False
     fw = r.c['flavor_words']
     for a, b in ((u['flat'], e['flat']), (e['flat'], u['flat'])):
@@ -429,6 +448,19 @@ def flavor_ok(r, u, e):
             if w in a and w not in b:
                 return False
     return True
+
+
+MULT_RE = re.compile(r'[*x×]\s*(\d+)\s*(?:瓶|罐|袋|盒|包|支|听|杯)?(?:/箱)?(?![\d.]*\s*(?:g|kg|ml|l)\b)')
+
+
+def multiplier(text):
+    """标题里的 “*12” 整箱倍数（如 280g*12），没有则为 1。"""
+    t = norm(text)
+    pre = re.search(r'(\d+)\s*(?:pk|pack|瓶|罐|听|支)\s*[*x×]\s*\d', t)
+    if pre:
+        return int(pre.group(1))
+    m = MULT_RE.search(t)
+    return int(m.group(1)) if m else 1
 
 
 def score(r, u, e):
@@ -443,6 +475,13 @@ def score(r, u, e):
         ru, re_ = sorted([len(u['chars'] - e['chars'] - noise), len(e['chars'] - u['chars'] - noise)])
         if dice >= sb['min_char_dice'] and ru <= sb['max_residual_min'] and re_ <= sb['max_residual_max']:
             sm = max(sm, sb['sim_floor'] + 0.2 * dice)
+    cm = r.c.get('containment_match', {})
+    if cm.get('enabled') and u['dim'] and u['dim'] == e['dim'] and u['chars'] and u['brand'] and e['brand'] \
+            and (u['brand'] in e['flat'] or e['brand'] in u['flat']) \
+            and min(u['size'], e['size']) / max(u['size'], e['size']) >= cm['min_spec_ratio'] \
+            and len(u['chars']) >= cm['min_chars'] \
+            and len(u['chars'] & e['chars']) / len(u['chars']) >= cm['min_containment']:
+        sm = max(sm, cm['sim_floor'])      # 同品牌同规格，umall 标题核心字几乎都在 ebest 标题里（ebest 标题常附带一长串营销词）
     if classified and not r.same_group(u['group'], e['group']) and sm < r.c['group_relax_score']:
         return None
     # 产地、品种、品牌：不同则不匹配
@@ -513,10 +552,15 @@ def score(r, u, e):
         spec_sim = min(u['size'], e['size']) / max(u['size'], e['size'])
         same_brand = bool(u['brand'] and e['brand'] and (u['brand'] in e['flat'] or e['brand'] in u['flat']))
         max_diff = r.c['produce_max_spec_diff'] if same_brand and u['group'] in r.c['relaxed_token_groups'] else r.c['max_spec_diff']
-        if spec_sim < 1 - max_diff:      # 规格差异过大视为不同商品（含整箱与单瓶）
+        cs = r.c.get('case_vs_single', {})
+        mu, me = multiplier(u['text']), multiplier(e['text'])
+        case_ok = bool(cs.get('enabled')) and mu != me and sm >= cs['min_score'] \
+            and abs((max(u['size'] / mu, e['size'] / me) / min(u['size'] / mu, e['size'] / me)) - 1) <= cs['max_unit_diff'] \
+            and (mu > 1) != (me > 1) and abs(u['size'] / mu - e['size'] / me) / max(u['size'] / mu, e['size'] / me) <= cs['max_unit_diff']
+        if spec_sim < 1 - max_diff and not case_ok:      # 规格差异过大视为不同商品（整箱与单瓶只有标题几乎一致且单件规格相同才算同款）
             return None
         sp = r.c['small_pack']
-        if u['dim'] != 'count' and min(u['size'], e['size']) < sp['max_size'] and spec_sim < 1 - sp['max_diff'] \
+        if not case_ok and u['dim'] != 'count' and min(u['size'], e['size']) < sp['max_size'] and spec_sim < 1 - sp['max_diff'] \
                 and u['group'] not in r.c['relaxed_token_groups'] and '约' not in u['text'] + e['text']:
             return None
         up, _ = unit_price(u['price'], u['dim'], u['size'])
@@ -524,9 +568,12 @@ def score(r, u, e):
     else:
         spec_sim = 1.0
         up, ep = u['price'], e['price']
-    if up <= 0 or not (1 - tol) <= ep / up <= (1 + tol):
+    em = r.c.get('exact_match', {})
+    exact = bool(em.get('enabled')) and u['dim'] and u['dim'] == e['dim'] and sm >= em['min_score'] \
+        and spec_sim >= em['min_spec_ratio'] and ep > 0 and up > 0
+    if up <= 0 or (not exact and not (1 - tol) <= ep / up <= (1 + tol)):
         return None
-    price_fit = 1 - abs(ep / up - 1) / tol
+    price_fit = max(0.0, 1 - abs(ep / up - 1) / tol)
     return title + 0.2 * spec_sim + 0.1 * price_fit
 
 
