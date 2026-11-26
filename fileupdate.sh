@@ -20,6 +20,8 @@ database/migrations/2026_11_18_000001_create_price_comparison_tables.php
 compare-tool/match_products.py
 compare-tool/matching_rules.json
 compare-tool/fetch_all_items.py
+compare-tool/free_delivery_to_csv.py
+compare-tool/australian_postcodes.csv
 .env.example
 )
 files_old2=(app/Services/UmallTrackingService.php

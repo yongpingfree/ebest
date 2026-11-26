@@ -18,6 +18,9 @@ return [
     'compare_start_minute' => (int) env('COMPARE_START_MINUTE', 30),
     // Umall tracking scripts (admin > Umall tracking)
     'umall_dir' => env('UMALL_TOOL_DIR', base_path('umall-tool')),
+    // free-shipping threshold lookup (report 2); token is a secret, set it in .env only
+    'umall_api_token' => env('UMALL_API_TOKEN', ''),
+    'umall_pinkage_url' => env('UMALL_PINKAGE_URL', 'https://b.umall.com.au/api/h5app/wxapp/delivery/getPinkageList'),
     'umall_python' => env('UMALL_PYTHON', 'python3'),
     'script' => env('PDF_TRANSFORM_SCRIPT'),
 ];

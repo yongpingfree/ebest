@@ -5,7 +5,7 @@ module MagicBean
     belongs_to :default_freight_template, foreign_key: "freight_template_id", inverse_of: :exceptional_freight_templates
 
     # validation macros
-    validates :au_suburb_freight_templates, length: { minimum: 1, too_short: "不能少于#{count}个" }
+    validates :au_suburb_freight_templates, length: { minimum: 1, too_short: "不能少于1个" }
     # callbacks
     before_validation :set_store_id
 

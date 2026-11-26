@@ -479,8 +479,8 @@ def score(r, u, e):
     if cm.get('enabled') and u['dim'] and u['dim'] == e['dim'] and u['chars'] and u['brand'] and e['brand'] \
             and (u['brand'] in e['flat'] or e['brand'] in u['flat']) \
             and min(u['size'], e['size']) / max(u['size'], e['size']) >= cm['min_spec_ratio'] \
-            and len(u['chars']) >= cm['min_chars'] \
-            and len(u['chars'] & e['chars']) / len(u['chars']) >= cm['min_containment']:
+            and ((len(u['chars']) >= cm['min_chars'] and len(u['chars'] & e['chars']) / len(u['chars']) >= cm['min_containment'])
+                 or (len(u['chars']) >= cm.get('min_chars_full', 99) and e['group'] in cm.get('full_groups', []) and u['chars'] <= e['chars'])):
         sm = max(sm, cm['sim_floor'])      # 同品牌同规格，umall 标题核心字几乎都在 ebest 标题里（ebest 标题常附带一长串营销词）
     if classified and not r.same_group(u['group'], e['group']) and sm < r.c['group_relax_score']:
         return None

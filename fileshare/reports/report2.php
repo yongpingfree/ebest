@@ -81,6 +81,8 @@ return function (Request $request) {
                     ->whereNotNull('category')->where('category', '<>', '')->distinct()->pluck('category'))
                 ->unique()->sort()->values(),
             'products' => $prods,
+            'free_shipping' => app(\App\Services\PriceComparisonService::class)->freeShippingText(),
+            'free_delivery_file' => is_file(app(\App\Services\PriceComparisonService::class)->freeDeliveryCsvPath()),
             'min' => DB::table('price_comparison')->min('load_time'),
             'max' => DB::table('price_comparison')->max('load_time'),
         ]);
@@ -114,6 +116,82 @@ return function (Request $request) {
         $side = $request->query('side') === 'ebest' ? 'ebest' : 'umall';
 
         return response()->json(['load_time' => $latest, 'rows' => $b->where('side', $side)->orderBy('category')->orderBy('title')->limit(5000)->get()]);
+    }
+
+    // 13: every row of price_comparison + price_comparison_unmatched inside the date range, one CSV.
+    // No "latest load" / hidden-pair filtering; umall products (matched + unmatched) share the umall columns.
+    if ($data === 'export_all') {
+        $from = preg_match('/^\d{4}-\d{2}-\d{2}$/', $start) ? $start . ' 00:00:00' : null;
+        $to = preg_match('/^\d{4}-\d{2}-\d{2}$/', $end) ? $end . ' 23:59:59' : null;
+        $range = fn ($q) => $q->when($from, fn ($q) => $q->where('load_time', '>=', $from))
+            ->when($to, fn ($q) => $q->where('load_time', '<=', $to));
+
+        // 售量 MMDD (one column per date in range): umall available_quantity at the last load of the previous day
+        // minus that at the last load of the day (negative = probable restock). Joined to umall_tracking by product title.
+        $d1 = $from ?: DB::table('price_comparison')->min('load_time') ?: DB::table('price_comparison_unmatched')->min('load_time');
+        $d2 = $to ?: DB::table('price_comparison')->max('load_time') ?: DB::table('price_comparison_unmatched')->max('load_time');
+        $days = [];
+        if ($d1 && $d2) {
+            for ($t = strtotime(substr($d1, 0, 10)), $e = strtotime(substr($d2, 0, 10)); $t <= $e && count($days) < 366; $t = strtotime('+1 day', $t)) {
+                $days[] = date('Y-m-d', $t);
+            }
+        }
+        $qty = [];   // title => day => quantity
+        if ($days) {
+            $lastLoad = DB::table('umall_tracking')
+                ->where('load_time', '>=', date('Y-m-d', strtotime('-1 day', strtotime($days[0]))) . ' 00:00:00')
+                ->where('load_time', '<=', end($days) . ' 23:59:59')
+                ->selectRaw('DATE(load_time) as d, MAX(load_time) as t')->groupBy(DB::raw('DATE(load_time)'))->pluck('t', 'd');
+            foreach ($lastLoad->chunk(30) as $chunk) {
+                $dayOf = array_flip($chunk->all());
+                foreach (DB::table('umall_tracking')->whereIn('load_time', $chunk->values())->cursor() as $r) {
+                    $qty[$r->item_name][$dayOf[$r->load_time]] ??= $r->available_quantity;
+                }
+            }
+        }
+        $sales = function (string $title, string $day) use ($qty) {
+            $prev = date('Y-m-d', strtotime('-1 day', strtotime($day)));
+            $a = $qty[$title][$prev] ?? null;
+            $b = $qty[$title][$day] ?? null;
+
+            return ($a === null || $b === null) ? '' : (int) $a - (int) $b;
+        };
+        $salesCols = fn (string $title, bool $isUmall) => array_map(fn ($d) => $isUmall ? $sales($title, $d) : '', $days);
+        $salesHead = array_map(fn ($d) => '售量 ' . date('md', strtotime($d)), $days);
+
+        $name = 'price_comparison_all_' . ($start ?: 'start') . '_' . ($end ?: 'end') . '_' . date('Ymd_His') . '.csv';
+
+        return response()->streamDownload(function () use ($range, $salesHead, $salesCols) {
+            $o = fopen('php://output', 'w');
+            fwrite($o, "\xEF\xBB\xBF");
+            $put = fn (array $r) => fputcsv($o, $r, ',', '"', '');
+            $put(array_merge(['result', 'common category', 'umall product title'], $salesHead, ['umall sku', 'ebest product title', 'ebest sku',
+                'umall selling price', 'ebest selling price', 'umall unit price', 'umall unit', 'ebest unit price', 'ebest unit',
+                'price diff pct', 'lower side', 'umall promo note', 'ebest promo note', 'load time']));
+            foreach ($range(DB::table('price_comparison'))->orderBy('load_time')->orderBy('category')->orderBy('umall_title')->cursor() as $r) {
+                $put(array_merge(['matched', $r->category, $r->umall_title], $salesCols($r->umall_title, true), [$r->umall_sku, $r->ebest_title, $r->ebest_sku,
+                    $r->umall_price, $r->ebest_price, $r->umall_unit_price, $r->umall_unit, $r->ebest_unit_price, $r->ebest_unit,
+                    $r->price_diff_pct, $r->lower_side, $r->umall_promo_note, $r->ebest_promo_note, $r->load_time]));
+            }
+            foreach ($range(DB::table('price_comparison_unmatched'))->orderBy('load_time')->orderBy('side')->orderBy('category')->orderBy('title')->cursor() as $r) {
+                $um = $r->side === 'umall';
+                $put(array_merge([$um ? 'umall_unmatched' : 'ebest_unmatched', $r->category, $um ? $r->title : ''],
+                    $salesCols($r->title, $um), [$um ? $r->sku : '', $um ? '' : $r->title, $um ? '' : $r->sku,
+                    $um ? $r->price : '', $um ? '' : $r->price,
+                    $um ? $r->unit_price : '', $um ? $r->unit : '', $um ? '' : $r->unit_price, $um ? '' : $r->unit,
+                    '', '', $um ? $r->promo_note : '', $um ? '' : $r->promo_note, $r->load_time]));
+            }
+            fclose($o);
+        }, $name, ['Content-Type' => 'text/csv; charset=utf-8']);
+    }
+
+    if ($data === 'free_delivery') {
+        $file = app(\App\Services\PriceComparisonService::class)->freeDeliveryCsvPath();
+        if (! is_file($file)) {
+            return response('文件尚未生成，请等待下一次对比任务运行。', 404);
+        }
+
+        return response()->download($file, 'umallfreedelivery.csv', ['Content-Type' => 'text/csv; charset=utf-8']);
     }
 
     // the 4 downloads serve the files generated at the end of the latest comparison run (no query, no filters)
@@ -203,7 +281,7 @@ return function (Request $request) {
   <label>商品<select id="prod"></select></label>
   <label>商品搜索（关键词，空格分隔）<input type="search" id="kw" placeholder="标题 / SKU"></label>
   <button id="search" type="button">搜索</button>
-</div><div class="muted" id="range"></div></div>
+</div><div class="muted" id="range"></div><div id="ship" style="margin-top:4px;font-weight:600;color:#d92d20"></div></div>
 <div class="card"><div class="stats">
   <div class="stat"><span>对比商品数</span><b id="s_all">-</b></div>
   <div class="stat u"><span>Umall 价格更低</span><b id="s_u">-</b></div>
@@ -221,7 +299,8 @@ return function (Request $request) {
     <button id="dl_e" type="button">下载 eBest 价格更高的商品 (CSV)</button>
     <button id="dl_uu" type="button">下载 Umall 未匹配商品 (CSV)</button>
     <button id="dl_ue" type="button">下载 eBest 未匹配商品 (CSV)</button>
-  </div><div class="muted">按当前筛选条件，每个商品取最近一次对比结果（页面隐藏的记录同样不会导出）；未匹配商品取所选范围内最近一次加载，按类别筛选（不受商品筛选影响）</div></div>
+    <button id="dl_all" type="button">导出所选日期全部数据 (CSV)</button>
+  </div><div class="muted">“导出所选日期全部数据”按开始/结束日期导出匹配与未匹配两张表的全部记录（含历史加载，不受类别、商品、搜索及隐藏规则影响），Umall 的匹配与未匹配商品合并在同一组列中，result 列标明 matched / umall_unmatched / ebest_unmatched。Umall 商品名称后按所选日期每天一列“售量 MMDD”＝前一天最后一次加载的 available_quantity － 当天最后一次加载的 available_quantity（负数表示可能补货；缺数据留空）。<br>按当前筛选条件，每个商品取最近一次对比结果（页面隐藏的记录同样不会导出）；未匹配商品取所选范围内最近一次加载，按类别筛选（不受商品筛选影响）</div></div>
 </div>
 <script>
 const $ = id => document.getElementById(id), KEY = new URLSearchParams(location.search).get('key');
@@ -283,11 +362,15 @@ const dl = side => location.href = qs({data: 'export', higher: side});          
 const dlu = side => location.href = qs({data: 'export_unmatched', side});
 $('search').onclick = () => load(); $('kw').onkeydown = e => { if (e.key === 'Enter') load(); };
 $('dl_uu').onclick = () => dlu('umall'); $('dl_ue').onclick = () => dlu('ebest');
+$('dl_all').onclick = () => location.href = qs({data: 'export_all', start: $('start').value, end: $('end').value});
 $('dl_u').onclick = () => dl('umall'); $('dl_e').onclick = () => dl('ebest');
 (async () => {
   meta = await (await fetch(qs({data: 'meta'}))).json();
   $('cat').innerHTML = '<option value="">(All)</option>' + meta.categories.map(c => `<option>${esc(c)}</option>`).join('');
   $('range').textContent = meta.min ? `可用数据：${meta.min} ~ ${meta.max}` : '暂无数据，请等待每日任务运行';
+  if (meta.free_shipping && meta.free_delivery_file) {
+    $('ship').innerHTML = `<a href="${qs({data: 'free_delivery'})}" title="下载各邮编免运费门槛 (CSV)" style="color:inherit">${esc(meta.free_shipping)}</a>`;
+  } else { $('ship').textContent = meta.free_shipping || ''; }
   fillProducts();
   $('cat').onchange = () => { fillProducts(); load(); };   // keeps the unmatched view if one is open
   ['prod', 'start', 'end'].forEach(i => $(i).onchange = () => { mode = 'matched'; load(); });

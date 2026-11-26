@@ -1,0 +1,14 @@
+filename: routes/web.php
+scp: stat local "vms/routes/web.php": No such file or directory
+filename: resources/views/layouts/base.blade.php
+scp: stat local "vms/resources/views/layouts/base.blade.php": No such file or directory
+filename: public/vms/css/vms.css
+scp: stat local "vms/public/vms/css/vms.css": No such file or directory
+filename: public/vms/images/ebest.png
+scp: stat local "vms/public/vms/images/ebest.png": No such file or directory
+filename: public/vms/images/logo.png
+scp: stat local "vms/public/vms/images/logo.png": No such file or directory
+On the server (cd /var/www/vms), run:
+  php artisan migrate --force
+  php artisan optimize:clear
+  php artisan queue:restart

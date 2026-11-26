@@ -1,0 +1,31 @@
+after saving a new item, getting 500 Server Error
+
+with below in log
+
+[2026-11-25 19:00:40] production.ERROR: Method Illuminate\Validation\Validator::validateInteger|min does not exist. {"userId":2,"exception":"[object] (BadMethodCallException(code: 0): Method Illuminate\\Validation\\Validator::validateInteger|min does not exist. at /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php:1842)
+[stacktrace]
+#0 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(773): Illuminate\\Validation\\Validator->__call()
+#1 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(495): Illuminate\\Validation\\Validator->validateAttribute()
+#2 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(530): Illuminate\\Validation\\Validator->passes()
+#3 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(617): Illuminate\\Validation\\Validator->fails()
+#4 /var/www/vms/vendor/laravel/framework/src/Illuminate/Foundation/Providers/FoundationServiceProvider.php(158): Illuminate\\Validation\\Validator->validate()
+#5 /var/www/vms/vendor/laravel/framework/src/Illuminate/Macroable/Traits/Macroable.php(132): Illuminate\\Http\\Request->{closure:Illuminate\\Foundation\\Providers\\FoundationServiceProvider::registerRequestValidation():150}()
+#6 /var/www/vms/app/Http/Controllers/ItemController.php(47): Illuminate\\Http\\Request->__call()
+#7 /var/www/vms/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\\Http\\Controllers\\ItemController->store()
+#8 /var/www/vms/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#9 /var/www/vms/vendor/laravel/framework/src/I
+
+same error
+
+[2026-11-25 19:00:40] production.ERROR: Method Illuminate\Validation\Validator::validateInteger|min does not exist. {"userId":2,"exception":"[object] (BadMethodCallException(code: 0): Method Illuminate\\Validation\\Validator::validateInteger|min does not exist. at /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php:1842)
+[stacktrace]
+#0 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(773): Illuminate\\Validation\\Validator->__call()
+#1 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(495): Illuminate\\Validation\\Validator->validateAttribute()
+#2 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(530): Illuminate\\Validation\\Validator->passes()
+#3 /var/www/vms/vendor/laravel/framework/src/Illuminate/Validation/Validator.php(617): Illuminate\\Validation\\Validator->fails()
+#4 /var/www/vms/vendor/laravel/framework/src/Illuminate/Foundation/Providers/FoundationServiceProvider.php(158): Illuminate\\Validation\\Validator->validate()
+#5 /var/www/vms/vendor/laravel/framework/src/Illuminate/Macroable/Traits/Macroable.php(132): Illuminate\\Http\\Request->{closure:Illuminate\\Foundation\\Providers\\FoundationServiceProvider::registerRequestValidation():150}()
+#6 /var/www/vms/app/Http/Controllers/ItemController.php(47): Illuminate\\Http\\Request->__call()
+#7 /var/www/vms/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(46): App\\Http\\Controllers\\ItemController->store()
+#8 /var/www/vms/vendor/laravel/framework/src/Illuminate/Routing/Route.php(276): Illuminate\\Routing\\ControllerDispatcher->dispatch()
+#9 /var/www/vms/vendor/laravel/framework/src/I

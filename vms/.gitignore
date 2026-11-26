@@ -1,0 +1,13 @@
+*.log
+.DS_Store
+.env
+/vendor
+/node_modules
+/storage/app/public/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+/bootstrap/cache/*
+!.gitkeep
+/database/*.sqlite

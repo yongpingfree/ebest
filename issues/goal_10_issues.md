@@ -559,6 +559,30 @@ Peppito 苏打饼干 黑松露芝士焗龙虾味 336g
 【整箱】喜茶 小奶茉 茉莉浓抹牛乳茶奶茶饮料 350ML*15
 refer to latest ebest product in umall_ebest/ebest folder
 11， in the drop down menu, even an entire category is not matched, the category should be listed as well.
+12, the following umall product should have match with eBest, but not there as of 20 Nov 2026 (refer to ebest_items_20261120.json)
+Obento 紫菜（寿司用） 25g
+不等 蟹黄鲜酱 100g
+【冻】安井 杂粮包 800g, fixed
+【冻】思念 虾仁菌菇水饺 400g
+【冻】我爱饺子 牛肉羊肉饺子 480g
+【冻】淘大 糯米鸡 180g
+乐事 薯片 墨西哥鸡汁番茄味 70g
+乐事 薯片 德克萨斯烧烤味 70g
+乐事 薯片 意大利香浓红烩味 70g
+乐事 薯片 美国经典原味 70g
+乐事 薯片 黄瓜味 70g
+【整箱】农夫山泉 茶π 蜜桃乌龙茶  500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶π 西柚茉莉花茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶π 青提乌龙茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶π柚子绿茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】农夫山泉 茶兀 茉莉花柠檬茶 500ml*15瓶/箱 新老包装随机发货
+【整箱】喜茶 小奶茉 茉莉浓抹牛乳茶奶茶饮料 350ML*15
+13, create a button in report 2, so that with the dates selection export all data in the following two tables, into one csv file, combine the umall products for both matched and unmatched
+price_comparison and price_comparison_unmatched 
+insert new columns between colume 3 & 4 (next to umall product name)
+- one colume per selected date in the range, in the form of '售量 MMDD'
+- for each date, get umall quantity from last timestamp a d the umall quantity from last timestamp of previous day, then latter minus current date value
+- minus is ok as it indictes possible restock
 # enhancement
 1, for any mentioning of below, list in notes and include in table view and export csv:
 such as "5.99，三件8折". It looks like a multi-buy promotion you spotted. Our price rule doesn't handle "buy 3, get 20% off", so it's probably an input for a rule change.

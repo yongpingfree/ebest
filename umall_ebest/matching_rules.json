@@ -1765,7 +1765,11 @@
     "MEIJI": "明治",
     "BANDAI": "万代",
     "Bandai": "万代",
-    "Mold Removal Gel": "除霉啫喱"
+    "Mold Removal Gel": "除霉啫喱",
+    "三鲜虾仁": "虾仁",
+    "珍珠鸡": "糯米鸡",
+    "Pearl Sticky Rice Chicken": "糯米鸡",
+    "Tao Da Amoy": "淘大"
   },
   "text_aliases_note": "比较前先统一的错别字/异写",
   "attribute_exact_groups": [
@@ -2022,7 +2026,8 @@
       "\\d+\\s*贴"
     ],
     "速冻面点": [
-      "菜包"
+      "菜包",
+      "糯米鸡"
     ]
   },
   "category_title_patterns_exclude": [
@@ -2043,7 +2048,11 @@
     "min_chars": 4,
     "min_containment": 0.85,
     "sim_floor": 0.6,
-    "说明": "两边品牌相同、规格一致（差异<3%），且 umall 标题核心汉字（去品牌、规格、括号备注）至少 85% 出现在 ebest 标题里，就认为标题相似（ebest 标题常带一长串营销词，拉低了 Jaccard 相似度）"
+    "说明": "两边品牌相同、规格一致（差异<3%），且 umall 标题核心汉字（去品牌、规格、括号备注）至少 85% 出现在 ebest 标题里，就认为标题相似（ebest 标题常带一长串营销词，拉低了 Jaccard 相似度）",
+    "min_chars_full": 3,
+    "full_groups": [
+      "速冻面点"
+    ]
   },
   "case_vs_single": {
     "enabled": true,

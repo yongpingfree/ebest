@@ -1,0 +1,44 @@
+WITH exc AS (   -- suburbs explicitly listed in an exceptional template
+  SELECT asft.au_suburb_id, e.id AS exc_id, e.freight_template_id AS default_id,
+         e.app_free_shipping_amount_in_cent  AS app_free,
+         e.web_free_shipping_amount_in_cent  AS web_free,
+         e.mini_program_free_shipping_amount_in_cent AS mp_free
+  FROM freight_templates e
+  JOIN au_suburb_freight_templates asft ON asft.freight_template_id = e.id
+  WHERE e.type = 'MagicBean::ExceptionalFreightTemplate'
+),
+def AS (        -- default templates (one per store and delivery_type)
+  SELECT d.id AS default_id, d.store_id, d.delivery_type,
+         d.app_free_shipping_amount_in_cent  AS app_free,
+         d.web_free_shipping_amount_in_cent  AS web_free,
+         d.mini_program_free_shipping_amount_in_cent AS mp_free
+  FROM freight_templates d
+  WHERE d.type = 'MagicBean::DefaultFreightTemplate'
+  AND EXISTS (SELECT 1
+                FROM freight_templates_items fti
+                JOIN items i ON i.id = fti.item_id
+                WHERE fti.freight_template_id = d.id
+                  AND i.freight_type = 2)
+)
+SELECT DISTINCT COALESCE(exc.exc_id,d.default_id) template_id, ftt.name,s.state_short_name AS state, s.name AS suburb, s.postal_code,
+       CASE WHEN exc.exc_id IS NULL THEN 'default' ELSE 'exceptional' END AS source,
+       d.delivery_type,
+       COALESCE(exc.app_free, d.app_free) / 100.0 AS app_threshold,
+       COALESCE(exc.web_free, d.web_free) / 100.0 AS web_threshold,
+       COALESCE(exc.mp_free,  d.mp_free)  / 100.0 AS mini_program_threshold
+FROM au_suburbs s
+LEFT JOIN exc ON exc.au_suburb_id = s.id
+JOIN def d ON d.default_id = exc.default_id
+          OR (exc.exc_id IS NULL AND d.store_id = s.store_id)
+LEFT JOIN freight_template_translations ftt on 
+         (exc.exc_id is not null and freight_template_id=exc.exc_id OR exc.exc_id is null and freight_template_id=d.default_id)
+WHERE s.state_short_name in ('ACT','NSW') 
+      and ftt.name in ('自派默認模板','Newcastle','shellharbour','Church Point','新運費模板69','wollongong','ACT新模式配送门槛','Central Coast','新運費模板59')
+--       and (exc.exc_id is not null and 7900 IN (COALESCE(exc.app_free),
+--                COALESCE(exc.web_free),
+--                COALESCE(exc.mp_free))
+--          OR
+--           exc.exc_id is null and 7900 IN (COALESCE(d.app_free),
+--                COALESCE(d.web_free),
+--                COALESCE(d.mp_free)))
+ORDER BY s.state_short_name, s.name;

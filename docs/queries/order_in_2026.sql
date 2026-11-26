@@ -1,0 +1,1 @@
+select title, sum(quantity) from order_items where created_at>='2026-01-01 00:00:00' group by title order by 2 desc limit 100;

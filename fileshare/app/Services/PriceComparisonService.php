@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Symfony\Component\Process\Process;
 
 /**
@@ -88,12 +89,81 @@ class PriceComparisonService
         $this->exec([$py, $dir . '/match_products.py', '--umall-dir', $umall, '--ebest', $ebest,
             '--rules', $dir . '/matching_rules.json', '--out', $csv, '--extended', '--unmatched-out', $unmatched], $dir, 'match_products.py');
 
+        $this->refreshFreeShipping();             // never fails the comparison
         $loadTime = now()->toDateTimeString();    // same load_time for matched and unmatched rows
         $this->loadUnmatched($unmatched, $loadTime);
         $n = $this->loadCsv($csv, $loadTime);
         $this->exportLatestFiles($loadTime);      // the 4 download files of the report page
 
         return $n;
+    }
+
+    public function freeShippingPath(): string
+    {
+        return storage_path('app/compare/free_shipping.json');
+    }
+
+    /** Minimum non-zero 'amount' of umall's getPinkageList (free-shipping threshold); keeps the previous value on failure. */
+    public function refreshFreeShipping(): ?float
+    {
+        $token = (string) config('fileshare.umall_api_token');
+        if ($token === '') {
+            return null;
+        }
+        try {
+            $res = Http::timeout(30)->withHeaders([
+                'accept' => '*/*', 'authorization' => 'Bearer ' . $token, 'origin' => 'https://m.umall.com.au',
+                'platform' => 'wap', 'ulang' => 'zh',
+                'user-agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36',
+            ])->get(config('fileshare.umall_pinkage_url'), ['company_id' => 1]);
+            $amounts = [];
+            $json = $res->json() ?? [];
+            array_walk_recursive($json, function ($v, $k) use (&$amounts) {
+                if ($k === 'amount' && is_numeric($v) && (float) $v > 0) {
+                    $amounts[] = (float) $v;
+                }
+            });
+            if (! $res->successful() || ! $amounts) {
+                return null;
+            }
+            $min = min($amounts);
+            File::ensureDirectoryExists(dirname($this->freeShippingPath()), 0775);
+            $this->buildFreeDeliveryCsv($res->body());   // never fails the threshold lookup
+            file_put_contents($this->freeShippingPath(), json_encode(['amount' => $min, 'updated_at' => now()->toDateTimeString()]));
+
+            return $min;
+        } catch (\Throwable $e) {
+            report($e);
+
+            return null;
+        }
+    }
+
+    public function freeDeliveryCsvPath(): string
+    {
+        return storage_path('app/compare/umallfreedelivery.csv');
+    }
+
+    /** Convert the raw getPinkageList response into umallfreedelivery.csv (free_delivery_to_csv.py); the old file is kept on failure. */
+    private function buildFreeDeliveryCsv(string $rawJson): void
+    {
+        try {
+            $json = storage_path('app/compare/umallfreedelivery.json');
+            $tmp = storage_path('app/compare/umallfreedelivery.tmp.csv');
+            file_put_contents($json, $rawJson);
+            $this->exec([config('fileshare.umall_python'), $this->dir() . '/free_delivery_to_csv.py', $json, '-o', $tmp],
+                $this->dir(), 'free_delivery_to_csv.py');
+            rename($tmp, $this->freeDeliveryCsvPath());
+        } catch (\Throwable $e) {
+            report($e);
+        }
+    }
+
+    public function freeShippingText(): string
+    {
+        $d = is_file($this->freeShippingPath()) ? json_decode(file_get_contents($this->freeShippingPath()), true) : null;
+
+        return $d ? 'Umall消费满$' . rtrim(rtrim(number_format($d['amount'], 2, '.', ''), '0'), '.') . '免运费 (更新于' . substr($d['updated_at'], 0, 10) . ')' : '';
     }
 
     /** The four files the report page downloads (generated at the end of every comparison run). */

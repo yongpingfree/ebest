@@ -195,6 +195,48 @@ apps developer
 - any critial enhancement required (which may block functions)
 - any non-critical but important enhancement required
 
+12， list out the OMS/WMS/app change required for beansmile team in Word format
+
+first priority
+- 1, in the app/api/v1/items API, add a read-only stock and sales query by vendor, SKU or both
+  - if both vendor and SKU are provided in the input, return the items under the vendor and matching SKU
+  - if only vendor or SKU is provided, return the items matching vendor or SKU.
+  - today the API returns all current products
+- 2, security enchancement on the app/api/v1/items API (changes in both OMS and eBest Apps)
+  - add a configurable Authorization token, so that the API only returns if the client supplies the token
+  - implement the token in a version control between OMS and iOS/Android App, so that the Apps with valid token are released at same time
+  - in the transition period (assuming not all customer updated App), if the request coming from Genuine eBest App (e.g. containing valid headers of "app-os-version", "current-app-version", "current-store-id", "current-postal-code", "current-suburb" and "current-delivery-area-id" and "local"), the API still returns even the Authorization token is not provided or wrong.
+  - introduce a configurtion flag, to lift the transition arrangement (to be configured by eBest at later time, for example, after all customers have upgraded to latest eBest App)
+- 3, new API for per-vendor dispatch query:
+  - input: vendor name & date (yyyymmdd)
+  - output:
+    - (only if the date is today) a list of orders details to be dispatched, with expected delivery date
+    - (only if the date is today) a list of items (with sku) in shortage (quantity 0, or quantity will be 0 if all orders are dispatched)
+    - a list of products returned from customer and comments from customers and eBest operation team, in the past 10 days from the date (yyyymmdd) (including on the date)
+- 4, in the OMS, there are '导出数据' buttons for both products and orders, add two new priviledges as product_export and order_export, so that only users with product_export can export product data, and users with order_export can export order data.
+
+for the API security, the issue to be addressed is:
+$ cat test.json | jq . | head -10
+[
+  {
+    "id": 87955,
+    "created_at": "2024-09-26T15:54:47.012+10:00",
+    "updated_at": "2026-11-23T13:44:46.451+11:00",
+    "cn": "MagicBean::Item",
+    "store_id": 2,
+    "title": "【聚划算】【独家】【全澳最纯净牧场的自由鸡蛋】南澳袋鼠岛牧场纯正放养走地土鸡蛋 极品美味 特大号 700g",
+    "sub_title": null,
+    "short_title": "袋鼠岛 放养走地土鸡蛋 700g",
+
+13， analysis gap in 电商平台软件需求说明书 (V2).docx; and pro and con in the two proposed solution in proposal1 & proposal2
+- 电商平台软件需求说明书 (V2).docx is used for RFP
+- the requirement is to replace all exisitng OMS, WMS, and integration with iOS/Android Apps and WeChat Mini Program, as well as the vendor onboarding system
+- the requirement document is to cover all requirement, scoring criterial
+- the requirement needs to specify how data can be migrated to the new system 
+- the requirement needs to specify how the current workflow can be migrated to the new system
+- pro and con in the two proposals, and which is a better match
+
+13.1， please add the comments to respective sections in 电商平台软件需求说明书 (V2)_comments.docx
 # status
 
 1, 2026-11-2 to 2026-11-9
@@ -478,3 +520,7 @@ key = f"images/{uuid.uuid4()}-{filename}"
 s3.upload_file(local_path, BUCKET, key,
                ExtraArgs={"ACL": "public-read", "ContentType": content_type})
 public_url = f"https://{CDN_HOST}/{key}"
+27, in the report 2, run the following command to get the minimum non zero amount, and display a text of 'Umall消费满$<amount>免运费 (更新于YYYY-MM-DD)' the command run at same time with the comparison job
+
+  curl --url 'https://b.umall.com.au/api/h5app/wxapp/delivery/getPinkageList?company_id=1'   -H 'accept: */*'   -H 'accept-language: en-GB,en-US;q=0.9,en;q=0.8'   -H 'authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vYi51bWFsbC5jb20uYXUvYXBpL2g1YXBwL3d4YXBwL2xvZ2luIiwiaWF0IjoxNzkyOTM1Mzc2LCJleHAiOjE3OTU5NTkzNzYsIm5iZiI6MTc5MjkzNTM3NiwianRpIjoiSjRoeEJGWnNzMW9RTzY1NyIsInN1YiI6IjkyMjQ2MTc0OTkyNjAwMV9lc3BpZXJfY29tcGFueWlkX2VzcGllcl8xIiwicHJ2IjoiOTE1ZWYzYjE0NTc5N2Q5NjM2ZTY2Nzg2NjA4OWM2YmIxZmUzMmUxYyIsImlkIjoiOTIyNDYxNzQ5OTI2MDAxX2VzcGllcl9jb21wYW55aWRfZXNwaWVyXzEiLCJ1c2VyX2lkIjoiOTIyNDYxNzQ5OTI2MDAxIiwiY29tcGFueV9pZCI6IjEiLCJncmFkZV9pZCI6IjEiLCJtb2JpbGUiOiI0MTU0NDY0ODIiLCJ1c2VyX2NhcmRfY29kZSI6IjJCRDhBMEE1NTQzMSIsIm9mZmxpbmVfY2FyZF9jb2RlIjpudWxsLCJkaXNhYmxlZCI6ZmFsc2UsIm9wZXJhdG9yX3R5cGUiOiJ1c2VyIiwiaW52aXRlcl9pZCI6IjAiLCJzb3VyY2VfaWQiOiIwIiwibW9uaXRvcl9pZCI6IjAiLCJsYXRlc3Rfc291cmNlX2lkIjoiMCIsImxhdGVzdF9tb25pdG9yX2lkIjoiMCIsImRldmljZV9pZCI6IkI5NEIwMkM0LUYzMTYtNDI3RS1BMDgzLUU0MUM2OENBQjVFMiIsImNyZWF0ZWQiOjE2NjY3NTI3MjZ9.gpf5HsXmLk1xPX8gaebFDjLidzrJxckXXNtY9BUUSeM'   -H 'origin: https://m.umall.com.au'   -H 'platform: wap'   -H 'priority: u=1, i'   -H 'sec-ch-ua: "Not:A-Brand";v="8", "Chromium";v="156", "Google Chrome";v="156"'   -H 'sec-ch-ua-mobile: ?0'   -H 'sec-ch-ua-platform: "macOS"'   -H 'sec-fetch-dest: empty'   -H 'sec-fetch-mode: cors'   -H 'sec-fetch-site: same-site'   -H 'ulang: zh'   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36' | jq . | grep amount
+28, for umall, there's updated categoryMapping.csv in the server, when fetching new umall product, use the new mapping for category, also update historical category in the db if the mapping was not done before.
