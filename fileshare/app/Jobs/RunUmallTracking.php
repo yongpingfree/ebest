@@ -14,13 +14,13 @@ class RunUmallTracking implements ShouldQueue
     public int $timeout = 3300;
     public int $tries = 1;
 
-    public function __construct(public int $runId) {}
+    public function __construct(public int $runId, public bool $fetch = true) {}
 
     public function handle(UmallTrackingService $svc): void
     {
         $svc->updateRun($this->runId, ['status' => 'running', 'started_at' => now()]);
         try {
-            $n = $svc->run();
+            $n = $svc->run($this->fetch);
             $svc->updateRun($this->runId, ['status' => 'done', 'rows' => $n, 'message' => "Loaded $n rows.", 'finished_at' => now()]);
         } catch (\Throwable $e) {
             Log::error('UM tracking failed', ['error' => $e->getMessage()]);

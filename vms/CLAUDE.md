@@ -9,7 +9,72 @@
 - support export of new PO document
 - support status viewing of new item and PO
 
-2, to be updated
+2, based on the current implement, I need to provide a MVP version for friendly vendor and internal team to test, please suggest:
+- a MVP scope and boundaries
+- assuming no change in OMS/WMS would be possible, so please highlight any manual integratio steps
+- all detailed steps/development to achive the MVP within 3 days
+- a slide desk showing each step vendor/option needs to go through from vendor onboarding till successful product delivery
+
+3, make the following updates
+- a language toggle for Chinese and English for /vms and /vms/register entry
+  - all menu and input files in /vms should support both  Chinsee and English
+  - /vms/staff remain as Chinese by default
+- vendor is able to delete an uploaded image and re-upload, the deleted image should be physically removed from cdn at same time
+- for new vendor registration, enforce vendor to create at least one brand, and upload brand image
+- in the /vms, add one brand management menu
+- for all new Brand, eBest staff to fill in the brand ID created in WMS
+- when exporting vendor, options to do multiple select, and last record is the SQL for inserting to suppliers table (refer wms_suppliers.sql)
+- after a new vendor registration, email eBest staff for approval
+- when creating a new item, vendor can select brand from drop down menu (showing id-name)
+
+# to do
+0， support chinese/english
+1, make sure any uploaded image can be deleted
+2, for new vendor registration, one brand to be created as mandatory
+3, in ventory management portal, add option to manage Brand and upload images
+4, download from a list of category and subcategory from oms
+5, in the vendor onboarding, when vendor create a new item, option to select category and subcategory (from drop down manual), or create new category, subcategory
+6, when exporting vendor, options to do multiple select, and last record is the SQL for inserting to suppliers table (refer wms_suppliers.sql)
+7, after a new vendor registration, email eBest staff for approval
+8, (defered) where to update sellable item?
+
+# notes on sellable quantity
+可售数量怎么形成
+
+1. 审核采购单时,WMS 会检查 available_qty 是否等于收货明细合计,不一致则报错"收货数量与订单数量不符"。
+2. 审核通过后,WMS 调用 updatePOStock,按条码加到 WMS 自己的 stocks 表,并写一条 stock_logs(note 为 po)。
+3. 定时任务 syncPOtoOMS 把已审核且 syncback=0 的采购单行推给 OMS 的 batch_update_quantity_v3:
+   - 推送的数量是 available_qty,是增量,并不是库存绝对值。
+   - OMS 做的是 sku.quantity = 旧库存 + 新增量(stock_keeping_units.rb:27)。
+   - allow_sync 不是 Y 或 OMS 时,数量按 0 推送,只更新进价。
+   - 推送成功后采购单行的 syncback 置 1,防止重复加库存。
+4. 所以 OMS 的 sku.quantity 是该 SKU 所有采购单入库量的累计结果,再被订单扣减。每个 SKU 只有一个库存数字。
+
+已售数量怎么形成
+
+- 下单时 OMS 在 after_create 中执行 decrease_inventory!,直接减 sku.quantity(order.rb:327、stock_keeping_unit.rb:250)。
+- 同时执行 increase_sales_count!,加到商品(item)级别的 sales_count。取消订单时 decrease_sales_count! 回退,退款或售后会把库存加回。
+- sales_count 是商品级累计数,不分采购单,也不分供应商。
+- OMS 订单行里没有采购单号。WMS 的订单拣货和 stocks 也只按条码记数量,不记来自哪张采购单。
+
+对 VMS 的影响
+
+1. 按采购单的已售数量,在 OMS 和 WMS 中都查不到。 VMS 需要自己按先进先出(FIFO)分摊,这正是我上一轮方案里的做法。
+2. 销量数据来源: OMS 订单行(order_items)有 SKU、数量和订单日期,是可靠来源。sales_count 太粗,不能用。MVP 阶段由运营导出订单行文件上传;第 2 阶段由 goal 12 第 1 项的只读接口提供。
+3. 库存重复入账风险: batch_update_quantity_v3 是增量更新。如果 VMS 以后用它推送供应商配送采购单,同时 WMS 又处理同一张单,库存就会加两次。VMS 计算出的可售数量也只能当"参考值",MVP 里由运营手工更新 OMS(M5),避免重复。
+4. 供应商配送采购单 在 WMS 里也要走收货和审核才会加库存。"提交即生效"只是 VMS 自己的口径,与 OMS 实际库存会有差异,需要在对账时说明。
+
+# inputs
+1, categories and categories_translation table schema in oms
+docs/reference folder
+categories.sql
+and categories_translation.sql
+
+2, brand sample
+brand sample.png
+
+3, wms suppliers table
+wms_suppliers.sql
 
 # issues
  for any issue fix, update fileupload.sh

@@ -23,6 +23,8 @@ compare-tool/fetch_all_items.py
 compare-tool/free_delivery_to_csv.py
 compare-tool/australian_postcodes.csv
 .env.example
+app/Services/UmallTrackingService.php
+app/Jobs/RunUmallTracking.php
 )
 files_old2=(app/Services/UmallTrackingService.php
 app/Jobs/RunUmallTracking.php
@@ -35,7 +37,6 @@ database/migrations/2026_11_16_000001_create_umall_tracking_table.php
 umall-tool/script1_fetch.py
 umall-tool/script2_to_csv.py
 umall-tool/productList.md
-umall-tool/categoryMapping.csv
 app/Services/PdfSettingsService.php
 app/Filament/Pages/UploadFiles.php
 resources/views/filament/pages/upload-files.blade.php

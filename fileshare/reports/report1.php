@@ -28,7 +28,7 @@ return function (Request $request) {
     $end = (string) $request->query('end', '');
 
     // base query: category list (empty = all), title search (LIKE), optional exact product, time range
-    $base = function () use ($cats, $q, $product, $start, $end) {
+    $base = function (bool $noStart = false, ?string $from = null, bool $noEnd = false) use ($cats, $q, $product, $start, $end) {
         $b = DB::table('umall_tracking');
         if ($cats) {
             $b->whereIn('category', $cats);
@@ -39,14 +39,30 @@ return function (Request $request) {
         if ($product !== '') {
             $b->where('item_name', $product);
         }
-        if ($start !== '') {
-            $b->where('load_time', '>=', $start . ' 00:00:00');
+        $startDay = $from ?? $start;
+        if ($startDay !== '' && ! $noStart) {
+            $b->where('load_time', '>=', $startDay . ' 00:00:00');
         }
-        if ($end !== '') {
+        if ($end !== '' && ! $noEnd) {
             $b->where('load_time', '<=', $end . ' 23:59:59');
         }
 
         return $b;
+    };
+
+    // Quantity of every item at the LAST load of the previous day that has data (before $day).
+    // Only that one timestamp is used: no older values are carried forward. The range start is ignored on purpose.
+    $baselineQty = function (string $day) use ($base) {
+        $m = [];
+        $pl = $base(true)->where('load_time', '<', $day . ' 00:00:00')->max('load_time');
+        if (! $pl) {
+            return $m;
+        }
+        foreach ($base(true)->where('load_time', $pl)->get(['category', 'item_name', 'available_quantity']) as $r) {
+            $m[$r->category . "\x1f" . $r->item_name] = $r->available_quantity !== null ? (float) $r->available_quantity : null;
+        }
+
+        return $m;
     };
 
     if ($data === 'latestcsv') {
@@ -77,7 +93,7 @@ return function (Request $request) {
     }
 
     // Compare the first load with the last load inside [start, end]
-    $compare = function () use ($base) {
+    $compare = function () use ($base, $baselineQty) {
         $loads = $base()->distinct()->orderBy('load_time')->pluck('load_time');
         $res = ['counts' => ['up' => 0, 'down' => 0, 'same' => 0, 'new' => 0, 'missing' => 0, 'stockdown' => 0, 'stockup' => 0], 'rows' => [], 'first' => null, 'last' => null];
         if ($loads->isEmpty()) {
@@ -95,6 +111,8 @@ return function (Request $request) {
             $items[$r->category . "\x1f" . $r->item_name][$slot] = $eff;
             $qty[$r->category . "\x1f" . $r->item_name][$slot] = $r->available_quantity !== null ? (float) $r->available_quantity : null;
         }
+        // old qty = last known qty before the day of the last load (not the previous load: there can be several loads a day)
+        $oqty = $baselineQty(substr($last, 0, 10));
         foreach ($items as $k => $v) {
             [$cat, $name] = explode("\x1f", $k, 2);
             $old = $v['first'] ?? null;
@@ -109,10 +127,10 @@ return function (Request $request) {
                 $status = $hasNew ? 'new' : 'missing';
             }
             $res['counts'][$status]++;
-            $oq = $qty[$k]['first'] ?? null;
+            $oq = $oqty[$k] ?? null;
             $nq = $qty[$k]['last'] ?? null;
             $stock = 'same';
-            if ($oq !== null && $nq !== null && $first !== $last) {
+            if ($oq !== null && $nq !== null) {
                 $stock = $nq < $oq ? 'stockdown' : ($nq > $oq ? 'stockup' : 'same');
             }
             if ($stock !== 'same') {
@@ -141,22 +159,107 @@ return function (Request $request) {
                 }
             }
         }
-        $groups = [];
-        foreach ($base()->orderBy('load_time')->get(['load_time', 'category', 'item_name', 'price_aud', 'promotion_price_aud', 'available_quantity']) as $r) {
-            if ($keep !== null && ! isset($keep[$r->category . "\x1f" . $r->item_name])) {
-                continue;
+        // raw per-load series from day $from (default: the selected start)
+        $buildSeries = function (?string $from, bool $noEnd = false) use ($base, $keep, $baselineQty) {
+            $groups = [];
+            foreach ($base(false, $from, $noEnd)->orderBy('load_time')->get(['load_time', 'category', 'item_name', 'price_aud', 'promotion_price_aud', 'available_quantity']) as $r) {
+                if ($keep !== null && ! isset($keep[$r->category . "\x1f" . $r->item_name])) {
+                    continue;
+                }
+                $groups[$r->load_time][] = $r;
             }
-            $groups[$r->load_time][] = $r;
-        }
-        $out = [];
-        foreach ($groups as $t => $rs) {
-            $row = ['load_time' => $t, 'items' => count($rs)];
-            foreach (['price_aud', 'promotion_price_aud', 'available_quantity'] as $f) {
-                $vals = array_filter(array_map(fn ($r) => $r->$f, $rs), fn ($v) => $v !== null);
-                $row[$f] = $vals ? round(array_sum($vals) / count($vals), 2) : null;
+            $out = [];
+            // baseline = quantity at the last load of the previous day (never an earlier load of the same day,
+            // never older values carried forward); items missing there have no baseline and count as 0
+            $prevDayQty = [];
+            $curDayQty = [];
+            $curDay = null;
+            if ($groups) {
+                foreach ($baselineQty(substr((string) array_key_first($groups), 0, 10)) as $k => $v) {
+                    if ($keep === null || isset($keep[$k])) {
+                        $prevDayQty[$k] = $v;
+                    }
+                }
             }
-            $out[] = $row;
+            foreach ($groups as $t => $rs) {
+                $row = ['load_time' => $t, 'items' => count($rs)];
+                // 疑似销量 = old - new quantity when inventory went down, 0 when it went up (summed over the items)
+                $sold = null;
+                $amount = null;   // 估算销售额 = 疑似销量 x selling price (promotion price when present)
+                $curQty = [];
+                if ($curDay !== null && $curDay !== substr((string) $t, 0, 10)) {
+                    $prevDayQty = $curDayQty;   // day changed: the last load of the previous day is the baseline
+                    $curDayQty = [];
+                }
+                $curDay = substr((string) $t, 0, 10);
+                foreach ($rs as $r) {
+                    $curQty[$r->category . "\x1f" . $r->item_name] = $r->available_quantity;
+                    $o = $prevDayQty[$r->category . "\x1f" . $r->item_name] ?? null;
+                    if ($o !== null && $r->available_quantity !== null) {
+                        $units = max(0, $o - $r->available_quantity);
+                        $price = $r->promotion_price_aud ?? $r->price_aud;
+                        $sold = ($sold ?? 0) + $units;
+                        if ($price !== null) {
+                            $amount = ($amount ?? 0) + $units * (float) $price;
+                        }
+                    }
+                }
+                $curDayQty = $curQty;   // replaced, not merged: only the last load of the day counts
+                $row['suspected_sales'] = $sold;
+                $row['estimated_sales'] = $amount === null ? null : round($amount, 2);
+                foreach (['price_aud', 'promotion_price_aud', 'available_quantity'] as $f) {
+                    $vals = array_filter(array_map(fn ($r) => $r->$f, $rs), fn ($v) => $v !== null);
+                    $row[$f] = $vals ? round(array_sum($vals) / count($vals), 2) : null;
+                }
+                $out[] = $row;
+            }
+
+            return $out;
+        };
+
+        // Build ONE series over a fixed window (from the earlier of the selected start and 29 days before the latest
+        // load, up to the latest load, ignoring the selected end), smooth it, and only then cut the selected range.
+        // A day's value therefore never depends on which start/end dates are picked.
+        $latestDay = substr((string) DB::table('umall_tracking')->max('load_time'), 0, 10);
+        $winStart = date('Y-m-d', strtotime($latestDay . ' -29 days'));
+        if ($start !== '' && $start < $winStart) {
+            $winStart = $start;
         }
+        $out = $latestDay !== '' ? $buildSeries($winStart, true) : [];
+
+        // 疑似销量 / 估算销售额 more than 6x the typical value (median of the positive points) is an artefact of
+        // loading extra categories: replace it with the average of the nearest normal points before and after
+        // (only one neighbour -> that value; none -> null)
+        foreach (['suspected_sales', 'estimated_sales'] as $fld) {
+            $vals = array_column($out, $fld);
+            $pos = array_values(array_filter($vals, fn ($v) => $v !== null && $v > 0));
+            sort($pos);
+            $median = $pos ? (count($pos) % 2 ? $pos[intdiv(count($pos), 2)] : ($pos[count($pos) / 2 - 1] + $pos[count($pos) / 2]) / 2) : 0;
+            $isBig = fn ($v) => $median > 0 && $v !== null && $v > 6 * $median;
+            $fixed = $vals;
+            foreach ($vals as $i => $v) {
+                if (! $isBig($v)) {
+                    continue;
+                }
+                $prev = $next = null;
+                for ($j = $i - 1; $j >= 0; $j--) {
+                    if ($vals[$j] !== null && ! $isBig($vals[$j])) { $prev = $vals[$j]; break; }
+                }
+                for ($j = $i + 1; $j < count($vals); $j++) {
+                    if ($vals[$j] !== null && ! $isBig($vals[$j])) { $next = $vals[$j]; break; }
+                }
+                $n = array_values(array_filter([$prev, $next], fn ($x) => $x !== null));
+                $fixed[$i] = $n ? round(array_sum($n) / count($n), 2) : null;
+            }
+            foreach ($out as $i => $_) {
+                $out[$i][$fld] = $fixed[$i];
+            }
+        }
+
+        // cut the selected range
+        $from = $start !== '' ? $start . ' 00:00:00' : null;
+        $to = $end !== '' ? $end . ' 23:59:59' : null;
+        $out = array_values(array_filter($out, fn ($r) => ($from === null || $r['load_time'] >= $from) && ($to === null || $r['load_time'] <= $to)));
 
         return response()->json($out);
     }
@@ -227,6 +330,9 @@ return function (Request $request) {
   <div class="box"><label>Product</label><select id="prod"></select></div>
   <div class="box"><label>Indicator</label>
     <select id="ind">
+      <option value="combined" selected>疑似销量和销售额</option>
+      <option value="suspected_sales">疑似销量</option>
+      <option value="estimated_sales">估算销售额</option>
       <option value="price_aud">price_aud</option>
       <option value="promotion_price_aud">promotion_price_aud</option>
       <option value="available_quantity">available_quantity</option>
@@ -246,6 +352,7 @@ function params(o){
   return base + '?' + p;
 }
 const get = o => fetch(params(o)).then(r => r.json());
+const money = v => v === null || v === undefined || v === '' ? '' : '\$' + Number(v).toLocaleString('en-AU', {minimumFractionDigits: 2, maximumFractionDigits: 2});
 const fmt = v => v === null || v === undefined ? '' : v;
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const selected = sel => Array.from(sel.selectedOptions).map(o => o.value).filter(v => v !== '');   // (All) = empty = no filter
@@ -275,23 +382,36 @@ async function refresh(){
   \$('cmp').textContent = cmp.first ? 'Comparing load ' + cmp.first + '  ->  ' + cmp.last : 'No data in the selected range.';
   // chart
   const k = \$('ind').value;
-  \$('empty').textContent = series.length ? (f.product ? '' : 'Average of the ' + k + ' across the selected items.') : 'No data.';
+  \$('empty').textContent = series.length ? (f.product ? '' : (k === 'combined' ? 'Left axis: sum of 估算销售额 (\$); right axis: sum of 疑似销量 (volume), across the selected items.' : k === 'estimated_sales' ? 'Sum of 估算销售额 (疑似销量 x selling price) across the selected items.' : k === 'suspected_sales' ? 'Sum of the 疑似销量 (qty at the last load of the previous day - current qty, 0 when inventory increased) across the selected items.' : 'Average of the ' + k + ' across the selected items.')) : 'No data.';
   if (chart) chart.destroy();
-  chart = new Chart(\$('chart'), {type: 'line',
-    data: {labels: series.map(r => r.load_time), datasets: [{label: k, data: series.map(r => r[k]), borderColor: '#b5532f', backgroundColor: '#b5532f33', tension: .2, spanGaps: true, pointRadius: 3}]},
-    options: {maintainAspectRatio: false, scales: {y: {beginAtZero: true}}}});
+  const labels = series.map(r => r.load_time);
+  const ds = (label, key, color, axis) => ({label, data: series.map(r => r[key]), yAxisID: axis, borderColor: color, backgroundColor: color + '33', tension: .2, spanGaps: true, pointRadius: 3});
+  if (k === 'combined') {         // 估算销售额 ($, left axis) and 疑似销量 (volume, right axis) in different colours
+    chart = new Chart(\$('chart'), {type: 'line',
+      data: {labels, datasets: [ds('估算销售额 (\$)', 'estimated_sales', '#b5532f', 'y'), ds('疑似销量 (volume)', 'suspected_sales', '#2a6fb0', 'y1')]},
+      options: {maintainAspectRatio: false, interaction: {mode: 'index', intersect: false}, scales: {
+        y: {type: 'linear', position: 'left', beginAtZero: true, title: {display: true, text: '估算销售额 (\$)', color: '#b5532f'}, ticks: {color: '#b5532f', callback: v => '\$' + Number(v).toLocaleString('en-AU')}},
+        y1: {type: 'linear', position: 'right', beginAtZero: true, title: {display: true, text: '疑似销量 (volume)', color: '#2a6fb0'}, ticks: {color: '#2a6fb0'}, grid: {drawOnChartArea: false}}},
+        plugins: {tooltip: {callbacks: {label: c => c.dataset.label + ': ' + (c.dataset.yAxisID === 'y' ? money(c.parsed.y) : c.parsed.y)}}}}});
+  } else {
+    const isMoney = k === 'estimated_sales' || k.endsWith('price_aud');
+    chart = new Chart(\$('chart'), {type: 'line',
+      data: {labels, datasets: [ds(k, k, '#b5532f', 'y')]},
+      options: {maintainAspectRatio: false, scales: {y: {beginAtZero: true, ticks: {callback: v => isMoney ? '\$' + Number(v).toLocaleString('en-AU') : v}}},
+        plugins: {tooltip: {callbacks: {label: c => c.dataset.label + ': ' + (isMoney ? money(c.parsed.y) : c.parsed.y)}}}}});
+  }
   document.querySelectorAll('.tile[data-c]').forEach(t => t.classList.toggle('active', t.dataset.c === f.change));
   // table: time series for a specific product, otherwise (or after a figure was clicked) the comparison list
   if (f.product && !forceCompare) {
-    tableCols = ['load_time','category','product','price_aud','promotion_price_aud','available_quantity'];
+    tableCols = ['load_time','category','product','price_aud','promotion_price_aud','available_quantity','疑似销量','估算销售额'];
     const cat = f.category.length === 1 ? f.category[0] : '';
-    tableRows = series.slice().reverse().map(r => [r.load_time, cat, f.product, fmt(r.price_aud), fmt(r.promotion_price_aud), fmt(r.available_quantity)]);
+    tableRows = series.slice().reverse().map(r => [r.load_time, cat, f.product, fmt(r.price_aud), fmt(r.promotion_price_aud), fmt(r.available_quantity), fmt(r.suspected_sales), money(r.estimated_sales)]);
     \$('tinfo').textContent = 'Details of the selected product over time';
   } else {
     tableCols = ['category','product','old_price','new_price','old_qty','new_qty','change'];
     const sd = f.change === 'stockdown', su = f.change === 'stockup';
-    if (sd) tableCols.push('疑似销量'); else if (su) tableCols.push('疑似采购量');
-    tableRows = cmp.rows.map(r => [r.category, r.item_name, fmt(r.old_price), fmt(r.new_price), fmt(r.old_qty), fmt(r.new_qty), (f.change === 'stockdown' || f.change === 'stockup') ? label[r.stock] : label[r.status] + (r.stock !== 'same' ? ' / ' + label[r.stock] : '')].concat(sd ? [fmt(r.old_qty - r.new_qty)] : su ? [fmt(r.new_qty - r.old_qty)] : []));
+    tableCols.push('疑似销量', '估算销售额'); if (su) tableCols.push('疑似采购量');
+    tableRows = cmp.rows.map(r => [r.category, r.item_name, fmt(r.old_price), fmt(r.new_price), fmt(r.old_qty), fmt(r.new_qty), (f.change === 'stockdown' || f.change === 'stockup') ? label[r.stock] : label[r.status] + (r.stock !== 'same' ? ' / ' + label[r.stock] : '')].concat([r.old_qty === null || r.new_qty === null ? '' : Math.max(0, r.old_qty - r.new_qty), r.old_qty === null || r.new_qty === null || r.new_price === null ? '' : money(Math.max(0, r.old_qty - r.new_qty) * r.new_price)], su ? [fmt(r.new_qty - r.old_qty)] : []));
     \$('tinfo').textContent = 'Comparison of the selected items' + (f.change !== 'all' ? ' - ' + label[f.change] : '') + ' (' + tableRows.length + ' rows)';
   }
   \$('thead').innerHTML = '<tr>' + tableCols.map(h => '<th>' + h + '</th>').join('') + '</tr>';

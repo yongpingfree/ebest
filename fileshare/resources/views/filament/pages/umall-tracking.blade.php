@@ -61,7 +61,10 @@
 
     <div style="display:flex;gap:.75rem;flex-wrap:wrap">
         <x-filament::button wire:click="run" icon="heroicon-o-arrow-path" :disabled="! $this->canRun()">
-            Fetch &amp; load data
+            Umall fetch &amp; load data
+        </x-filament::button>
+        <x-filament::button wire:click="loadOnly" color="gray" icon="heroicon-o-arrow-down-tray" :disabled="! $this->canRun()">
+            Umall load only
         </x-filament::button>
         <x-filament::button wire:click="runComparison" color="gray" icon="heroicon-o-scale" :disabled="! $this->canRun()">
             Run price comparison

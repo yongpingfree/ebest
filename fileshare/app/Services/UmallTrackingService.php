@@ -63,8 +63,9 @@ class UmallTrackingService
             ->get(['r.*', 'u.name as user_name']);
     }
 
-    /** Runs both scripts, then loads the CSV. Returns the number of rows loaded. */
-    public function run(): int
+    /** Runs both scripts, then loads the CSV. Returns the number of rows loaded.
+     *  $fetch=false skips script1 and rebuilds from the json already in storage (current mapping applies). */
+    public function run(bool $fetch = true): int
     {
         $dir = $this->dir();
         $py = config('fileshare.umall_python');
@@ -73,10 +74,60 @@ class UmallTrackingService
         $csv = $out . '/umall_items_' . now()->format('dMY') . '.csv';
         File::ensureDirectoryExists($raw, 0775);
 
-        $this->exec([$py, 'script1_fetch.py', $dir . '/productList.md', $raw], $dir, 'script1_fetch.py');
+        if ($fetch) {
+            $this->exec([$py, 'script1_fetch.py', $dir . '/productList.md', $raw], $dir, 'script1_fetch.py');
+        } elseif (! glob($raw . '/*.json')) {
+            throw new \RuntimeException("No fetched data found in $raw - run 'Umall fetch & load data' first");
+        }
         $this->exec([$py, 'script2_to_csv.py', $raw, $dir . '/categoryMapping.csv', $csv], $dir, 'script2_to_csv.py');
 
-        return $this->loadCsv($csv);
+        $n = $this->loadCsv($csv);
+        $this->remapHistoricalCategories();   // never fails the run
+
+        return $n;
+    }
+
+    /** Reads categoryMapping.csv (same format as script2_to_csv.py): keyword/id => category name. */
+    public function loadMapping(): array
+    {
+        $file = $this->dir() . '/categoryMapping.csv';
+        $map = [];
+        if (! is_file($file)) {
+            return $map;
+        }
+        foreach (preg_split('/\R/u', ltrim((string) file_get_contents($file), "\xEF\xBB\xBF")) as $line) {
+            $line = trim($line);
+            if ($line === '' || str_starts_with($line, '#')) {
+                continue;
+            }
+            $parts = preg_split('/[,，\t]/u', $line, 2);
+            if (count($parts) === 2 && trim($parts[0]) !== '' && trim($parts[1]) !== '') {
+                $map[trim($parts[0])] = trim($parts[1]);
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * Historical rows loaded before a mapping existed keep the raw keyword as category
+     * (script2 leaves unmapped categories unchanged). Rewrite those to the mapped name.
+     * Returns the number of rows updated.
+     */
+    public function remapHistoricalCategories(): int
+    {
+        $updated = 0;
+        try {
+            foreach ($this->loadMapping() as $key => $name) {
+                if ($key !== $name) {
+                    $updated += DB::table('umall_tracking')->where('category', $key)->update(['category' => $name]);
+                }
+            }
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return $updated;
     }
 
     private function exec(array $cmd, string $cwd, string $name): void

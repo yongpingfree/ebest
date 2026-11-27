@@ -32,6 +32,17 @@ class UmallTracking extends Page
 
     public function run(): void
     {
+        $this->startTracking(true);
+    }
+
+    /** Reloads from the json already in storage (no API fetch); category mapping is re-applied. */
+    public function loadOnly(): void
+    {
+        $this->startTracking(false);
+    }
+
+    private function startTracking(bool $fetch): void
+    {
         if (! $this->canRun()) {
             Notification::make()->title("The 'UM' permission is required")->danger()->send();
 
@@ -43,8 +54,8 @@ class UmallTracking extends Page
 
             return;
         }
-        RunUmallTracking::dispatch($svc->startRun('manual', auth()->id()));
-        Notification::make()->title('Fetch started')->body('Runs in the background; see the run history below.')->success()->send();
+        RunUmallTracking::dispatch($svc->startRun($fetch ? 'manual' : 'manual (load only)', auth()->id()), $fetch);
+        Notification::make()->title($fetch ? 'Fetch started' : 'Load started')->body('Runs in the background; see the run history below.')->success()->send();
     }
 
     /** Manually triggers the daily comparison job (ebest fetch + match + load); never fetches umall. */
