@@ -7,6 +7,6 @@
 <form method="post" action="{{ url('/vms/staff/items/export') }}">@csrf
 <div class="row" style="margin-bottom:8px"><button class="btn">导出所选(未选则导出全部「已提交」) → import-items.xlsx</button></div>
 <table><tr><th></th><th>供应商</th><th>商品编码</th><th>标题</th><th>状态</th><th>提交时间</th><th>已导出</th><th></th></tr>
-@foreach($items as $i)<tr><td><input type="checkbox" name="ids[]" value="{{ $i->id }}"></td><td>{{ $i->vendor->name }}</td><td>{{ $i->sku_no }}</td><td>{{ $i->title }}</td><td><span class="badge b-{{ $i->status }}">{{ $i->statusLabel() }}</span></td><td>{{ optional($i->submitted_at)->format('Y-m-d H:i') }}</td><td>{{ optional($i->exported_at)->format('m-d H:i') }}</td><td><a href="{{ url('/vms/staff/items/'.$i->id) }}">处理</a></td></tr>@endforeach</table></form>
+@foreach($items as $i)<tr><td><input type="checkbox" name="ids[]" value="{{ $i->id }}"></td><td>{{ $i->vendor->name }}</td><td>{{ $i->sku_no }}</td><td>{{ $i->title }}@if($i->post_listing_changed_at) <span class="badge b-pending">上架后有修改</span>@endif</td><td><span class="badge b-{{ $i->status }}">{{ $i->statusLabel() }}</span></td><td>{{ optional($i->submitted_at)->format('Y-m-d H:i') }}</td><td>{{ optional($i->exported_at)->format('m-d H:i') }}</td><td><a href="{{ url('/vms/staff/items/'.$i->id) }}">处理</a></td></tr>@endforeach</table></form>
 <div class="pager">{{ $items->links() }}</div>
 @endsection

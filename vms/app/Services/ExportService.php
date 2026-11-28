@@ -37,6 +37,10 @@ class ExportService
             $d['store_id'] = config('vms.store_id');
             $d['item_no'] = $item->oms_item_no ?: 'V'.$item->vendor_id.'-'.$item->id;
             $d['shoppingunit'] = $item->vendor->name;
+            // 品牌:供应商选的是 VMS 品牌,导出时换成 eBest 回填的品牌 id(运营在商品页手填的 brand_id 优先)
+            if (empty($d['brand_id']) && ! empty($d['brand_ref'])) {
+                $d['brand_id'] = \App\Models\Brand::find($d['brand_ref'])?->ebest_brand_id;
+            }
             foreach (['cover', 'share_cover', 'main_images', 'detail_images', 'sku_image'] as $kind) {
                 $d[$kind] = $item->images->where('kind', $kind)->pluck('url')->implode(';');
             }

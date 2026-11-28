@@ -36,3 +36,4 @@ textarea{min-height:80px}
 .pager{margin-top:12px}.pager nav{display:flex;gap:6px;align-items:center}.pager svg{width:16px;height:16px}
 @media(max-width:800px){.side{display:none}.main{padding:12px}}
 .pagination{display:flex;gap:4px;list-style:none;padding:0;margin:0}.pagination .page-link,.pagination span{display:block;padding:4px 10px;border:1px solid var(--line);background:#fff;border-radius:3px}.pagination .active .page-link,.pagination .active span{background:var(--brand);color:#fff;border-color:var(--brand)}.pagination .disabled span{color:#aaa}
+.top a.linkbtn{margin-right:14px;text-decoration:none}

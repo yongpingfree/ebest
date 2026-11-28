@@ -34,7 +34,7 @@ class PurchaseOrder extends Model
 
     public function statusLabel(): string
     {
-        return self::STATUS[$this->status] ?? $this->status;
+        return __(self::STATUS[$this->status] ?? $this->status);
     }
 
     public function editableByVendor(): bool

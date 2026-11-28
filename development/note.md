@@ -14,3 +14,9 @@ eBest WMS	GitLab  https://g.donkibuy.com/ebest/wms
 # ci自动部署production
 
 ???
+
+# AWS related
+
+With the AWS CLI (your own credentials need S3 delete and CloudFront invalidation permission):
+aws s3 rm s3://<bucket>/images/1bf3568d-xxxx-photo.png
+aws cloudfront create-invalidation --distribution-id EQBQSAG176B64 --paths "/images/1bf3568d-xxxx-photo.png"

@@ -8,14 +8,19 @@ $rows = ['申请类型'=>$vendor->application_type==='amend'?'修改已有供应
 <span class="right row">
 @if(auth('staff')->user()->isAdmin())
   @unless($full)<a class="btn sec" href="{{ url('/vms/staff/vendors/'.$vendor->id.'/reveal') }}">查看完整银行信息(记录审计)</a>@endunless
-  <a class="btn sec" href="{{ url('/vms/staff/vendors/'.$vendor->id.'/wms-export') }}">导出 WMS 建档字段</a>
+  <a class="btn sec" href="{{ url('/vms/staff/vendors/'.$vendor->id.'/wms-export') }}">导出 WMS 建档字段和 SQL</a>
 @endif</span></div>
 <div class="card"><table>@foreach($rows as $k=>$v)<tr><th style="width:200px">{{ $k }}</th><td>{{ $v }}</td></tr>@endforeach</table></div>
+
+<div class="card"><h2>品牌</h2>
+@forelse($vendor->brands as $b)<div class="row" style="padding:6px 0">@if($b->image_path)<a href="{{ $b->display_url }}" target="_blank"><img src="{{ $b->display_url }}" alt="" style="width:56px;height:56px;object-fit:contain"></a>@endif
+<b>{{ $b->name }}</b> <span class="muted">{{ $b->name_en }}</span> <span class="muted">品牌编号:{{ $b->ebest_brand_id ?: '待回填' }}</span></div>@empty<p class="muted">没有品牌</p>@endforelse
+<a href="{{ url('/vms/staff/brands?q='.urlencode($vendor->name ?? '')) }}">去回填品牌编号</a></div>
 
 @if($vendor->pending_changes)
 <div class="card"><h2>待审核的修改内容</h2><table>
 @foreach(collect($vendor->pending_changes)->except(['account_number','auth_confirmed'])->all() as $k=>$v)
-<tr><th style="width:200px">{{ $k }}</th><td>{{ $v }}</td><td class="muted">原值:{{ is_scalar($vendor->{$k} ?? null) ? $vendor->{$k} : '' }}</td></tr>@endforeach
+<tr><th style="width:200px">{{ ['application_type'=>'申请类型','abn'=>'澳大利亚商业号','name'=>'供应商名称','street_address'=>'街道地址','postal_address'=>'邮寄地址','phone'=>'电话','payment_terms_days'=>'付款期限(天)','bsb'=>'BSB','bank_institution'=>'金融机构','bank_branch'=>'分行名称','bank_account_name'=>'账户名称','contact_name'=>'联系人姓名','contact_phone'=>'联系人电话','auth_name'=>'填写人姓名','auth_phone'=>'填写人电话','auth_date'=>'授权日期'][$k] ?? $k }}</th><td>{{ $v }}</td><td class="muted">原值:{{ is_scalar($vendor->{$k} ?? null) ? $vendor->{$k} : '' }}</td></tr>@endforeach
 @if(isset($vendor->pending_changes['account_number']))<tr><th>银行账号</th><td colspan="2">已提交新账号(加密存储,通过后生效)</td></tr>@endif</table></div>
 @endif
 

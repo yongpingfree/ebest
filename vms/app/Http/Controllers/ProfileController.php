@@ -15,11 +15,29 @@ class ProfileController extends Controller
         return view('profile', ['vendor' => $v, 'maskedAccount' => Vendor::maskAccount($v->account_number)]);
     }
 
+    /** 邮件通知 eBest 审核人。收件人:VMS_STAFF_NOTIFY_EMAIL(逗号分隔),未配置则发给全部启用的管理员;发送失败只记日志 */
+    private function notifyStaff(Vendor $v, bool $amend): void
+    {
+        $to = array_filter(array_map('trim', explode(',', (string) config('vms.staff_notify_email'))));
+        if (! $to) {
+            $to = \App\Models\StaffUser::where('role', 'admin')->where('is_active', true)->pluck('email')->all();
+        }
+        if (! $to) {
+            return;
+        }
+        try {
+            \Illuminate\Support\Facades\Mail::to($to)->send(new \App\Mail\VendorSubmittedMail($v, $amend));
+            $v->update(['submit_notified_at' => now()]);
+        } catch (\Throwable $e) {
+            report($e);
+        }
+    }
+
     public function update(Request $r)
     {
         $v = auth('vendor')->user();
         if ($v->status === 'pending' || ($v->isApproved() && $v->pending_changes)) {
-            return back()->with('warning', '资料正在审核中,暂不能修改');
+            return back()->with('warning', __('资料正在审核中,暂不能修改'));
         }
         $data = $r->validate([
             'application_type' => ['required', 'in:new,amend'],
@@ -40,30 +58,33 @@ class ProfileController extends Controller
             'auth_name' => ['required', 'string', 'max:120'],
             'auth_phone' => ['required', 'string', 'max:40'],
         ], [
-            'abn.regex' => '澳大利亚商业号(ABN)须为 11 位数字',
-            'bsb.regex' => 'BSB 格式为 6 位数字(如 082-001)',
-            'account_number.regex' => '银行账号须为 4–10 位数字',
-            'auth_confirmed.accepted' => '请勾选授权声明',
+            'abn.regex' => __('澳大利亚商业号(ABN)须为 11 位数字'),
+            'bsb.regex' => __('BSB 格式为 6 位数字(如 082-001)'),
+            'account_number.regex' => __('银行账号须为 4–10 位数字'),
+            'auth_confirmed.accepted' => __('请勾选授权声明'),
         ], [
-            'abn' => '澳大利亚商业号', 'name' => '供应商名称', 'street_address' => '街道地址', 'postal_address' => '邮寄地址',
-            'phone' => '电话', 'payment_terms_days' => '付款期限', 'bsb' => 'BSB', 'account_number' => '银行账号',
-            'bank_institution' => '金融机构', 'bank_branch' => '分行名称', 'bank_account_name' => '账户名称',
-            'contact_name' => '联系人姓名', 'contact_phone' => '联系人电话', 'auth_name' => '填写人姓名', 'auth_phone' => '填写人电话',
+            'abn' => __('澳大利亚商业号'), 'name' => __('供应商名称'), 'street_address' => __('街道地址'), 'postal_address' => __('邮寄地址'),
+            'phone' => __('电话'), 'payment_terms_days' => __('付款期限'), 'bsb' => 'BSB', 'account_number' => __('银行账号'),
+            'bank_institution' => __('金融机构'), 'bank_branch' => __('分行名称'), 'bank_account_name' => __('账户名称'),
+            'contact_name' => __('联系人姓名'), 'contact_phone' => __('联系人电话'), 'auth_name' => __('填写人姓名'), 'auth_phone' => __('填写人电话'),
         ]);
+        if (! $v->hasBrandWithImage()) {
+            return back()->withErrors(['brand' => __('请至少添加一个品牌并上传品牌图片后再提交')])->withInput();
+        }
         $data['abn'] = preg_replace('/\D/', '', $data['abn']);
         $data['bsb'] = strlen($data['bsb']) === 6 ? substr($data['bsb'], 0, 3).'-'.substr($data['bsb'], 3) : $data['bsb'];
         $data['auth_confirmed'] = true;
         $data['auth_date'] = today();
         if (empty($data['account_number'])) {
             if (! $v->account_number) {
-                return back()->withErrors(['account_number' => '请填写银行账号'])->withInput();
+                return back()->withErrors(['account_number' => __('请填写银行账号')])->withInput();
             }
             unset($data['account_number']); // 留空表示不修改
         }
 
         $warn = null;
         if (mb_strtolower(trim($data['bank_account_name'])) !== mb_strtolower(trim($data['name']))) {
-            $warn = '提示:账户名称与供应商名称不一致,审核时运营会进一步核实。';
+            $warn = __('提示:账户名称与供应商名称不一致,审核时运营会进一步核实。');
         }
 
         if ($v->isApproved()) {
@@ -79,7 +100,8 @@ class ProfileController extends Controller
             $event = '提交注册资料';
         }
         VendorHistory::create(['vendor_id' => $v->id, 'event' => $event, 'actor' => $v->email]);
+        $this->notifyStaff($v->fresh(), $v->isApproved());
 
-        return redirect('/vms/profile')->with('status', '资料已提交,等待 eBest 审核。')->with('warning', $warn);
+        return redirect('/vms/profile')->with('status', __('资料已提交,等待 eBest 审核。'))->with('warning', $warn);
     }
 }

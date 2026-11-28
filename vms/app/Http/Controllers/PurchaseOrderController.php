@@ -58,12 +58,15 @@ class PurchaseOrderController extends Controller
         ];
     }
 
-    private const LABELS = ['delivery_mode' => '配送方式', 'purchase_date' => '采购日期', 'purchaser' => '采购人', 'marketing_mode' => '营销模式', 'eta_date' => '预计到货时间', 'sync_stock' => '是否同步库存'];
+    private function labels(): array
+    {
+        return ['delivery_mode' => __('配送方式'), 'purchase_date' => __('采购日期'), 'purchaser' => __('采购人'), 'marketing_mode' => __('营销模式'), 'eta_date' => __('预计到货时间'), 'sync_stock' => __('是否同步库存')];
+    }
 
     public function store(Request $r)
     {
         $v = $this->vendor();
-        $d = $r->validate($this->rules(), [], self::LABELS);
+        $d = $r->validate($this->rules(), [], $this->labels());
         $po = $v->purchaseOrders()->create([
             'draft_no' => Svc::nextDraftNo($v), 'vendor_name' => $v->name, 'status' => 'draft',
             'reference_no' => $d['reference_no'] ?: Svc::autoReference($v),
@@ -71,7 +74,7 @@ class PurchaseOrderController extends Controller
         Svc::saveLines($po, $r->input('lines', []));
         $po->logStatus(null, 'draft', '创建草稿', $v->email);
 
-        return redirect("/vms/pos/{$po->id}/edit")->with('status', '采购单草稿已保存');
+        return redirect("/vms/pos/{$po->id}/edit")->with('status', __('采购单草稿已保存'));
     }
 
     public function show(PurchaseOrder $po)
@@ -85,7 +88,7 @@ class PurchaseOrderController extends Controller
     {
         $this->mine($po);
         if (! $po->editableByVendor()) {
-            return redirect("/vms/pos/{$po->id}")->with('warning', '已提交的采购单不可修改');
+            return redirect("/vms/pos/{$po->id}")->with('warning', __('已提交的采购单不可修改'));
         }
         $po->load('lines');
         $lastPrices = [];
@@ -100,7 +103,7 @@ class PurchaseOrderController extends Controller
     {
         $this->mine($po);
         abort_unless($po->editableByVendor(), 403);
-        $d = $r->validate($this->rules(), [], self::LABELS);
+        $d = $r->validate($this->rules(), [], $this->labels());
         $po->update(collect($d)->except(['lines', 'reference_no'])->all() + ['reference_no' => $d['reference_no'] ?: Svc::autoReference($this->vendor())]);
         Svc::saveLines($po, $r->input('lines', []));
 
@@ -108,7 +111,7 @@ class PurchaseOrderController extends Controller
             return $this->submit($po);
         }
 
-        return back()->with('status', '草稿已保存');
+        return back()->with('status', __('草稿已保存'));
     }
 
     public function submit(PurchaseOrder $po)
@@ -125,7 +128,7 @@ class PurchaseOrderController extends Controller
         $po->update(['status' => $to, 'submitted_at' => now()]);
         $po->logStatus('draft', $to, $to === 'approved' ? '供应商配送,无需 eBest 审核' : null, $this->vendor()->email);
 
-        return redirect("/vms/pos/{$po->id}")->with('status', $to === 'approved' ? '采购单已生效(供应商配送无需审核)' : '采购单已提交,等待仓库审核');
+        return redirect("/vms/pos/{$po->id}")->with('status', $to === 'approved' ? __('采购单已生效(供应商配送无需审核)') : __('采购单已提交,等待仓库审核'));
     }
 
     public function destroy(PurchaseOrder $po)
@@ -134,7 +137,7 @@ class PurchaseOrderController extends Controller
         abort_unless($po->status === 'draft', 403);
         $po->delete();
 
-        return redirect('/vms/pos')->with('status', '草稿已删除');
+        return redirect('/vms/pos')->with('status', __('草稿已删除'));
     }
 
     public function export(PurchaseOrder $po)

@@ -9,11 +9,11 @@
 #trimModal .tf .tip{margin-right:auto;color:#555;font-size:13px}
 </style>
 <div id="trimModal">
-  <div class="th"><span>图片裁剪 <span id="trimName" class="muted" style="font-size:13px"></span></span><button type="button" class="x" id="trimClose">×</button></div>
+  <div class="th"><span>{{ __('图片裁剪') }} <span id="trimName" class="muted" style="font-size:13px"></span></span><button type="button" class="x" id="trimClose">×</button></div>
   <div class="tb" id="trimBox"><canvas id="trimCv"></canvas></div>
   <div class="tf"><span class="tip" id="trimTip"></span>
-    <button type="button" class="btn sec" id="trimReset">重置</button>
-    <button type="button" class="btn ok" id="trimOk">确定</button></div>
+    <button type="button" class="btn sec" id="trimReset">{{ __('重置') }}</button>
+    <button type="button" class="btn ok" id="trimOk">{{ __('确定') }}</button></div>
 </div>
 <script>
 (function () {
@@ -63,7 +63,7 @@
     ctx.fillStyle = '#1e88e5';
     [[x, y], [x + w, y], [x, y + h], [x + w, y + h]].forEach(function (p) { ctx.fillRect(p[0] - 5, p[1] - 5, 10, 10); });
     var ow = spec.width || Math.round(crop.w), oh = spec.height || Math.round(crop.h * ow / crop.w);
-    tip.textContent = '输出尺寸 ' + ow + '×' + oh + ' 像素。拖动方框移动,拖动角点缩放。';
+    tip.textContent = {!! json_encode(__('输出尺寸'), JSON_UNESCAPED_UNICODE) !!} + ' ' + ow + '×' + oh + ' ' + {!! json_encode(__('像素。拖动方框移动,拖动角点缩放。'), JSON_UNESCAPED_UNICODE) !!};
   }
   function pos(e) { var r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / scale, y: (e.clientY - r.top) / scale }; }
   function hit(p) {
@@ -125,7 +125,7 @@
     loadImg(cur).then(function (i) {
       if (!i) { done.push(cur); next(); return; } // 非图片交给服务器报错
       if (!needTrim(i.width, i.height, spec)) { done.push(cur); next(); return; }
-      img = i; nameEl.textContent = cur.name + '(原图 ' + i.width + '×' + i.height + ')';
+      img = i; nameEl.textContent = cur.name + ' (' + {!! json_encode(__('原图'), JSON_UNESCAPED_UNICODE) !!} + ' ' + i.width + '×' + i.height + ')';
       modal.classList.add('on'); fit(); reset();
     });
   }

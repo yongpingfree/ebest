@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ProfileController;
@@ -28,6 +29,14 @@ Route::prefix('vms')->group(function () {
         return response()->file($disk->path($path), ['Cache-Control' => 'public, max-age=86400']);
     })->where('path', '.*');
 
+    // 语言切换(供应商端):zh | en
+    Route::get('lang/{locale}', function (string $locale) {
+        abort_unless(in_array($locale, \App\Http\Middleware\SetVmsLocale::LOCALES, true), 404);
+        session(['vms_locale' => $locale]);
+
+        return redirect()->back(fallback: '/vms')->withCookie(cookie('vms_locale', $locale, 60 * 24 * 365));
+    });
+
     Route::get('/', fn () => auth('vendor')->check() ? redirect('/vms/dashboard') : redirect('/vms/login'));
 
     // ---- 供应商:注册 / 登录 / 邮箱验证 ----
@@ -45,6 +54,10 @@ Route::prefix('vms')->group(function () {
         Route::post('verify/resend', [VendorAuthController::class, 'resend'])->middleware('throttle:3,1');
 
         Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::get('brands', [BrandController::class, 'index']);
+        Route::post('brands', [BrandController::class, 'store']);
+        Route::post('brands/{brand}', [BrandController::class, 'update']);
+        Route::delete('brands/{brand}', [BrandController::class, 'destroy']);
         Route::get('profile', [ProfileController::class, 'show']);
         Route::post('profile', [ProfileController::class, 'update']);
 
@@ -75,6 +88,7 @@ Route::prefix('vms')->group(function () {
             Route::get('/', [Staff\AuthController::class, 'dashboard']);
 
             Route::get('vendors', [Staff\VendorController::class, 'index']);
+            Route::post('vendors/export', [Staff\VendorController::class, 'export']);
             Route::get('vendors/{vendor}', [Staff\VendorController::class, 'show']);
             Route::get('vendors/{vendor}/reveal', [Staff\VendorController::class, 'reveal']);
             Route::get('vendors/{vendor}/wms-export', [Staff\VendorController::class, 'wmsExport']);
@@ -82,10 +96,14 @@ Route::prefix('vms')->group(function () {
             Route::post('vendors/{vendor}/reject', [Staff\VendorController::class, 'reject']);
             Route::post('vendors/{vendor}/wms-ref', [Staff\VendorController::class, 'setWmsRef']);
 
+            Route::get('brands', [Staff\BrandController::class, 'index']);
+            Route::post('brands/{brand}/id', [Staff\BrandController::class, 'setId']);
+
             Route::get('items', [Staff\ItemController::class, 'index']);
             Route::match(['get', 'post'], 'items/export', [Staff\ItemController::class, 'export']);
             Route::get('items/{item}', [Staff\ItemController::class, 'show']);
             Route::post('items/{item}/ops', [Staff\ItemController::class, 'updateOps']);
+            Route::post('items/{item}/synced', [Staff\ItemController::class, 'clearChanged']);
             Route::post('items/{item}/return', [Staff\ItemController::class, 'returnItem']);
             Route::post('items/{item}/mark/{to}', [Staff\ItemController::class, 'mark']);
 

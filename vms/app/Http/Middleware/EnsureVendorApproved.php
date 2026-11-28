@@ -12,10 +12,10 @@ class EnsureVendorApproved
     {
         $v = auth('vendor')->user();
         if (! $v->email_verified_at) {
-            return redirect('/vms/verify')->with('status', '请先完成邮箱验证');
+            return redirect('/vms/verify')->with('status', __('请先完成邮箱验证'));
         }
         if (! $v->isApproved()) {
-            return redirect('/vms/profile')->with('warning', '供应商资料审核通过后才能录入商品和创建采购单');
+            return redirect('/vms/profile')->with('warning', __('供应商资料审核通过后才能录入商品和创建采购单'));
         }
 
         return $next($request);

@@ -583,6 +583,14 @@ insert new columns between colume 3 & 4 (next to umall product name)
 - one colume per selected date in the range, in the form of '售量 MMDD'
 - for each date, get umall quantity from last timestamp a d the umall quantity from last timestamp of previous day, then latter minus current date value
 - minus is ok as it indictes possible restock
+14, the following umall category is wrong
+水果	【冻】李富贵 发财牛油锅底 中辣 约500g
+水果	【冻】李富贵 慢熬大骨浓汤锅底 约1L
+水果	【冻】李富贵 火锅卤牛筋 约200g
+水果	【冻】李富贵 白胡椒猪肚鸡汤锅底 约1L
+水果	【冻】李富贵 贡菜丸子 约135g
+水果	【冻】李富贵 麻辣小郡肝 约200g
+水果	【冻】泰国原产 金杯 无核金枕头榴莲肉 400g
 # enhancement
 1, for any mentioning of below, list in notes and include in table view and export csv:
 such as "5.99，三件8折". It looks like a multi-buy promotion you spotted. Our price rule doesn't handle "buy 3, get 20% off", so it's probably an input for a rule change.

@@ -4,7 +4,7 @@
  * VMS 配置。商品字段定义同时驱动:录入表单、校验、导出 import-items.xlsx。
  * key 与 import-items.xlsx 第 1 行的列名一致。
  *   scope: vendor = 供应商填写, ops = eBest 运营填写, auto = 系统自动生成
- *   type : text | textarea | number | decimal | yesno | select | multi
+ *   type : text | textarea | number | decimal | yesno | select | multi | date | datetime | brand | category | subcategory
  */
 $yesno = ['是', '否'];
 
@@ -13,7 +13,10 @@ return [
 
     'image_disk' => env('VMS_IMAGE_DISK', 'public'),
     'image_cdn_host' => env('VMS_IMAGE_CDN_HOST', 'cdn.minimall.donkibuy.com'),
+    'staff_notify_email' => env('VMS_STAFF_NOTIFY_EMAIL'),
     'image_max_kb' => 5120,
+    // 可选:CloudFront 分配 id。配置后删除图片会同时让 CDN 缓存失效(需 IAM 权限 cloudfront:CreateInvalidation)
+    'cdn_distribution_id' => env('VMS_CDN_DISTRIBUTION_ID'),
     // .env 中 AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY 存 base64 编码值(echo -n '<值>' | base64),上传时由 ImageService 解码
     's3_raw' => ['key' => env('AWS_ACCESS_KEY_ID'), 'secret' => env('AWS_SECRET_ACCESS_KEY')],
 
@@ -34,6 +37,9 @@ return [
         ['key' => 'shared_description_zh_cn', 'label' => '分享描述', 'type' => 'textarea', 'required' => false, 'scope' => 'vendor', 'group' => '基本信息'],
         ['key' => 'tag_list', 'label' => '标签(分号隔开)', 'type' => 'text', 'required' => false, 'scope' => 'vendor', 'group' => '基本信息'],
         ['key' => 'storage_method', 'label' => '存储方式', 'type' => 'select', 'options' => ['常温', '冷藏', '冷冻', '其他', '/'], 'required' => false, 'scope' => 'vendor', 'group' => '基本信息'],
+        ['key' => 'brand_ref', 'label' => '品牌', 'type' => 'brand', 'required' => true, 'scope' => 'vendor', 'group' => '分类与品牌'],
+        ['key' => 'category_parent_id', 'label' => '分类', 'type' => 'category', 'required' => true, 'scope' => 'vendor', 'group' => '分类与品牌'],
+        ['key' => 'category_id', 'label' => '子分类', 'type' => 'subcategory', 'required' => true, 'scope' => 'vendor', 'group' => '分类与品牌'],
 
         ['key' => 'sku_no', 'label' => '商品编码(货号,唯一)', 'type' => 'text', 'required' => true, 'scope' => 'vendor', 'group' => 'SKU 与价格'],
         ['key' => 'barcode', 'label' => '条形码', 'type' => 'text', 'required' => false, 'scope' => 'vendor', 'group' => 'SKU 与价格'],
@@ -52,9 +58,9 @@ return [
         ['key' => 'buy_quota', 'label' => '限购数', 'type' => 'number', 'required' => true, 'default' => '99', 'scope' => 'vendor', 'group' => '销售与配送'],
         ['key' => 'buy_quota_days', 'label' => '限购周期(天)', 'type' => 'number', 'required' => true, 'default' => '1', 'scope' => 'vendor', 'group' => '销售与配送'],
         ['key' => 'is_presell', 'label' => '是否预售', 'type' => 'yesno', 'options' => $yesno, 'required' => false, 'default' => '否', 'scope' => 'vendor', 'group' => '销售与配送'],
-        ['key' => 'presell_end_at', 'label' => '预售结束时间(墨尔本时区)', 'type' => 'text', 'required' => false, 'required_if' => ['is_presell' => '是'], 'scope' => 'vendor', 'group' => '销售与配送'],
-        ['key' => 'presell_dispatch_on', 'label' => '预售可派送最早日期', 'type' => 'text', 'required' => false, 'required_if' => ['is_presell' => '是'], 'scope' => 'vendor', 'group' => '销售与配送'],
-        ['key' => 'latest_presell_dispatch_on', 'label' => '预售可派送最晚日期', 'type' => 'text', 'required' => false, 'required_if' => ['is_presell' => '是'], 'scope' => 'vendor', 'group' => '销售与配送'],
+        ['key' => 'presell_end_at', 'label' => '预售结束时间(悉尼堪培拉时区)', 'type' => 'datetime', 'required' => false, 'required_if' => ['is_presell' => '是'], 'scope' => 'vendor', 'group' => '销售与配送'],
+        ['key' => 'presell_dispatch_on', 'label' => '预售可派送最早日期', 'type' => 'date', 'required' => false, 'required_if' => ['is_presell' => '是'], 'scope' => 'vendor', 'group' => '销售与配送'],
+        ['key' => 'latest_presell_dispatch_on', 'label' => '预售可派送最晚日期', 'type' => 'date', 'required' => false, 'required_if' => ['is_presell' => '是'], 'scope' => 'vendor', 'group' => '销售与配送'],
         ['key' => 'is_virtual', 'label' => '是否虚拟库存商品', 'type' => 'yesno', 'options' => $yesno, 'required' => false, 'default' => '否', 'scope' => 'vendor', 'group' => '销售与配送'],
         ['key' => 'coupon_enabled', 'label' => '是否可用优惠券', 'type' => 'yesno', 'options' => $yesno, 'required' => false, 'default' => '是', 'scope' => 'vendor', 'group' => '销售与配送'],
         ['key' => 'is_seasonal', 'label' => '是否时令商品', 'type' => 'yesno', 'options' => $yesno, 'required' => false, 'default' => '否', 'scope' => 'vendor', 'group' => '销售与配送'],
@@ -68,7 +74,6 @@ return [
 
         // eBest 运营填写(供应商不可见、不可改)
         ['key' => 'leader', 'label' => '负责人', 'type' => 'text', 'required' => false, 'scope' => 'ops', 'group' => '运营填写'],
-        ['key' => 'category_id', 'label' => '主产品二级分类 id', 'type' => 'text', 'required' => false, 'scope' => 'ops', 'group' => '运营填写'],
         ['key' => 'minor_category_id', 'label' => '次产品二级分类 id', 'type' => 'text', 'required' => false, 'scope' => 'ops', 'group' => '运营填写'],
         ['key' => 'brand_id', 'label' => '品牌 id', 'type' => 'text', 'required' => false, 'scope' => 'ops', 'group' => '运营填写'],
         ['key' => 'qa_and_guarantee_id', 'label' => '答疑&保障 id', 'type' => 'text', 'required' => false, 'scope' => 'ops', 'group' => '运营填写'],

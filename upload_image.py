@@ -29,7 +29,8 @@ DEFAULT_CDN_HOST = "cdn.minimall.donkibuy.com"
 
 
 def build_key(filename: str) -> str:
-    return f"images/{uuid.uuid4()}-{filename}"
+    return f"images/{filename}"
+    # return f"images/{uuid.uuid4()}-{filename}"
 
 
 def upload_image(s3, local_path: Path, bucket: str, cdn_host: str) -> tuple[str, str]:

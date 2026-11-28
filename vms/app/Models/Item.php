@@ -15,7 +15,10 @@ class Item extends Model
 
     protected $guarded = ['id'];
 
-    protected $casts = ['data' => 'array', 'submitted_at' => 'datetime', 'exported_at' => 'datetime'];
+    protected $casts = ['data' => 'array', 'submitted_at' => 'datetime', 'exported_at' => 'datetime', 'post_listing_changed_at' => 'datetime'];
+
+    /** 上架后供应商只能改的字段 */
+    public const LIMITED_FIELDS = ['title_zh_cn', 'title_en', 'short_title'];
 
     public function vendor(): BelongsTo
     {
@@ -34,7 +37,7 @@ class Item extends Model
 
     public function statusLabel(): string
     {
-        return self::STATUS[$this->status] ?? $this->status;
+        return __(self::STATUS[$this->status] ?? $this->status);
     }
 
     public function val(string $key, $default = null)
@@ -45,6 +48,17 @@ class Item extends Model
     public function editableByVendor(): bool
     {
         return in_array($this->status, ['draft', 'returned'], true);
+    }
+
+    /** 已导入 OMS / 已上架的商品:供应商只能修改标题和图片 */
+    public function limitedEditableByVendor(): bool
+    {
+        return in_array($this->status, ['imported', 'listed'], true);
+    }
+
+    public function imagesEditableByVendor(): bool
+    {
+        return $this->editableByVendor() || $this->limitedEditableByVendor();
     }
 
     public function logStatus(?string $from, string $to, ?string $note, string $actor): void

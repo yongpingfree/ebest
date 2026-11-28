@@ -37,6 +37,9 @@ class ItemService
             if (is_array($v)) {
                 $v = implode(';', array_filter($v));
             }
+            if (($f['type'] ?? '') === 'datetime' && is_string($v)) {
+                $v = str_replace('T', ' ', $v); // 日期时间控件提交 2026-12-01T18:00,存为 2026-12-01 18:00
+            }
             $out[$f['key']] = ($v === null || $v === '') ? null : trim((string) $v);
         }
 
@@ -60,6 +63,8 @@ class ItemService
                 'number' => ['integer', 'min:0'],
                 'decimal' => ['numeric', 'min:0'],
                 'textarea' => ['string', 'max:5000'],
+                'date' => ['date_format:Y-m-d'],
+                'datetime' => ['date_format:Y-m-d\TH:i'],
                 'select', 'yesno' => [Rule::in($f['options'])],
                 'multi' => ['array'],
                 default => ['string', 'max:255'],
@@ -70,6 +75,11 @@ class ItemService
             }
         }
 
+        // 品牌必须是本供应商的;子分类必须属于所选分类
+        $rules['brand_ref'] = ['nullable', Rule::exists('brands', 'id')->where('vendor_id', $vendor->id)];
+        $rules['category_parent_id'] = ['nullable', Rule::exists('categories', 'id')->whereNull('parent_id')];
+        $rules['category_id'] = ['nullable', Rule::exists('categories', 'id')->whereNotNull('parent_id')];
+
         return $rules;
     }
 
@@ -77,7 +87,7 @@ class ItemService
     {
         $n = [];
         foreach (self::fields() as $f) {
-            $n[$f['key']] = $f['label'];
+            $n[$f['key']] = __($f['label']);
         }
 
         return $n;
@@ -104,20 +114,20 @@ class ItemService
                 $needed = false; // 虚拟产品无需填写配送方式
             }
             if ($needed && $empty) {
-                $errors[] = "「{$f['label']}」为必填项";
+                $errors[] = __('「:label」为必填项', ['label' => __($f['label'])]);
             }
         }
         if (($data['price_in_yuan'] ?? 0) !== null && isset($data['price_in_yuan']) && (float) $data['price_in_yuan'] <= 0) {
-            $errors[] = '「价格」必须大于 0';
+            $errors[] = __('「价格」必须大于 0');
         }
         $counts = $item->images->groupBy('kind')->map->count();
         foreach (config('vms.image_kinds') as $kind => $spec) {
             if ($spec['required'] && ! ($counts[$kind] ?? 0)) {
-                $errors[] = "请上传「{$spec['label']}」({$spec['hint']})";
+                $errors[] = __('请上传「:label」(:hint)', ['label' => __($spec['label']), 'hint' => __($spec['hint'])]);
             }
         }
         if ($item->vendor && ! $item->vendor->isApproved()) {
-            $errors[] = '供应商资料尚未审核通过,不能提交商品';
+            $errors[] = __('供应商资料尚未审核通过,不能提交商品');
         }
 
         return $errors;

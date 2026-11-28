@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectGuestsTo(function ($request) {
             return $request->is('vms/staff/*') ? url('/vms/staff/login') : url('/vms/login');
         });
+        $middleware->web(append: [\App\Http\Middleware\SetVmsLocale::class]);
         $middleware->alias([
             'vendor.approved' => \App\Http\Middleware\EnsureVendorApproved::class,
         ]);

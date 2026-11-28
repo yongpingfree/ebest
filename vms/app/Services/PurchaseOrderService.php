@@ -69,7 +69,7 @@ class PurchaseOrderService
                 'item_id' => $item->id,
                 'product_name' => $item->title,
                 'sku_no' => $item->sku_no,
-                'barcode' => $item->val('barcode'),
+                'barcode' => trim((string) ($row['barcode'] ?? '')) !== '' ? trim((string) $row['barcode']) : $item->val('barcode'),
                 'qty' => $qty, 'unit_price' => $price, 'gst_rate' => $gst, 'subtotal' => $sub,
                 'price_note' => $row['price_note'] ?? null,
                 'pack_note' => $row['pack_note'] ?? null,
@@ -83,34 +83,34 @@ class PurchaseOrderService
         $errors = [];
         foreach (['vendor_name' => '供货商名称', 'purchase_date' => '采购日期', 'purchaser' => '采购人', 'marketing_mode' => '营销模式', 'eta_date' => '预计到货时间'] as $f => $label) {
             if (empty($po->{$f})) {
-                $errors[] = "「{$label}」为必填项";
+                $errors[] = __('「:label」为必填项', ['label' => __($label)]);
             }
         }
         if ($po->lines->isEmpty()) {
-            $errors[] = '采购单至少需要一行商品';
+            $errors[] = __('采购单至少需要一行商品');
         }
         foreach ($po->lines as $l) {
             $name = $l->sku_no ?: $l->product_name;
             if ($l->qty < 1) {
-                $errors[] = "{$name}:数量必须大于 0";
+                $errors[] = __(':name:数量必须大于 0', ['name' => $name]);
             }
             if (! $l->sku_no && ! $l->barcode) {
-                $errors[] = "{$l->product_name}:商品编码与条形码至少填一个";
+                $errors[] = __(':name:商品编码与条形码至少填一个', ['name' => $l->product_name]);
             }
             $virtual = $l->item && $l->item->val('is_virtual') === '是';
             if (! $virtual && (float) $l->unit_price <= 0) {
-                $errors[] = "{$name}:含税单价必须大于 0";
+                $errors[] = __(':name:含税单价必须大于 0', ['name' => $name]);
             }
             $last = self::lastPrice($po->vendor, $l->sku_no, $po->id);
             if ($last !== null && abs($last - (float) $l->unit_price) > 0.00001 && ! $virtual && trim((string) $l->price_note) === '') {
-                $errors[] = "{$name}:单价与上次采购单({$last})不同,请填写价格变动标注";
+                $errors[] = __(':name:单价与上次采购单(:last)不同,请填写价格变动标注', ['name' => $name, 'last' => $last]);
             }
         }
         // 营销模式须与商品一致
         foreach ($po->lines as $l) {
             $m = $l->item?->val('marketing_mode') ?: '自营';
             if ($l->item && $m !== $po->marketing_mode) {
-                $errors[] = ($l->sku_no ?: $l->product_name).":商品营销模式为「{$m}」,与采购单「{$po->marketing_mode}」不一致";
+                $errors[] = __(':name:商品营销模式为「:m」,与采购单「:po」不一致', ['name' => $l->sku_no ?: $l->product_name, 'm' => __($m), 'po' => __($po->marketing_mode)]);
             }
         }
 

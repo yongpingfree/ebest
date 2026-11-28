@@ -30,10 +30,10 @@ class UmallTrackingService
     {
         $today = now()->startOfDay();
         $secs = \Illuminate\Support\Facades\Cache::remember(
-            'umall_run_offset_' . $today->format('Y-m-d'), now()->addDays(2), fn () => random_int(-3600, 3600)
+            'umall_run_offset_' . $today->format('Y-m-d'), now()->addDays(2), fn () => random_int(-900, 900)
         );
 
-        return $today->copy()->setTime(12, 0)->addSeconds((int) $secs);
+        return $today->copy()->setTime(23, 0)->addSeconds((int) $secs);
     }
 
     public function ranScheduledToday(): bool

@@ -25,18 +25,47 @@
 - for all new Brand, eBest staff to fill in the brand ID created in WMS
 - when exporting vendor, options to do multiple select, and last record is the SQL for inserting to suppliers table (refer wms_suppliers.sql)
 - after a new vendor registration, email eBest staff for approval
-- when creating a new item, vendor can select brand from drop down menu (showing id-name)
+- when creating a new item, vendor can select:
+  - brand from drop down menu (showing id-name)
+  - category (id-name)
+  - subcategory (auto refreshed with selection of category)
+- create one SQL to export category and subcategory from all items, including id and name
+- create one script to load the category and subcategory into vms internal db, assuming the CSV in predefined folder
+- for all implementation, update README.md for verification points
+
+# issues
+1, in the product item view, the image should be clickable so user can see details
+2, after deleting an image, it still can be accessed from URL
+
+[2026-11-27 18:40:34] production.ERROR: Error executing "CreateInvalidation" on "https://cloudfront.amazonaws.com/2020-05-31/distribution/EQBQSAG176B64/invalidation"; AWS HTTP error:
+AccessDenied (client): User: arn:aws:iam::730335262564:user/ebest-staging is not authorized to perform: cloudfront:CreateInvalidation on resource: arn:aws:cloudfront::730335262564:distribution/EQBQSAG176B64 because no identity-based policy allows the cloudfront:CreateInvalidation action {"userId":2,"exception":"[object] (Aws\\CloudFront\\Exception\\CloudFrontException(code: 0): Error executing \"CreateInvalidation\" on \"https://cloudfront.amazonaws.com/2020-05-31/distribution/EQBQSAG176B64/invalidation\"; AWS HTTP error:
+AccessDenied (client): User: arn:aws:iam::730335262564:user/ebest-staging is not authorized to perform: cloudfront:CreateInvalidation on resource: arn:aws:cloudfront::730335262564:distribution/EQBQSAG176B64 because no identity-based policy allows the cloudfront:CreateInvalidation action at /var/www/vms/vendor/aws/aws-sdk-php/src/WrappedHttpHandler.php:204)
+
+3, for onboarded item, allow vendor to modify limited fields: title, images
+4, for onboarded item, when replacing an image, the old image is not deleted from CDN
+5，in the onboarding page
+- change 墨尔本时区 to 悉尼堪培拉时区
+- 预售可派送最早/晚日期 用calendar widget, not free text input
+6, after an approved vendor changed his name, eBest staff seeing an pending approval, but in the vendor audit, nothing shown up
+7, bar code field is not editable in PO creation; also quantity and unit price input fields not aligned with field name in the PO creation page
 
 # to do
-0， support chinese/english
-1, make sure any uploaded image can be deleted
-2, for new vendor registration, one brand to be created as mandatory
-3, in ventory management portal, add option to manage Brand and upload images
-4, download from a list of category and subcategory from oms
-5, in the vendor onboarding, when vendor create a new item, option to select category and subcategory (from drop down manual), or create new category, subcategory
-6, when exporting vendor, options to do multiple select, and last record is the SQL for inserting to suppliers table (refer wms_suppliers.sql)
-7, after a new vendor registration, email eBest staff for approval
+0， (done) support chinese/english
+1, (done)make sure any uploaded image can be deleted
+2, (done)for new vendor registration, one brand to be created as mandatory
+3, (done)in ventory management portal, add option to manage Brand and upload images
+4, (done)download from a list of category and subcategory from oms
+5, (done)in the vendor onboarding, when vendor create a new item, option to select category and subcategory (from drop down manual), or create new category, subcategory
+6, (done) when exporting vendor, options to do multiple select, and last record is the SQL for inserting to suppliers table (refer wms_suppliers.sql)
+7, (done) after a new vendor registration, email eBest staff for approval
 8, (defered) where to update sellable item?
+9, (done) date input use widget, instead of free text
+10, PO to notifiy eBest: 1) vendor self delivery, no approval required; 2) other 2 type, approval required. in any case, eBest need to import to WMS and update WMS ID.
+11, 3 type of eBest personal: 1) approval vendor; 2) approve new item; 3) approve new PO
+12, verify format of ';' in the free text field in new item
+13, check DB connection from fileserver (for integration purpose)
+14, (fixed) fix the bar code in new PO page
+15, create a demo
 
 # notes on sellable quantity
 可售数量怎么形成

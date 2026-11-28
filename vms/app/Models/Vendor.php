@@ -37,6 +37,17 @@ class Vendor extends Authenticatable
         return $this->hasMany(Item::class);
     }
 
+    public function brands(): HasMany
+    {
+        return $this->hasMany(Brand::class)->orderBy('id');
+    }
+
+    /** 提交注册资料前须至少有一个带品牌图的品牌 */
+    public function hasBrandWithImage(): bool
+    {
+        return $this->brands()->whereNotNull('image_path')->exists();
+    }
+
     public function purchaseOrders(): HasMany
     {
         return $this->hasMany(PurchaseOrder::class);
@@ -54,7 +65,7 @@ class Vendor extends Authenticatable
 
     public function statusLabel(): string
     {
-        return ['incomplete' => '资料未提交', 'pending' => '待审核', 'approved' => '已通过', 'rejected' => '已驳回'][$this->status] ?? $this->status;
+        return __(['incomplete' => '资料未提交', 'pending' => '待审核', 'approved' => '已通过', 'rejected' => '已驳回'][$this->status] ?? $this->status);
     }
 
     /** 账号只显示后 3 位 */

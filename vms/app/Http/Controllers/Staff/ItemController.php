@@ -42,6 +42,15 @@ class ItemController extends Controller
         return back()->with('status', '运营字段已保存');
     }
 
+    /** 上架后的标题/图片修改已在 OMS 同步,清除标记 */
+    public function clearChanged(Item $item)
+    {
+        $item->update(['post_listing_changed_at' => null]);
+        $item->logStatus($item->status, $item->status, '运营已同步上架后的修改', auth('staff')->user()->email);
+
+        return back()->with('status', '已清除标记');
+    }
+
     public function returnItem(Request $r, Item $item)
     {
         $r->validate(['reason' => ['required', 'string', 'max:1000']], ['reason.required' => '退回时必须填写原因']);
